@@ -1,0 +1,6 @@
+{
+  "name": "@stencil-frame/stencil",
+  "version": "0.1.0",
+  "description": "Brand builder — agent-assisted Johnson Five and a Half Steps workflow. Coming in v0.3.",
+  "type": "module"
+}

@@ -1,0 +1,31 @@
+{
+  "name": "stencil-frame",
+  "version": "0.1.0",
+  "description": "Open-source AI-agnostic brand engine and content engine.",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "core",
+    "frame",
+    "stencil"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=frame",
+    "build": "npm run build --workspace=frame",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^1.6.0",
+    "typescript": "^5.4.0",
+    "vitest": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

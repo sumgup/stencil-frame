@@ -1,0 +1,181 @@
+// brand.md schema types — spec v0.1
+// mirrors the seven layers defined in SPEC.md
+
+// ─── Layer 1: Identity (from YAML frontmatter) ───────────────────────────────
+
+export interface DtcgColorValue {
+  colorSpace: "srgb" | "display-p3" | "a98-rgb";
+  components: [number, number, number];
+  hex: string;
+}
+
+export interface DtcgTypographyValue {
+  fontFamily: string;
+  fontWeight: number;
+  fontSize: { value: number; unit: "rem" | "px" | "em" };
+  lineHeight: number;
+  letterSpacing?: { value: number; unit: "em" | "px" };
+}
+
+export interface DtcgColorToken {
+  $value: DtcgColorValue;
+  $type?: "color";
+  $description?: string;
+}
+
+export interface DtcgTypographyToken {
+  $type: "typography";
+  $value: DtcgTypographyValue;
+  $description?: string;
+}
+
+export interface FrameBrandExtensions {
+  image_style_prompt: string;
+  mood_keywords: string[];
+  carousel_aspect_ratio?: string;
+  primary_channels?: string[];
+}
+
+export interface BrandVisual {
+  color: {
+    $type?: "color";
+    primary: DtcgColorToken;
+    accent: DtcgColorToken;
+    gold?: DtcgColorToken;
+    ink: DtcgColorToken;
+    paper: DtcgColorToken;
+    [key: string]: DtcgColorToken | string | undefined;
+  };
+  typography?: {
+    heading?: DtcgTypographyToken;
+    subheading?: DtcgTypographyToken;
+    body?: DtcgTypographyToken;
+    label?: DtcgTypographyToken;
+    [key: string]: DtcgTypographyToken | undefined;
+  };
+  $extensions?: {
+    "org.frame.brand": FrameBrandExtensions;
+    [key: string]: unknown;
+  };
+}
+
+export interface BrandIdentity {
+  id: string;
+  name: string;
+  spec_version: string;
+  created_at: string;
+  updated_at: string;
+  tagline?: string;
+  parent_brand?: string;
+  tags?: string[];
+  visual?: BrandVisual;
+}
+
+// ─── Layer 3: Positioning ─────────────────────────────────────────────────────
+
+export interface BrandPositioning {
+  purpose: string;       // Why are we here?
+  practice: string;      // What do we do and how?
+  difference: string;    // What makes us different?
+  audience: string;      // Who are we here for?
+  values: string;        // What do we value most?
+  personality: string;   // What is our personality?
+  rejects: string;       // What do we explicitly oppose?
+  belief_shift: string;  // From X to Y
+  audience_tension: string; // Unspoken contradiction we resolve
+}
+
+// ─── Layer 4: Voice ───────────────────────────────────────────────────────────
+
+export interface BrandVoice {
+  philosophy: string;
+  dos: string[];
+  donts: string[];
+  reference_moves: string[];
+  anti_examples: string[];
+}
+
+// ─── Layer 5: Framework (Frame-specific) ─────────────────────────────────────
+
+export interface FrameworkSlide {
+  name: string;
+  purpose: string;
+  tone_notes: string;
+  example?: string;
+}
+
+export interface BrandFramework {
+  name: string;
+  philosophy: string;
+  slides: FrameworkSlide[];
+}
+
+// ─── Full BrandSpec ───────────────────────────────────────────────────────────
+
+export interface BrandSpec {
+  // Layer 1 — Identity (required)
+  identity: BrandIdentity;
+
+  // Layer 2 — Research (required, raw prose)
+  research: string;
+
+  // Layer 3 — Positioning (required)
+  positioning: BrandPositioning;
+
+  // Layer 4 — Voice (optional)
+  voice?: BrandVoice;
+
+  // Layer 5 — Framework (optional)
+  framework?: BrandFramework;
+
+  // Layer 7 — Bridging (optional, raw prose)
+  // Note: listed last in spec because it's authored after positioning + visual exist
+  bridging?: string;
+}
+
+// ─── LLM Adapter types ───────────────────────────────────────────────────────
+
+export type LlmTier = "smart" | "cheap";
+
+export interface LlmMessage {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
+
+export interface LlmResponse {
+  content: string;
+  model: string;
+  usage?: {
+    input_tokens: number;
+    output_tokens: number;
+  };
+}
+
+export interface LlmAdapter {
+  call(messages: LlmMessage[], tier: LlmTier): Promise<LlmResponse>;
+}
+
+// ─── Frame types ─────────────────────────────────────────────────────────────
+
+export interface ContentBrief {
+  campaign: string;       // What this piece of content is for
+  product?: string;       // Specific product being featured
+  hook?: string;          // Optional human-supplied angle
+  channel: "instagram" | "myntra" | "amazon";
+}
+
+export interface CarouselSlide {
+  index: number;
+  role: string;           // e.g. "Provoke", "Flex" — from framework
+  headline: string;
+  body: string;
+  cta?: string;
+  image_prompt: string;   // Ready to send to image generation API
+}
+
+export interface CarouselOutput {
+  brand_id: string;
+  brief: ContentBrief;
+  slides: CarouselSlide[];
+  generated_at: string;
+}

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@stencil-frame/core": ["./core/src/index.ts"],
+      "@stencil-frame/core/*": ["./core/src/*"]
+    }
+  },
+  "include": ["core/src", "frame/server", "stencil", "tests"],
+  "exclude": ["node_modules", "dist", "frame/ui"]
+}
