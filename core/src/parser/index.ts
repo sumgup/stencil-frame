@@ -11,9 +11,39 @@ function extractFrontmatter(raw: string): { yaml: string; body: string } {
   return { yaml: match[1], body: match[2] };
 }
 
+// Extracts image_style_prompt from a YAML block scalar (| literal).
+// Scans for the key, then collects all lines indented past it.
+function extractImageStylePrompt(yaml: string): string {
+  const lines = yaml.split("\n");
+  let inBlock = false;
+  let baseIndent = 0;
+  const blockLines: string[] = [];
+
+  for (const line of lines) {
+    if (!inBlock) {
+      const match = line.match(/^(\s+)image_style_prompt:\s*\|$/);
+      if (match) {
+        inBlock = true;
+        baseIndent = match[1].length + 2;
+      }
+    } else {
+      if (/^\s*$/.test(line)) { blockLines.push(""); continue; }
+      const indent = line.search(/\S/);
+      if (indent >= baseIndent) {
+        blockLines.push(line.slice(baseIndent));
+      } else {
+        break;
+      }
+    }
+  }
+
+  return blockLines.join("\n").trim();
+}
+
 // Minimal YAML parser for the brand.md identity block.
 // Extracts the `brand:` key and returns it as a plain object.
 // Full YAML parsing (for the visual tokens) deferred to v0.2.
+// Exception: image_style_prompt is parsed now because Frame needs it for image generation.
 function parseIdentityFromYaml(yaml: string): BrandIdentity {
   const lines = yaml.split("\n");
   const identity: Record<string, unknown> = {};
@@ -24,7 +54,7 @@ function parseIdentityFromYaml(yaml: string): BrandIdentity {
     if (line.trim() === "brand:") { inBrand = true; continue; }
     if (!inBrand) continue;
     if (line.trim() === "visual:") { inVisual = true; continue; }
-    if (inVisual) continue; // visual tokens parsed separately — complex nested YAML
+    if (inVisual) continue; // full visual token parsing deferred to v0.2
 
     const match = line.match(/^\s{2}(\w+):\s*(.+)$/);
     if (match) {
@@ -38,6 +68,15 @@ function parseIdentityFromYaml(yaml: string): BrandIdentity {
       }
       identity[key] = value;
     }
+  }
+
+  const imageStylePrompt = extractImageStylePrompt(yaml);
+  if (imageStylePrompt) {
+    identity.visual = {
+      $extensions: {
+        "org.frame.brand": { image_style_prompt: imageStylePrompt },
+      },
+    };
   }
 
   return identity as unknown as BrandIdentity;

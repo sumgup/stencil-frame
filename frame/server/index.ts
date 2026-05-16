@@ -5,7 +5,7 @@ import { parseBrandFile, createAdapter, BrandSpec, ContentBrief, CarouselOutput 
 import { buildSystemPrompt, buildCarouselPrompt } from "../prompts/carousel.js";
 
 const PORT = process.env.PORT ?? 3001;
-const BRANDS_DIR = resolve(process.env.BRANDS_DIR ?? "../../brands");
+const BRANDS_DIR = resolve(process.env.BRANDS_DIR ?? "../brands");
 
 // ─── Simple router ────────────────────────────────────────────────────────────
 
