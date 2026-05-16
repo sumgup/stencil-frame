@@ -40,10 +40,31 @@ function extractImageStylePrompt(yaml: string): string {
   return blockLines.join("\n").trim();
 }
 
+// Extracts hex color values from the visual.color block.
+// Color names are at 6-space indent; hex values appear in their $value line.
+function extractColorHexes(yaml: string): Record<string, string> {
+  const result: Record<string, string> = {};
+  let lastName = "";
+  for (const line of yaml.split("\n")) {
+    const nameMatch = line.match(/^ {6}(\w+):\s*$/);
+    if (nameMatch) { lastName = nameMatch[1]; continue; }
+    const hexMatch = line.match(/hex:\s*["']?(#[0-9A-Fa-f]{6})["']?/);
+    if (hexMatch && lastName) { result[lastName] = hexMatch[1]; lastName = ""; }
+  }
+  return result;
+}
+
+// Extracts mood_keywords inline array from the $extensions block.
+function extractMoodKeywords(yaml: string): string[] {
+  const match = yaml.match(/mood_keywords:\s*\[([^\]]+)\]/);
+  if (!match) return [];
+  return match[1].split(",").map((k) => k.trim().replace(/^["']|["']$/g, ""));
+}
+
 // Minimal YAML parser for the brand.md identity block.
 // Extracts the `brand:` key and returns it as a plain object.
 // Full YAML parsing (for the visual tokens) deferred to v0.2.
-// Exception: image_style_prompt is parsed now because Frame needs it for image generation.
+// Exception: image_style_prompt, colors, and mood_keywords are parsed now because Frame needs them.
 function parseIdentityFromYaml(yaml: string): BrandIdentity {
   const lines = yaml.split("\n");
   const identity: Record<string, unknown> = {};
@@ -71,10 +92,16 @@ function parseIdentityFromYaml(yaml: string): BrandIdentity {
   }
 
   const imageStylePrompt = extractImageStylePrompt(yaml);
-  if (imageStylePrompt) {
+  const colorHexes = extractColorHexes(yaml);
+  const moodKeywords = extractMoodKeywords(yaml);
+  if (imageStylePrompt || Object.keys(colorHexes).length) {
     identity.visual = {
+      color: colorHexes,
       $extensions: {
-        "org.frame.brand": { image_style_prompt: imageStylePrompt },
+        "org.frame.brand": {
+          image_style_prompt: imageStylePrompt,
+          mood_keywords: moodKeywords,
+        },
       },
     };
   }

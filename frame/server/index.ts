@@ -33,14 +33,23 @@ async function readBody(req: IncomingMessage): Promise<unknown> {
 
 // ─── Route handlers ───────────────────────────────────────────────────────────
 
-// GET /brands — list available brand files
+// GET /brands — list brands with enough data for the sidebar UI
 async function listBrands(res: ServerResponse) {
   try {
     const { readdir } = await import("fs/promises");
     const files = await readdir(BRANDS_DIR);
-    const brands = files
-      .filter((f) => f.endsWith(".brand.md"))
-      .map((f) => f.replace(".brand.md", ""));
+    const ids = files.filter((f) => f.endsWith(".brand.md")).map((f) => f.replace(".brand.md", ""));
+    const brands = await Promise.all(ids.map(async (id) => {
+      const brand = await parseBrandFile(join(BRANDS_DIR, `${id}.brand.md`));
+      return {
+        id,
+        name: brand.identity.name,
+        tagline: brand.identity.tagline ?? "",
+        colors: (brand.identity.visual as { color?: Record<string, string> } | undefined)?.color ?? {},
+        moodKeywords: (brand.identity.visual as { $extensions?: { "org.frame.brand"?: { mood_keywords?: string[] } } } | undefined)
+          ?.$extensions?.["org.frame.brand"]?.mood_keywords ?? [],
+      };
+    }));
     json(res, 200, { brands });
   } catch {
     json(res, 500, { error: "Could not read brands directory" });
@@ -59,21 +68,29 @@ async function getBrand(res: ServerResponse, id: string) {
 }
 
 // POST /generate/carousel — generate carousel from brand + brief
-// Body: { brand_id: string, brief: ContentBrief, api_key?: string }
+// Body: { brandId: string, brief: string, api_key?: string }
+// Accepts camelCase brandId (from UI) and a plain-text brief string.
 async function generateCarousel(req: IncomingMessage, res: ServerResponse) {
   try {
     const body = await readBody(req) as {
-      brand_id: string;
-      brief: ContentBrief;
+      brandId?: string;
+      brand_id?: string;
+      brief: string | ContentBrief;
       api_key?: string;
     };
 
-    if (!body.brand_id || !body.brief) {
-      return json(res, 400, { error: "brand_id and brief are required" });
+    const brandId = body.brandId ?? body.brand_id;
+    if (!brandId || !body.brief) {
+      return json(res, 400, { error: "brandId and brief are required" });
     }
 
+    // Accept brief as plain string or structured object
+    const brief: ContentBrief = typeof body.brief === "string"
+      ? { campaign: body.brief, channel: "instagram" }
+      : body.brief;
+
     // Load brand
-    const filePath = join(BRANDS_DIR, `${body.brand_id}.brand.md`);
+    const filePath = join(BRANDS_DIR, `${brandId}.brand.md`);
     const brand: BrandSpec = await parseBrandFile(filePath);
 
     // Create adapter — use request-supplied key or fall back to env
@@ -86,23 +103,28 @@ async function generateCarousel(req: IncomingMessage, res: ServerResponse) {
     const response = await adapter.call(
       [
         { role: "system", content: buildSystemPrompt(brand) },
-        { role: "user", content: buildCarouselPrompt(brand, body.brief) },
+        { role: "user", content: buildCarouselPrompt(brand, brief) },
       ],
       "smart"
     );
 
     // Parse the JSON response
     const clean = response.content.replace(/```json|```/g, "").trim();
-    const slides = JSON.parse(clean);
+    const rawSlides = JSON.parse(clean);
 
-    const output: CarouselOutput = {
-      brand_id: body.brand_id,
-      brief: body.brief,
+    // Normalise slide shape for the UI
+    const slides = rawSlides.map((s: { role?: string; name?: string; image_prompt?: string; imagePrompt?: string; [k: string]: unknown }) => ({
+      ...s,
+      name: s.role ?? s.name ?? "",
+      imagePrompt: s.image_prompt ?? s.imagePrompt ?? "",
+    }));
+
+    json(res, 200, {
+      brand: { id: brandId, name: brand.identity.name },
+      brief,
       slides,
       generated_at: new Date().toISOString(),
-    };
-
-    json(res, 200, output);
+    });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     json(res, 500, { error: message });
