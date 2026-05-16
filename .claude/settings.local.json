@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(npm install *)",
+      "Bash(npm test *)",
+      "Bash(npm run *)",
+      "Bash(dir \"C:\\\\Users\\\\sumit\\\\Documents\\\\Claude\\\\Projects\\\\stencil-frame\\\\stencil-frame\\\\frame\" /b)",
+      "Bash(node_modules/.bin/tsx server/index.ts)",
+      "Bash(curl -s http://localhost:3001/brands)",
+      "Bash(kill %1)",
+      "Bash(netstat -ano)",
+      "PowerShell($p = \\(Get-NetTCPConnection -LocalPort 3001 -EA SilentlyContinue | Select -First 1\\).OwningProcess; if \\($p\\) { Stop-Process -Id $p -Force })",
+      "Bash(\"C:\\\\Users\\\\sumit\\\\Documents\\\\Claude\\\\Projects\\\\stencil-frame\\\\stencil-frame\\\\node_modules\\\\.bin\\\\tsx\" server/index.ts)",
+      "Bash(python3 -c ' *)"
+    ]
+  }
+}

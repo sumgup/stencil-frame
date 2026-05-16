@@ -35,6 +35,11 @@ npm run lint
 ## Project structure
 
 ```
+design/          ← feature design pipeline. Read before building any UI feature.
+  README.md      ← how the pipeline works
+  MEMORY.md      ← system rules, feature registry, design system
+  prompts/       ← agent prompt templates (01 through 07, run in order)
+  features/      ← one folder per feature, created when design work starts
 brands/           ← brand.md files live here. One file per brand.
 core/src/
   types/brand.ts  ← BrandSpec TypeScript types. The schema lives here.

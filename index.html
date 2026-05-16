@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frame — Content Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300&family=DM+Mono:wght@400;500&family=Syne:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0d;
+  --surface: #111116;
+  --surface2: #18181f;
+  --border: rgba(255,255,255,0.06);
+  --border-hi: rgba(255,255,255,0.12);
+  --text: #e2e2ec;
+  --muted: #6b6b82;
+  --dim: #3a3a4a;
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'Syne', system-ui, sans-serif;
+  --mono: 'DM Mono', monospace;
+  --brand-primary: #C8102E;
+  --brand-accent: #E91E63;
+  --brand-gold: #FFB81C;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Subtle grain */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  border-right: 0.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background: var(--surface);
+}
+
+.sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.wordmark {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+
+.wordmark em {
+  font-style: italic;
+  color: var(--muted);
+}
+
+.tagline-pill {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.sidebar-section {
+  padding: 1.2rem 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.sidebar-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+/* Brand selector */
+.brand-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.brand-card {
+  padding: 0.8rem 1rem;
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.brand-card:hover { border-color: var(--border-hi); }
+
+.brand-card.active {
+  border-color: rgba(255,255,255,0.2);
+  background: var(--surface2);
+}
+
+.brand-card.active::before { opacity: 1; }
+
+.brand-name {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.brand-tagline {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.4;
+  font-style: italic;
+}
+
+.brand-colors {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+.color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(255,255,255,0.1);
+}
+
+/* Brief input */
+.brief-area {
+  width: 100%;
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  resize: none;
+  min-height: 90px;
+  transition: border-color 0.2s;
+}
+
+.brief-area:focus {
+  outline: none;
+  border-color: var(--border-hi);
+}
+
+.brief-area::placeholder { color: var(--dim); }
+
+.generate-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 0.8rem;
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: 10px;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.generate-btn:hover { background: #fff; transform: translateY(-1px); }
+.generate-btn:active { transform: translateY(0); }
+.generate-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* Brand preview panel */
+.brand-preview {
+  padding: 1.2rem 1.5rem;
+  flex: 1;
+}
+
+.preview-field {
+  margin-bottom: 0.8rem;
+}
+
+.preview-key {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.preview-val {
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.preview-val.italic { font-style: italic; color: var(--muted); }
+
+.keyword-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.kw-chip {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border-hi);
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
+
+/* MAIN CONTENT */
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-header {
+  padding: 1.8rem 2.5rem 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.main-title {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 300;
+  color: var(--muted);
+}
+
+.main-title span {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.status-pill {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border: 0.5px solid var(--border);
+  border-radius: 20px;
+}
+
+.status-pill.generating {
+  color: var(--brand-gold);
+  border-color: rgba(255,184,28,0.3);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.status-pill.done {
+  color: #6ec97e;
+  border-color: rgba(110,201,126,0.3);
+}
+
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* Empty state */
+.empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  gap: 1rem;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  opacity: 0.15;
+}
+
+.empty-heading {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.empty-sub {
+  font-size: 0.82rem;
+  color: var(--dim);
+  max-width: 280px;
+  line-height: 1.6;
+}
+
+/* Carousel output */
+.carousel-output {
+  flex: 1;
+  padding: 2rem 2.5rem;
+  overflow-y: auto;
+}
+
+.output-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.output-brand {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.output-brief {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+  border-left: 1px solid var(--border);
+  padding-left: 1rem;
+}
+
+.mock-badge {
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  color: var(--brand-gold);
+  background: rgba(255,184,28,0.08);
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 0.5px solid rgba(255,184,28,0.2);
+  margin-left: auto;
+}
+
+.slides-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.slide-card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  animation: slideIn 0.4s ease both;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-card:nth-child(1) { animation-delay: 0.05s; }
+.slide-card:nth-child(2) { animation-delay: 0.1s; }
+.slide-card:nth-child(3) { animation-delay: 0.15s; }
+.slide-card:nth-child(4) { animation-delay: 0.2s; }
+.slide-card:nth-child(5) { animation-delay: 0.25s; }
+
+.slide-image-placeholder {
+  aspect-ratio: 1;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide-image-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.02));
+}
+
+.slide-number-bg {
+  font-family: var(--serif);
+  font-size: 6rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.04);
+  font-style: italic;
+  line-height: 1;
+  user-select: none;
+}
+
+.slide-number-label {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.slide-content {
+  padding: 1.1rem 1.2rem;
+}
+
+.slide-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.slide-name {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.slide-num-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--dim);
+}
+
+.slide-headline {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.25;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.slide-body {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-bottom: 0.8rem;
+}
+
+.slide-image-prompt {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--dim);
+  line-height: 1.5;
+  padding: 0.5rem 0.7rem;
+  background: var(--surface2);
+  border-radius: 6px;
+  border-left: 2px solid var(--border-hi);
+}
+
+.slide-image-prompt::before {
+  content: '⌥ img · ';
+  color: var(--muted);
+}
+
+/* Generating skeleton */
+.skeleton-slide {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%,100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.skel-img { aspect-ratio: 1; background: var(--surface2); }
+.skel-content { padding: 1.1rem 1.2rem; }
+.skel-line { height: 8px; background: var(--surface2); border-radius: 4px; margin-bottom: 8px; }
+.skel-line.wide { width: 90%; }
+.skel-line.med { width: 65%; }
+.skel-line.short { width: 40%; }
+
+/* Slide accent colors per framework step */
+[data-step="1"] .slide-number-label { color: #C8102E; }
+[data-step="2"] .slide-number-label { color: #E91E63; }
+[data-step="3"] .slide-number-label { color: #FFB81C; }
+[data-step="4"] .slide-number-label { color: #7eb8c8; }
+[data-step="5"] .slide-number-label { color: #9bc87e; }
+[data-step="1"] .slide-name { color: #C8102E; }
+[data-step="2"] .slide-name { color: #E91E63; }
+[data-step="3"] .slide-name { color: #FFB81C; }
+[data-step="4"] .slide-name { color: #7eb8c8; }
+[data-step="5"] .slide-name { color: #9bc87e; }
+
+@media (max-width: 800px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { border-right: none; border-bottom: 0.5px solid var(--border); }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="wordmark">Stencil + <em>Frame</em></div>
+      <div class="tagline-pill">Content Engine · v0.2</div>
+    </div>
+
+    <!-- Brand selector -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Brand</div>
+      <div class="brand-list" id="brandList">
+        <div style="font-size:0.75rem;color:var(--dim)">Loading brands…</div>
+      </div>
+    </div>
+
+    <!-- Brand preview -->
+    <div class="sidebar-section brand-preview" id="brandPreview" style="display:none">
+      <div class="sidebar-label">Brand snapshot</div>
+      <div id="brandPreviewContent"></div>
+    </div>
+
+    <!-- Brief + Generate -->
+    <div class="sidebar-section" style="margin-top:auto">
+      <div class="sidebar-label">Brief</div>
+      <textarea
+        class="brief-area"
+        id="briefInput"
+        placeholder="Describe the content angle, product, or campaign moment…&#10;&#10;e.g. Launch of new Glimmer Pop in shade 'Tobacco Rose' — target college students before exams season."
+        rows="4"
+      ></textarea>
+      <button class="generate-btn" id="generateBtn" onclick="generate()">
+        Generate carousel
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="main-header">
+      <div class="main-title" id="mainTitle">
+        <span>Frame</span> — select a brand to begin
+      </div>
+      <div class="status-pill" id="statusPill">idle</div>
+    </div>
+
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">◈</div>
+      <div class="empty-heading">No carousel yet</div>
+      <div class="empty-sub">Select a brand, write a brief, hit generate. Your slides appear here.</div>
+    </div>
+
+    <div class="carousel-output" id="carouselOutput" style="display:none">
+      <div class="output-meta" id="outputMeta"></div>
+      <div class="slides-grid" id="slidesGrid"></div>
+    </div>
+  </main>
+
+</div>
+
+<script>
+const API = 'http://localhost:3001';
+let selectedBrand = null;
+let allBrands = [];
+
+// Step colors for slide cards
+const stepColors = ['#C8102E','#E91E63','#FFB81C','#7eb8c8','#9bc87e'];
+
+async function init() {
+  try {
+    const res = await fetch(`${API}/brands`);
+    const data = await res.json();
+    allBrands = data.brands;
+    renderBrandList(allBrands);
+    // Auto-select first brand
+    if (allBrands.length > 0) selectBrand(allBrands[0]);
+  } catch (err) {
+    document.getElementById('brandList').innerHTML =
+      `<div style="font-size:0.75rem;color:#c87e7e">Server offline — run: node frame/server/index.js</div>`;
+  }
+}
+
+function renderBrandList(brands) {
+  const list = document.getElementById('brandList');
+  list.innerHTML = brands.map(b => `
+    <div class="brand-card" id="card-${b.id}" onclick="selectBrand(${JSON.stringify(b).replace(/"/g,'&quot;')})">
+      <div class="brand-name">${b.name}</div>
+      <div class="brand-tagline">${b.tagline}</div>
+      <div class="brand-colors">
+        ${Object.values(b.colors).slice(0,5).map(c =>
+          `<div class="color-dot" style="background:${c.hex || c}"></div>`
+        ).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function selectBrand(brand) {
+  selectedBrand = brand;
+
+  // Update active card
+  document.querySelectorAll('.brand-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById(`card-${brand.id}`);
+  if (card) card.classList.add('active');
+
+  // Show brand preview
+  const preview = document.getElementById('brandPreview');
+  const content = document.getElementById('brandPreviewContent');
+  preview.style.display = 'block';
+
+  const kws = (brand.moodKeywords || []).map(k =>
+    `<span class="kw-chip">${k}</span>`
+  ).join('');
+
+  content.innerHTML = `
+    <div class="preview-field">
+      <div class="preview-key">Tagline</div>
+      <div class="preview-val italic">${brand.tagline}</div>
+    </div>
+    <div class="preview-field">
+      <div class="preview-key">Mood</div>
+      <div class="keyword-row">${kws}</div>
+    </div>
+  `;
+
+  // Update header
+  document.getElementById('mainTitle').innerHTML =
+    `<span>${brand.name}</span> — write a brief to generate`;
+}
+
+function showGenerating(slideCount) {
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('carouselOutput').style.display = 'block';
+  document.getElementById('statusPill').textContent = 'generating…';
+  document.getElementById('statusPill').className = 'status-pill generating';
+  document.getElementById('outputMeta').innerHTML = '';
+
+  const grid = document.getElementById('slidesGrid');
+  grid.innerHTML = Array(slideCount || 5).fill(0).map(() => `
+    <div class="skeleton-slide">
+      <div class="skel-img"></div>
+      <div class="skel-content">
+        <div class="skel-line short"></div>
+        <div class="skel-line wide"></div>
+        <div class="skel-line med"></div>
+        <div class="skel-line short" style="margin-top:12px"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderSlides(data) {
+  const grid = document.getElementById('slidesGrid');
+  const pill = document.getElementById('statusPill');
+  const meta = document.getElementById('outputMeta');
+
+  pill.textContent = 'done';
+  pill.className = 'status-pill done';
+
+  const brief = document.getElementById('briefInput').value;
+  meta.innerHTML = `
+    <div class="output-brand">${data.brand.name}</div>
+    <div class="output-brief">${brief.slice(0, 80)}${brief.length > 80 ? '…' : ''}</div>
+    ${data.mock ? '<div class="mock-badge">mock · add API key for real generation</div>' : ''}
+  `;
+
+  grid.innerHTML = data.slides.map((slide, i) => `
+    <div class="slide-card" data-step="${i+1}" style="animation-delay:${i * 0.07}s">
+      <div class="slide-image-placeholder">
+        <div class="slide-number-bg">${i+1}</div>
+        <div class="slide-number-label">${slide.name}</div>
+      </div>
+      <div class="slide-content">
+        <div class="slide-name-row">
+          <div class="slide-name">${slide.name}</div>
+          <div class="slide-num-badge">${i+1}/${data.slides.length}</div>
+        </div>
+        <div class="slide-headline">${slide.headline}</div>
+        <div class="slide-body">${slide.body}</div>
+        <div class="slide-image-prompt">${slide.imagePrompt.slice(0, 120)}…</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function generate() {
+  if (!selectedBrand) {
+    alert('Select a brand first');
+    return;
+  }
+  const brief = document.getElementById('briefInput').value.trim();
+  if (!brief) {
+    alert('Write a brief first');
+    return;
+  }
+
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+  showGenerating();
+
+  try {
+    const res = await fetch(`${API}/generate/carousel`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ brandId: selectedBrand.id, brief }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    renderSlides(data);
+  } catch (err) {
+    document.getElementById('statusPill').textContent = 'error';
+    document.getElementById('statusPill').className = 'status-pill';
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate carousel';
+  }
+}
+
+// Allow Enter in brief to generate (Ctrl/Cmd+Enter)
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('briefInput').addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') generate();
+  });
+  init();
+});
+</script>
+</body>
+</html>
