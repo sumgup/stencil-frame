@@ -1,6 +1,6 @@
 # Roadmap
 
-## Current status: v0.1 complete ✓
+## Current status: v0.2 in progress
 
 ---
 
@@ -23,16 +23,23 @@
 
 ---
 
-## v0.2 — Frame rebuild ← NEXT
+## v0.2 — Frame rebuild ← IN PROGRESS
 
 **Goal:** Frame rebuilt to consume brand.md. ColorFlix end-to-end carousel output.
 
-**What to build:**
-- `core/src/parser/` — brand.md → BrandSpec (TypeScript)
-- `core/src/adapter/` — AI-agnostic LLM adapter, smart/cheap tiers
-- `frame/server/` — Node API: `/brands`, `/brands/:id`, `/generate/carousel`
-- `frame/ui/` — React demo page: load brand → enter brief → generate carousel
-- Unit + functional tests passing
+**Built so far:**
+- `brands/colorflix.brand.md` — complete brand file, all seven layers ✓
+- `core/src/parser/` — brand.md → BrandSpec (TypeScript), 13 tests passing ✓
+- `core/src/adapter/` — AI-agnostic LLM adapter, smart/cheap tier routing ✓
+- `frame/server/index.ts` — Node API: `/health`, `/brands`, `/brands/:id`, `/generate/carousel` ✓
+- `index.html` — Frame UI shell: brand selector, brief input, carousel output, slide cards ✓
+- ESM confirmed working (TypeScript throughout, `"type": "module"`) ✓
+- Dev server running: `npm run dev` starts server + UI, auto-kills port conflicts ✓
+
+**Still needed to complete v0.2:**
+- Real LLM generation — add `ANTHROPIC_API_KEY` to `.env` and test end-to-end
+- Image generation — slide cards show placeholders, need image gen integration
+- React UI in `frame/ui/` — current UI is standalone `index.html`, Vite/React shell not yet built
 
 **Definition of done:**
 Load `colorflix.brand.md` → enter a brief → get five carousel slides (copy + image prompts)
