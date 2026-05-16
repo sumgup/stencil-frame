@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:ui\"",
     "dev:server": "tsx watch server/index.ts",
-    "dev:ui": "vite --root ..",
+    "dev:ui": "vite ..",
     "build": "vite build ui",
     "preview": "vite preview ui"
   },
