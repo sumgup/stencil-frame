@@ -130,3 +130,6 @@ Copy `.env.example` to `.env` and fill in your key.
 - Commit messages: imperative, lowercase, specific
   - good: `add brand.md parser for positioning section`
   - bad: `Updated stuff`, `WIP`, `fix`
+
+## Design philosophy
+Read `DESIGN_PHILOSOPHY.md` before designing any interface, sonic asset, or visual component.
