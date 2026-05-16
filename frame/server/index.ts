@@ -157,6 +157,14 @@ const server = createServer(async (req, res) => {
   json(res, 404, { error: "Not found" });
 });
 
+server.on("error", (err: NodeJS.ErrnoException) => {
+  if (err.code === "EADDRINUSE") {
+    console.error(`\n  Port ${PORT} is already in use.\n  Run: npx kill-port ${PORT}\n  Then retry: npm run dev\n`);
+    process.exit(1);
+  }
+  throw err;
+});
+
 server.listen(PORT, () => {
   console.log(`Frame server running on http://localhost:${PORT}`);
   console.log(`Brands directory: ${BRANDS_DIR}`);

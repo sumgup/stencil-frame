@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:ui\"",
-    "dev:server": "tsx watch server/index.ts",
+    "dev:server": "npx --yes kill-port 3001 & tsx watch server/index.ts",
     "dev:ui": "vite ..",
     "build": "vite build ui",
     "preview": "vite preview ui"
