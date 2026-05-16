@@ -147,6 +147,9 @@ const server = createServer(async (req, res) => {
     return res.end();
   }
 
+  if (method === "GET" && (url === "/" || url === "/health")) {
+    return json(res, 200, { status: "ok", version: "0.2", routes: ["GET /brands", "GET /brands/:id", "POST /generate/carousel"] });
+  }
   if (method === "GET" && url === "/brands") return listBrands(res);
   if (method === "GET" && url.startsWith("/brands/")) {
     const id = url.split("/brands/")[1];
