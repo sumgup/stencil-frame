@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stencil + Frame — Act 1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;1,300&family=DM+Mono&display=swap');
+
+  :root {
+    --bg: #080d0a;
+    --green: #8fba7a;
+    --green-dim: #3a5a30;
+    --green-faint: rgba(143,186,122,0.07);
+    --green-card: rgba(143,186,122,0.04);
+    --text: #e8f0e5;
+    --text-sub: #4a5f45;
+    --text-dim: #1e2a1e;
+    --text-hint: #2a3a2a;
+    --facts: #7ab8c9;
+    --obstacle: #c97a7a;
+    --opportunity: #c9b87a;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; overflow:hidden; }
+
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:0.45; pointer-events:none; z-index:50;
+  }
+
+  #blob-canvas { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:1; }
+
+  .ambient {
+    position:fixed; width:800px; height:800px; border-radius:50%;
+    background:radial-gradient(circle, var(--green-faint) 0%, transparent 65%);
+    top:50%; left:50%; transform:translate(-50%,-50%);
+    pointer-events:none; z-index:2;
+    animation:breathe 9s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.5;}
+    50%{transform:translate(-50%,-50%) scale(1.15);opacity:0.9;}
+  }
+
+  /* HUD */
+  .hud-left {
+    position:fixed; top:2.2rem; left:2.8rem;
+    display:flex; align-items:center; gap:8px;
+    opacity:0; animation:fadeIn 0.8s ease 0.3s forwards; z-index:20;
+  }
+  .s-dot { width:5px; height:5px; border-radius:50%; background:var(--text-dim); }
+  .s-dot.on { background:var(--green); box-shadow:0 0 7px rgba(143,186,122,0.5); }
+  .s-dot.done { background:var(--green-dim); }
+
+  .hud-right {
+    position:fixed; top:2rem; right:2.8rem;
+    display:flex; align-items:flex-end; gap:4px;
+    opacity:0; animation:fadeIn 0.8s ease 0.4s forwards; z-index:20;
+  }
+  .m-bar { width:2px; border-radius:1px; background:var(--green-dim); animation:mPulse 4s ease-in-out infinite; }
+  .m-bar:nth-child(1){height:10px;animation-delay:0s;}
+  .m-bar:nth-child(2){height:16px;animation-delay:0.35s;}
+  .m-bar:nth-child(3){height:20px;animation-delay:0.7s;}
+  .m-bar:nth-child(4){height:13px;animation-delay:1.05s;}
+
+  @keyframes mPulse {
+    0%,100%{opacity:0.2;transform:scaleY(1);}
+    50%{opacity:0.55;transform:scaleY(1.2);}
+  }
+
+  .progress {
+    position:fixed; right:2.8rem; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:11px;
+    z-index:20; opacity:0; animation:fadeIn 0.8s ease 0.5s forwards;
+  }
+  .p-item { display:flex; align-items:center; gap:7px; }
+  .p-line { width:16px; height:1px; background:var(--text-dim); transition:all 0.4s; }
+  .p-item.on .p-line { background:var(--green); width:24px; }
+  .p-item.done .p-line { background:var(--green-dim); width:20px; }
+  .p-name { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-dim); }
+  .p-item.on .p-name { color:var(--green-dim); }
+  .p-item.done .p-name { color:var(--text-dim); }
+
+  /* ── PHASE 1 — Question ── */
+  #phase-question {
+    position:relative; z-index:10;
+    width:100%; height:100vh;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:2rem 3rem;
+  }
+
+  .act-tag {
+    font-family:'DM Mono',monospace; font-size:9px;
+    letter-spacing:0.22em; text-transform:uppercase; color:var(--green-dim);
+    margin-bottom:2.8rem;
+    opacity:0; animation:fadeIn 1s ease 0.5s forwards;
+  }
+
+  /* Act 0 echo — what they said */
+  .echo-wrap {
+    max-width:580px; text-align:center;
+    margin-bottom:2.5rem;
+    opacity:0; animation:fadeIn 1s ease 0.8s forwards;
+  }
+
+  .echo-label {
+    font-family:'DM Mono',monospace; font-size:8px;
+    letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--green-dim); margin-bottom:0.6rem;
+  }
+
+  .echo-text {
+    font-family:'DM Serif Display',serif;
+    font-size:1.05rem; line-height:1.55;
+    color:var(--text-sub); font-style:italic;
+    font-weight:400;
+    padding:0.8rem 1.2rem;
+    border-left:1px solid var(--green-dim);
+  }
+
+  .question {
+    font-family:'DM Serif Display',serif;
+    font-size:clamp(1.8rem,3.8vw,3rem);
+    line-height:1.3; color:var(--text); font-weight:400;
+    text-align:center; max-width:620px; margin-bottom:0.9rem;
+    opacity:0; transform:translateY(18px);
+    animation:riseIn 2s cubic-bezier(0.16,1,0.3,1) 1.2s forwards;
+  }
+
+  .question em { font-style:italic; color:var(--green); }
+
+  .sub-q {
+    font-size:0.9rem; font-weight:300; color:var(--text-sub);
+    text-align:center; max-width:440px; line-height:1.65;
+    margin-bottom:2.5rem;
+    opacity:0; animation:fadeIn 1s ease 2.4s forwards;
+  }
+
+  .input-wrap {
+    width:100%; max-width:560px; position:relative;
+    opacity:0; animation:fadeIn 1s ease 2.8s forwards;
+  }
+
+  textarea {
+    width:100%; background:transparent; border:none;
+    border-bottom:1px solid var(--text-dim);
+    padding:0.8rem 0; font-family:'DM Sans',sans-serif;
+    font-size:1rem; font-weight:300; color:var(--text);
+    outline:none; resize:none; min-height:80px;
+    line-height:1.75; caret-color:var(--green);
+    transition:border-color 0.4s;
+  }
+  textarea::placeholder { color:var(--text-hint); font-style:italic; }
+  textarea:focus { border-bottom-color:var(--green-dim); }
+
+  .input-line {
+    position:absolute; bottom:0; left:0;
+    height:1px; width:0; background:var(--green);
+    transition:width 0.7s cubic-bezier(0.16,1,0.3,1);
+  }
+  textarea:focus ~ .input-line { width:100%; }
+
+  .think-btn {
+    margin-top:1.8rem;
+    background:transparent;
+    border:1px solid var(--green-dim);
+    color:var(--green-dim);
+    font-family:'DM Mono',monospace;
+    font-size:10px; letter-spacing:0.16em; text-transform:uppercase;
+    padding:0.7rem 1.8rem; cursor:pointer;
+    transition:all 0.3s;
+    opacity:0; animation:fadeIn 1s ease 3.5s forwards;
+  }
+  .think-btn:hover { border-color:var(--green); color:var(--green); }
+
+  /* ── PHASE 2 — Reflection ── */
+  #phase-reflection {
+    position:fixed; inset:0; z-index:15;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:2rem 3rem;
+    opacity:0; pointer-events:none;
+    transition:opacity 0.8s ease;
+  }
+
+  #phase-reflection.visible {
+    opacity:1; pointer-events:auto;
+  }
+
+  .reflection-header {
+    font-family:'DM Mono',monospace; font-size:9px;
+    letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--green-dim); margin-bottom:2.5rem;
+    text-align:center;
+  }
+
+  .reflection-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:1px;
+    max-width:780px; width:100%;
+    margin-bottom:2.5rem;
+  }
+
+  .r-card {
+    padding:1.5rem 1.4rem;
+    border:1px solid var(--text-dim);
+    position:relative; overflow:hidden;
+    opacity:0; transform:translateY(12px);
+  }
+
+  .r-card.reveal { animation:riseIn 0.8s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .r-card:nth-child(1) { animation-delay:0.1s; }
+  .r-card:nth-child(2) { animation-delay:0.35s; }
+  .r-card:nth-child(3) { animation-delay:0.6s; }
+
+  .r-card::before {
+    content:''; position:absolute; top:0; left:0;
+    width:100%; height:2px;
+  }
+  .r-card.facts::before { background:var(--facts); }
+  .r-card.obstacle::before { background:var(--obstacle); }
+  .r-card.opportunity::before { background:var(--opportunity); }
+
+  .r-label {
+    font-family:'DM Mono',monospace; font-size:8px;
+    letter-spacing:0.18em; text-transform:uppercase;
+    margin-bottom:1rem;
+  }
+  .r-card.facts .r-label { color:var(--facts); opacity:0.7; }
+  .r-card.obstacle .r-label { color:var(--obstacle); opacity:0.7; }
+  .r-card.opportunity .r-label { color:var(--opportunity); opacity:0.7; }
+
+  .r-items { list-style:none; }
+  .r-item {
+    font-family:'DM Sans',sans-serif; font-size:0.88rem;
+    font-weight:300; color:var(--text-sub); line-height:1.65;
+    padding:0.35rem 0;
+    border-bottom:1px solid var(--text-dim);
+  }
+  .r-item:last-child { border-bottom:none; }
+
+  /* Agent question */
+  .agent-q {
+    font-family:'DM Serif Display',serif;
+    font-size:1.3rem; font-style:italic;
+    color:var(--text-sub); text-align:center;
+    max-width:560px; line-height:1.5;
+    margin-bottom:2.5rem;
+    opacity:0; animation:fadeIn 1s ease 1.2s forwards;
+  }
+
+  .agent-q em { color:var(--green); font-style:normal; }
+
+  /* Edit / confirm row */
+  .action-row {
+    display:flex; gap:1rem; align-items:center;
+    opacity:0; animation:fadeIn 1s ease 1.8s forwards;
+  }
+
+  .edit-btn {
+    background:transparent; border:1px solid var(--text-dim);
+    color:var(--text-sub); font-family:'DM Mono',monospace;
+    font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
+    padding:0.6rem 1.2rem; cursor:pointer; transition:all 0.3s;
+  }
+  .edit-btn:hover { border-color:var(--text-sub); color:var(--text); }
+
+  .confirm-btn {
+    background:transparent; border:1px solid var(--green-dim);
+    color:var(--green); font-family:'DM Mono',monospace;
+    font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
+    padding:0.6rem 1.5rem; cursor:pointer; transition:all 0.3s;
+  }
+  .confirm-btn:hover { border-color:var(--green); background:rgba(143,186,122,0.05); }
+
+  /* Bottom */
+  .honest {
+    position:fixed; bottom:2.5rem; left:50%; transform:translateX(-50%);
+    font-size:11px; font-weight:300; color:var(--text-dim);
+    line-height:1.85; z-index:20; text-align:center; white-space:nowrap;
+    opacity:0; animation:fadeIn 1.2s ease 4s forwards;
+  }
+
+  @keyframes fadeIn { to{opacity:1;} }
+  @keyframes riseIn { to{opacity:1;transform:translateY(0);} }
+</style>
+</head>
+<body>
+
+<canvas id="blob-canvas"></canvas>
+<div class="ambient"></div>
+
+<div class="hud-left">
+  <div class="s-dot done"></div>
+  <div class="s-dot on"></div>
+  <div class="s-dot"></div>
+  <div class="s-dot"></div>
+  <div class="s-dot"></div>
+</div>
+
+<div class="hud-right">
+  <div class="m-bar"></div><div class="m-bar"></div>
+  <div class="m-bar"></div><div class="m-bar"></div>
+</div>
+
+<div class="progress">
+  <div class="p-item done"><div class="p-line"></div><span class="p-name">Who</span></div>
+  <div class="p-item on"><div class="p-line"></div><span class="p-name">Warm</span></div>
+  <div class="p-item"><div class="p-line"></div><span class="p-name">Research</span></div>
+  <div class="p-item"><div class="p-line"></div><span class="p-name">Map</span></div>
+  <div class="p-item"><div class="p-line"></div><span class="p-name">Confirm</span></div>
+</div>
+
+<!-- Phase 1 — Question -->
+<div id="phase-question">
+  <span class="act-tag">Act 1 — Warm up</span>
+
+  <!-- Echo of Act 0 answer -->
+  <div class="echo-wrap">
+    <p class="echo-label">You said</p>
+    <p class="echo-text" id="echo-text">"DIY branding for people starting fresh."</p>
+  </div>
+
+  <h1 class="question">
+    Now tell me about the <em>problem.</em><br>
+    Who has it — and what does it feel like for them?
+  </h1>
+  <p class="sub-q">Don't describe a market. Describe a person.</p>
+
+  <div class="input-wrap">
+    <textarea id="act1-input" placeholder="a founder at 11pm, staring at a blank brand guide..."></textarea>
+    <div class="input-line"></div>
+  </div>
+
+  <button class="think-btn" onclick="showReflection()">
+    let the agent think →
+  </button>
+</div>
+
+<!-- Phase 2 — Reflection -->
+<div id="phase-reflection">
+  <p class="reflection-header">Here is what I am hearing</p>
+
+  <div class="reflection-grid">
+    <div class="r-card facts">
+      <p class="r-label">Facts</p>
+      <ul class="r-items">
+        <li class="r-item">Solo founders can't afford agencies</li>
+        <li class="r-item">Most branding tools skip the strategy</li>
+        <li class="r-item">Pain is acute at day one of launch</li>
+      </ul>
+    </div>
+    <div class="r-card obstacle">
+      <p class="r-label">Obstacle</p>
+      <ul class="r-items">
+        <li class="r-item">Impostor syndrome before they start</li>
+        <li class="r-item">Don't know what they don't know</li>
+        <li class="r-item">Branding feels like someone else's job</li>
+      </ul>
+    </div>
+    <div class="r-card opportunity">
+      <p class="r-label">Opportunity</p>
+      <ul class="r-items">
+        <li class="r-item">No tool starts at the very beginning</li>
+        <li class="r-item">Co-thinking is missing from every tool</li>
+        <li class="r-item">Clarity alone is worth the session</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="agent-q">
+    Does this feel right? Is anything <em>missing or wrong?</em>
+  </p>
+
+  <div class="action-row">
+    <button class="edit-btn" onclick="goBack()">← edit my answer</button>
+    <button class="confirm-btn" onclick="confirmAndProceed()">this feels right → research</button>
+  </div>
+</div>
+
+<p class="honest">Every strong brand starts with honest questions. This is where yours begins.</p>
+
+<script>
+// ── Blob — slightly larger than Act 0 ────────────────────────
+const canvas = document.getElementById('blob-canvas');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+resize(); window.addEventListener('resize',resize);
+
+const N=12, BASE_R=90; // larger than Act 0's 72
+const cx=()=>canvas.width/2, cy=()=>canvas.height/2;
+const pts = Array.from({length:N},(_,i)=>({
+  angle:(i/N)*Math.PI*2,
+  f1:0.3+Math.random()*0.4, f2:0.15+Math.random()*0.25, f3:0.07+Math.random()*0.12,
+  a1:7+Math.random()*11, a2:5+Math.random()*9, a3:3+Math.random()*6,
+  p1:Math.random()*Math.PI*2, p2:Math.random()*Math.PI*2, p3:Math.random()*Math.PI*2,
+}));
+
+let t=0, blobOpacity=0;
+
+function getR(pt){
+  return BASE_R + pt.a1*Math.sin(t*pt.f1+pt.p1)
+    + pt.a2*Math.sin(t*pt.f2+pt.p2)
+    + pt.a3*Math.sin(t*pt.f3+pt.p3);
+}
+
+function spline(blobPts){
+  ctx.beginPath();
+  const len=blobPts.length;
+  for(let i=0;i<len;i++){
+    const p0=blobPts[(i-1+len)%len], p1=blobPts[i];
+    const p2=blobPts[(i+1)%len], p3=blobPts[(i+2)%len];
+    if(i===0) ctx.moveTo(p1.x,p1.y);
+    ctx.bezierCurveTo(
+      p1.x+(p2.x-p0.x)/6, p1.y+(p2.y-p0.y)/6,
+      p2.x-(p3.x-p1.x)/6, p2.y-(p3.y-p1.y)/6,
+      p2.x, p2.y
+    );
+  }
+  ctx.closePath();
+}
+
+function drawBlob(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(blobOpacity<1) blobOpacity+=0.003;
+  t+=0.007; // slightly slower — more settled
+  const blobPts=pts.map(pt=>({
+    x:cx()+getR(pt)*Math.cos(pt.angle),
+    y:cy()+getR(pt)*Math.sin(pt.angle)
+  }));
+  for(let layer=3;layer>=1;layer--){
+    const scale=1+layer*0.16, alpha=(0.02/layer)*blobOpacity;
+    const sp=blobPts.map(p=>({x:cx()+(p.x-cx())*scale, y:cy()+(p.y-cy())*scale}));
+    spline(sp); ctx.fillStyle=`rgba(143,186,122,${alpha})`; ctx.fill();
+  }
+  spline(blobPts);
+  const grad=ctx.createRadialGradient(cx(),cy(),0,cx(),cy(),BASE_R*1.3);
+  grad.addColorStop(0,`rgba(143,186,122,${0.06*blobOpacity})`);
+  grad.addColorStop(0.6,`rgba(143,186,122,${0.03*blobOpacity})`);
+  grad.addColorStop(1,'rgba(143,186,122,0)');
+  ctx.fillStyle=grad; ctx.fill();
+  ctx.strokeStyle=`rgba(143,186,122,${0.14*blobOpacity})`; ctx.lineWidth=0.8; ctx.stroke();
+  requestAnimationFrame(drawBlob);
+}
+drawBlob();
+
+// ── Phase transitions ────────────────────────────────────────
+function showReflection(){
+  const input = document.getElementById('act1-input');
+  if(input.value.trim().length < 5) {
+    input.focus();
+    input.style.borderBottomColor = 'rgba(201,122,122,0.5)';
+    setTimeout(()=>input.style.borderBottomColor='',1500);
+    return;
+  }
+
+  const q = document.getElementById('phase-question');
+  const r = document.getElementById('phase-reflection');
+
+  q.style.transition = 'opacity 0.6s ease';
+  q.style.opacity = '0';
+
+  setTimeout(()=>{
+    q.style.display='none';
+    r.classList.add('visible');
+    // Stagger card reveals
+    document.querySelectorAll('.r-card').forEach(c=>{
+      c.classList.add('reveal');
+    });
+  }, 600);
+}
+
+function goBack(){
+  const q = document.getElementById('phase-question');
+  const r = document.getElementById('phase-reflection');
+  r.classList.remove('visible');
+  q.style.display='flex';
+  setTimeout(()=>{ q.style.opacity='1'; }, 50);
+}
+
+function confirmAndProceed(){
+  document.body.style.transition='opacity 1.2s ease';
+  document.body.style.opacity='0';
+}
+</script>
+</body>
+</html>

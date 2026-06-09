@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stencil + Frame — Blob Morph System</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;1,300&family=DM+Mono&display=swap');
+
+  :root {
+    --bg: #080d0a;
+    --green: #8fba7a;
+    --green-dim: #3a5a30;
+    --green-faint: rgba(143,186,122,0.07);
+    --text: #e8f0e5;
+    --text-sub: #4a5f45;
+    --text-dim: #1e2a1e;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; overflow:hidden; }
+
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:0.45; pointer-events:none; z-index:50;
+  }
+
+  canvas { position:fixed; inset:0; width:100%; height:100%; z-index:1; }
+
+  .ambient {
+    position:fixed; width:800px; height:800px; border-radius:50%;
+    background:radial-gradient(circle, var(--green-faint) 0%, transparent 65%);
+    top:50%; left:50%; transform:translate(-50%,-50%);
+    pointer-events:none; z-index:2;
+    animation:breathe 9s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.6;}
+    50%{transform:translate(-50%,-50%) scale(1.15);opacity:1;}
+  }
+
+  .controls {
+    position:fixed; bottom:2.5rem; left:50%; transform:translateX(-50%);
+    display:flex; align-items:center; gap:1px; z-index:20;
+  }
+
+  .act-btn {
+    background:transparent; border:1px solid var(--text-dim);
+    color:var(--text-dim); font-family:'DM Mono',monospace;
+    font-size:9px; letter-spacing:0.16em; text-transform:uppercase;
+    padding:0.6rem 1.2rem; cursor:pointer; transition:all 0.3s;
+  }
+  .act-btn:hover { border-color:var(--text-sub); color:var(--text-sub); }
+  .act-btn.active { border-color:var(--green); color:var(--green); background:var(--green-faint); }
+
+  .morph-btn {
+    background:transparent; border:1px solid var(--green-dim);
+    color:var(--green); font-family:'DM Mono',monospace;
+    font-size:9px; letter-spacing:0.16em; text-transform:uppercase;
+    padding:0.6rem 1.8rem; cursor:pointer;
+    transition:all 0.3s; margin-left:1.5rem;
+    display:none;
+  }
+  .morph-btn:hover { border-color:var(--green); background:var(--green-faint); }
+
+  .act-label {
+    position:fixed; top:2.2rem; left:50%; transform:translateX(-50%);
+    font-family:'DM Mono',monospace; font-size:9px;
+    letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--green-dim); z-index:20;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Birth message — appears after glow */
+  .birth-msg {
+    position:fixed; top:50%; left:50%;
+    transform:translate(-50%, 120px);
+    font-family:'DM Serif Display',serif;
+    font-size:clamp(1rem,1.8vw,1.4rem);
+    color:var(--text-sub); font-style:italic;
+    text-align:center; line-height:1.6;
+    z-index:20; opacity:0;
+    transition:opacity 1.5s ease;
+    pointer-events:none;
+  }
+  .birth-msg em { color:var(--green); font-style:normal; }
+
+  .geo-bar-wrap {
+    position:fixed; top:2rem; right:3rem;
+    z-index:20; display:flex; flex-direction:column; gap:5px; align-items:flex-end;
+  }
+  .geo-label {
+    font-family:'DM Mono',monospace; font-size:8px;
+    letter-spacing:0.14em; text-transform:uppercase; color:var(--text-dim);
+  }
+  .geo-track { width:80px; height:1px; background:var(--text-dim); position:relative; }
+  .geo-fill {
+    position:absolute; top:0; left:0; height:100%;
+    background:var(--green); transition:width 1.5s cubic-bezier(0.16,1,0.3,1);
+  }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<div class="ambient"></div>
+
+<span class="act-label" id="act-label">Act 0 — Who Are You</span>
+<div class="birth-msg" id="birth-msg">
+  Something came alive.<br>
+  <em>Your brand has found its form.</em>
+</div>
+
+<div class="geo-bar-wrap">
+  <span class="geo-label">form</span>
+  <div class="geo-track"><div class="geo-fill" id="geo-fill" style="width:0%"></div></div>
+</div>
+
+<div class="controls">
+  <button class="act-btn active" onclick="setAct(0,this)">Act 0</button>
+  <button class="act-btn" onclick="setAct(1,this)">Act 1</button>
+  <button class="act-btn" onclick="setAct(2,this)">Act 2b</button>
+  <button class="act-btn" onclick="setAct(3,this)">Act 3</button>
+  <button class="morph-btn" id="morph-btn" onclick="triggerFinalMorph()">
+    confirm — morph to form →
+  </button>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+resize(); window.addEventListener('resize',resize);
+const W=()=>canvas.width, H=()=>canvas.height;
+const cx=()=>W()/2, cy=()=>H()/2;
+
+// ── Icosahedron ───────────────────────────────────────────────
+const phi=(1+Math.sqrt(5))/2;
+const rawVerts=[
+  [0,1,phi],[0,-1,phi],[0,1,-phi],[0,-1,-phi],
+  [1,phi,0],[-1,phi,0],[1,-phi,0],[-1,-phi,0],
+  [phi,0,1],[phi,0,-1],[-phi,0,1],[-phi,0,-1]
+];
+const icoVerts=rawVerts.map(v=>{
+  const len=Math.sqrt(v[0]**2+v[1]**2+v[2]**2);
+  return v.map(x=>x/len);
+});
+const icoEdges=[
+  [0,1],[0,4],[0,5],[0,8],[0,10],
+  [1,6],[1,7],[1,8],[1,10],
+  [2,3],[2,4],[2,5],[2,9],[2,11],
+  [3,6],[3,7],[3,9],[3,11],
+  [4,5],[4,8],[4,9],[5,10],[5,11],
+  [6,7],[6,8],[6,9],[7,10],[7,11],
+  [8,9],[10,11]
+];
+
+// ── Blob ──────────────────────────────────────────────────────
+const N=12;
+const blobPts=Array.from({length:N},(_,i)=>({
+  angle:(i/N)*Math.PI*2,
+  f1:0.3+Math.random()*0.35, f2:0.15+Math.random()*0.2, f3:0.07+Math.random()*0.1,
+  a1:7+Math.random()*10, a2:4+Math.random()*7, a3:2+Math.random()*5,
+  p1:Math.random()*Math.PI*2, p2:Math.random()*Math.PI*2, p3:Math.random()*Math.PI*2,
+}));
+
+// ── State ─────────────────────────────────────────────────────
+let t=0, blobOpacity=0;
+let geometryT=0, targetGeometryT=0, geometrySpeed=0.008;
+let baseR=72, targetBaseR=72, blobSpeed=0.008;
+let icoRotation=0;
+
+// Glow state
+let glowActive=false;
+let glowT=0; // 0→1→0 over glow duration
+let glowPhase=0; // 0=rising, 1=peak, 2=settling
+let glowTimer=0;
+const GLOW_RISE=60, GLOW_PEAK=40, GLOW_SETTLE=80; // frames
+
+const actGeometryTargets=[0,0.2,0.5,0.85];
+const actSizes=[72,88,100,115];
+const actSpeeds=[0.008,0.006,0.005,0.003];
+const actLabels=['Act 0 — Who Are You','Act 1 — Warm Up','Act 2b — Gap Map','Act 3 — Confirm'];
+
+// ── Helpers ───────────────────────────────────────────────────
+function getBlobR(pt,base){
+  return base+pt.a1*Math.sin(t*pt.f1+pt.p1)+pt.a2*Math.sin(t*pt.f2+pt.p2)+pt.a3*Math.sin(t*pt.f3+pt.p3);
+}
+function getBlobPoint(i,base){
+  const pt=blobPts[i];
+  const r=getBlobR(pt,base);
+  return {x:cx()+r*Math.cos(pt.angle),y:cy()+r*Math.sin(pt.angle)};
+}
+function rotY(v,a){return[v[0]*Math.cos(a)+v[2]*Math.sin(a),v[1],-v[0]*Math.sin(a)+v[2]*Math.cos(a)];}
+function rotX(v,a){return[v[0],v[1]*Math.cos(a)-v[2]*Math.sin(a),v[1]*Math.sin(a)+v[2]*Math.cos(a)];}
+function project3D(v,R){const z=v[2]+3,f=2.8/z;return{x:cx()+v[0]*R*f,y:cy()+v[1]*R*f,z:v[2]};}
+
+function getMorphedPoint(i,geoT,base){
+  const blob=getBlobPoint(i,base);
+  const icoV=icoVerts[i%icoVerts.length];
+  let rv=rotY(icoV,icoRotation);
+  rv=rotX(rv,0.3+Math.sin(icoRotation*0.3)*0.1);
+  const ico=project3D(rv,base);
+  return{x:blob.x+(ico.x-blob.x)*geoT,y:blob.y+(ico.y-blob.y)*geoT,z:ico.z};
+}
+
+function drawMorphedShape(geoT,base){
+  const pts2d=Array.from({length:N},(_,i)=>getMorphedPoint(i,geoT,base));
+  ctx.beginPath();
+  const len=pts2d.length;
+  for(let i=0;i<len;i++){
+    const p0=pts2d[(i-1+len)%len],p1=pts2d[i],p2=pts2d[(i+1)%len],p3=pts2d[(i+2)%len];
+    if(i===0) ctx.moveTo(p1.x,p1.y);
+    const smooth=1-geoT*0.7;
+    ctx.bezierCurveTo(
+      p1.x+(p2.x-p0.x)/6*smooth,p1.y+(p2.y-p0.y)/6*smooth,
+      p2.x-(p3.x-p1.x)/6*smooth,p2.y-(p3.y-p1.y)/6*smooth,
+      p2.x,p2.y
+    );
+  }
+  ctx.closePath();
+  return pts2d;
+}
+
+// ── Glow intensity curve ──────────────────────────────────────
+function getGlowIntensity(){
+  if(!glowActive) return 0;
+  glowTimer++;
+  if(glowPhase===0){
+    // Rising
+    const progress=glowTimer/GLOW_RISE;
+    if(glowTimer>=GLOW_RISE){ glowPhase=1; glowTimer=0; }
+    return easeInOut(progress);
+  } else if(glowPhase===1){
+    // Peak — slight pulse
+    if(glowTimer>=GLOW_PEAK){ glowPhase=2; glowTimer=0; }
+    return 1 + Math.sin(glowTimer*0.15)*0.15;
+  } else {
+    // Settling
+    const progress=glowTimer/GLOW_SETTLE;
+    if(glowTimer>=GLOW_SETTLE){
+      glowActive=false; glowPhase=0; glowTimer=0;
+      // Show birth message
+      document.getElementById('birth-msg').style.opacity='1';
+      setTimeout(()=>{
+        document.getElementById('birth-msg').style.opacity='0';
+      },3500);
+    }
+    return 1-easeInOut(progress);
+  }
+}
+
+function easeInOut(t){return t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+
+// ── Draw ico edges with glow ──────────────────────────────────
+function drawIcoEdges(R,baseAlpha,glowIntensity){
+  const projected=icoVerts.map(v=>{
+    let rv=rotY(v,icoRotation);
+    rv=rotX(rv,0.3+Math.sin(icoRotation*0.3)*0.1);
+    return project3D(rv,R);
+  });
+
+  icoEdges.forEach(([i,j])=>{
+    const a=projected[i],b=projected[j];
+    const avgZ=(a.z+b.z)/2;
+    const depthA=(avgZ+1)/2;
+    const alpha=depthA*baseAlpha*0.6;
+
+    ctx.beginPath();
+    ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+
+    if(glowIntensity>0){
+      // Glow effect — draw thick dim line then thin bright line
+      const glowAlpha=glowIntensity*0.6*depthA;
+      const glowWidth=3+glowIntensity*8;
+
+      // Outer glow
+      ctx.strokeStyle=`rgba(143,186,122,${glowAlpha*0.3})`;
+      ctx.lineWidth=glowWidth;
+      ctx.stroke();
+
+      // Mid glow
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+      ctx.strokeStyle=`rgba(180,220,160,${glowAlpha*0.5})`;
+      ctx.lineWidth=glowWidth*0.4;
+      ctx.stroke();
+
+      // Core bright line
+      ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+      ctx.strokeStyle=`rgba(220,255,200,${Math.min(1,alpha+glowIntensity*0.5)})`;
+      ctx.lineWidth=0.8;
+      ctx.stroke();
+    } else {
+      ctx.strokeStyle=`rgba(143,186,122,${alpha})`;
+      ctx.lineWidth=0.7;
+      ctx.stroke();
+    }
+  });
+}
+
+function drawIcoVerts(R,vertAlpha,glowIntensity){
+  const projected=icoVerts.map(v=>{
+    let rv=rotY(v,icoRotation);
+    rv=rotX(rv,0.3+Math.sin(icoRotation*0.3)*0.1);
+    return project3D(rv,R);
+  });
+  projected.forEach(p=>{
+    const depthA=(p.z+1)/2;
+    const size=glowIntensity>0?1.2+glowIntensity*3:1.2;
+    ctx.beginPath(); ctx.arc(p.x,p.y,size,0,Math.PI*2);
+    ctx.fillStyle=`rgba(${glowIntensity>0?'200,255,180':'143,186,122'},${depthA*vertAlpha*0.8})`;
+    ctx.fill();
+  });
+}
+
+// ── Main loop ─────────────────────────────────────────────────
+function draw(){
+  ctx.clearRect(0,0,W(),H());
+  if(blobOpacity<1) blobOpacity+=0.003;
+
+  const geoLerpSpeed=0.015;
+  geometryT+=(targetGeometryT-geometryT)*geoLerpSpeed;
+  baseR+=(targetBaseR-baseR)*0.02;
+  icoRotation+=blobSpeed*0.5;
+  t+=blobSpeed;
+
+  document.getElementById('geo-fill').style.width=(geometryT*100)+'%';
+
+  const gT=geometryT, op=blobOpacity;
+  const glowI=getGlowIntensity();
+
+  // Glow layers
+  for(let layer=4;layer>=1;layer--){
+    const scale=1+layer*0.15, alpha=(0.022/layer)*op;
+    ctx.save(); ctx.translate(cx(),cy()); ctx.scale(scale,scale); ctx.translate(-cx(),-cy());
+    drawMorphedShape(gT,baseR);
+    ctx.fillStyle=`rgba(143,186,122,${alpha})`; ctx.fill();
+    ctx.restore();
+  }
+
+  // Core shape
+  drawMorphedShape(gT,baseR);
+  const grad=ctx.createRadialGradient(cx(),cy(),0,cx(),cy(),baseR*1.4);
+  grad.addColorStop(0,`rgba(143,186,122,${(0.07+gT*0.04)*op})`);
+  grad.addColorStop(0.5,`rgba(143,186,122,${(0.03+gT*0.02)*op})`);
+  grad.addColorStop(1,'rgba(143,186,122,0)');
+  ctx.fillStyle=grad; ctx.fill();
+  ctx.strokeStyle=`rgba(143,186,122,${(0.15+gT*0.25)*op})`; ctx.lineWidth=0.8+gT*0.4; ctx.stroke();
+
+  // Ico edges + glow
+  if(gT>0.3){
+    const edgeAlpha=((gT-0.3)/0.7)*op;
+    drawIcoEdges(baseR,edgeAlpha,glowI);
+    if(gT>0.6) drawIcoVerts(baseR,((gT-0.6)/0.4)*op,glowI);
+  }
+
+  // Highlight
+  drawMorphedShape(gT,baseR);
+  const hl=ctx.createRadialGradient(cx()-baseR*0.2,cy()-baseR*0.25,0,cx()-baseR*0.2,cy()-baseR*0.25,baseR*0.75);
+  hl.addColorStop(0,`rgba(${glowI>0?'220,255,210':'210,245,200'},${(0.06+gT*0.04+glowI*0.05)*op})`);
+  hl.addColorStop(1,'rgba(210,245,200,0)');
+  ctx.fillStyle=hl; ctx.fill();
+
+  // Ambient pulse during glow
+  if(glowI>0){
+    const ambientGrad=ctx.createRadialGradient(cx(),cy(),0,cx(),cy(),300+glowI*150);
+    ambientGrad.addColorStop(0,`rgba(143,186,122,${glowI*0.06})`);
+    ambientGrad.addColorStop(1,'rgba(143,186,122,0)');
+    ctx.beginPath(); ctx.arc(cx(),cy(),300+glowI*150,0,Math.PI*2);
+    ctx.fillStyle=ambientGrad; ctx.fill();
+  }
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+// ── Controls ──────────────────────────────────────────────────
+function setAct(idx,btn){
+  targetGeometryT=actGeometryTargets[idx];
+  targetBaseR=actSizes[idx];
+  blobSpeed=actSpeeds[idx];
+  document.querySelectorAll('.act-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('act-label').textContent=actLabels[idx];
+  const mb=document.getElementById('morph-btn');
+  mb.style.display=idx===3?'block':'none';
+  // Reset morph button if returning
+  mb.textContent='confirm — morph to form →';
+  mb.style.opacity='1'; mb.style.pointerEvents='auto';
+}
+
+function triggerFinalMorph(){
+  targetGeometryT=1.0;
+  blobSpeed=actSpeeds[3]*0.25;
+  const mb=document.getElementById('morph-btn');
+  mb.textContent='morphing...';
+  mb.style.opacity='0.4'; mb.style.pointerEvents='none';
+
+  // Wait for morph to nearly complete then trigger glow
+  setTimeout(()=>{
+    glowActive=true; glowPhase=0; glowTimer=0;
+    document.getElementById('act-label').textContent='Act 3 — Born';
+  }, 1800);
+}
+</script>
+</body>
+</html>
