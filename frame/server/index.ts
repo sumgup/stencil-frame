@@ -3,6 +3,7 @@ import { readFile } from "fs/promises";
 import { join, resolve } from "path";
 import { parseBrandFile, createAdapter, BrandSpec, ContentBrief, CarouselOutput } from "@stencil-frame/core";
 import { buildSystemPrompt, buildCarouselPrompt } from "../prompts/carousel.js";
+import { buildWeakAnswerCheckPrompt, buildAct0ReflectionPrompt, Act0QuestionId } from "../prompts/act0.js";
 
 const PORT = process.env.PORT ?? 3001;
 const BRANDS_DIR = resolve(process.env.BRANDS_DIR ?? "../brands");
@@ -131,6 +132,62 @@ async function generateCarousel(req: IncomingMessage, res: ServerResponse) {
   }
 }
 
+// POST /act0/check-answer — is this Act 0 answer weak?
+// Body: { question: "q1"|"q2"|"q3", answer: string, api_key?: string }
+// tier: cheap
+async function checkAct0Answer(req: IncomingMessage, res: ServerResponse) {
+  try {
+    const body = await readBody(req) as { question?: Act0QuestionId; answer?: string; api_key?: string };
+    if (!body.question || typeof body.answer !== "string") {
+      return json(res, 400, { error: "question and answer are required" });
+    }
+
+    const adapter = createAdapter({
+      provider: "anthropic",
+      apiKey: body.api_key ?? process.env.ANTHROPIC_API_KEY,
+    });
+
+    const response = await adapter.call(
+      [{ role: "user", content: buildWeakAnswerCheckPrompt(body.question, body.answer) }],
+      "cheap"
+    );
+
+    const clean = response.content.replace(/```json|```/g, "").trim();
+    const { weak } = JSON.parse(clean) as { weak: boolean };
+    json(res, 200, { weak: Boolean(weak) });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    json(res, 500, { error: message });
+  }
+}
+
+// POST /act0/reflect — reflect the three Act 0 answers back as one paragraph
+// Body: { oneLiner: string, values: string, purpose: string, api_key?: string }
+// tier: smart
+async function reflectAct0(req: IncomingMessage, res: ServerResponse) {
+  try {
+    const body = await readBody(req) as { oneLiner?: string; values?: string; purpose?: string; api_key?: string };
+    if (!body.oneLiner || !body.values || !body.purpose) {
+      return json(res, 400, { error: "oneLiner, values, and purpose are required" });
+    }
+
+    const adapter = createAdapter({
+      provider: "anthropic",
+      apiKey: body.api_key ?? process.env.ANTHROPIC_API_KEY,
+    });
+
+    const response = await adapter.call(
+      [{ role: "user", content: buildAct0ReflectionPrompt({ oneLiner: body.oneLiner, values: body.values, purpose: body.purpose }) }],
+      "smart"
+    );
+
+    json(res, 200, { reflection: response.content.trim() });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    json(res, 500, { error: message });
+  }
+}
+
 // ─── Server ───────────────────────────────────────────────────────────────────
 
 const server = createServer(async (req, res) => {
@@ -148,7 +205,11 @@ const server = createServer(async (req, res) => {
   }
 
   if (method === "GET" && (url === "/" || url === "/health")) {
-    return json(res, 200, { status: "ok", version: "0.2", routes: ["GET /brands", "GET /brands/:id", "POST /generate/carousel"] });
+    return json(res, 200, {
+      status: "ok",
+      version: "0.2",
+      routes: ["GET /brands", "GET /brands/:id", "POST /generate/carousel", "POST /act0/check-answer", "POST /act0/reflect"],
+    });
   }
   if (method === "GET" && url === "/brands") return listBrands(res);
   if (method === "GET" && url.startsWith("/brands/")) {
@@ -156,6 +217,8 @@ const server = createServer(async (req, res) => {
     return getBrand(res, id);
   }
   if (method === "POST" && url === "/generate/carousel") return generateCarousel(req, res);
+  if (method === "POST" && url === "/act0/check-answer") return checkAct0Answer(req, res);
+  if (method === "POST" && url === "/act0/reflect") return reflectAct0(req, res);
 
   json(res, 404, { error: "Not found" });
 });
