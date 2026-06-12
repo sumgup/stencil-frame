@@ -1,5 +1,6 @@
 import { useState } from "react";
 import BlobMorph from "./components/BlobMorph.jsx";
+import VerticalHero from "./components/VerticalHero.jsx";
 
 // Temporary review harness for BlobMorph — act presets from blob-morph-demo.html
 const ACT_PRESETS = [
@@ -12,11 +13,13 @@ const ACT_PRESETS = [
 export default function App() {
   const [actIndex, setActIndex] = useState(0);
   const [glowTrigger, setGlowTrigger] = useState(0);
+  const [heroKey, setHeroKey] = useState(0);
   const act = ACT_PRESETS[actIndex];
 
   return (
     <div className="relative min-h-screen overflow-hidden">
       <BlobMorph geometryT={act.geometryT} baseR={act.baseR} speed={act.speed} glowTrigger={glowTrigger} />
+      <VerticalHero key={heroKey} text="Find Your Gap" />
 
       <div className="relative z-10 flex flex-col items-center justify-center gap-6 px-8 min-h-screen pointer-events-none">
         <h1 className="font-fraunces font-black text-5xl uppercase tracking-wide text-accent">
@@ -49,6 +52,12 @@ export default function App() {
           className="font-mono text-[9px] uppercase tracking-[0.16em] px-6 py-2 border border-accent-dim text-accent ml-6 hover:bg-accent/10 transition-colors"
         >
           confirm — morph to form →
+        </button>
+        <button
+          onClick={() => setHeroKey((k) => k + 1)}
+          className="font-mono text-[9px] uppercase tracking-[0.16em] px-6 py-2 border border-text-dim text-text-dim hover:border-text-sub hover:text-text-sub ml-2 transition-colors"
+        >
+          replay hero
         </button>
       </div>
     </div>
