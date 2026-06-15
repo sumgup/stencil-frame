@@ -38,6 +38,21 @@ npm run dev
 
 Bring your own API key. Works with Anthropic, OpenAI, or local Ollama.
 
+### Setup
+
+1. Copy `.env.example` to `.env`.
+2. Add your `ANTHROPIC_API_KEY` (default provider — see `.env.example` for
+   how to point the adapter at OpenAI or Ollama instead via `LLM_PROVIDER`
+   / `LLM_API_KEY` / `LLM_BASE_URL`).
+3. The server (`frame/server`) reads this through `createAdapter()` — every
+   LLM call is routed through the AI-agnostic adapter described in
+   `CLAUDE.md`, never called directly.
+
+A configured key is **required** for Investigate's Act 0 (weak-answer
+push-back) and Act 1 (facts/obstacles/opportunities reflection) — these are
+"co-thinking" steps that genuinely need an LLM. Act 2a's research export is
+plain prompt-export and works without a key.
+
 ---
 
 ## The brand.md format

@@ -5,6 +5,13 @@ import { parseBrandFile, createAdapter, BrandSpec, ContentBrief, CarouselOutput 
 import { buildSystemPrompt, buildCarouselPrompt } from "../prompts/carousel.js";
 import { buildWeakAnswerCheckPrompt, buildAct0ReflectionPrompt, Act0QuestionId } from "../prompts/act0.js";
 
+// Load .env into process.env (no-op if the file doesn't exist).
+try {
+  process.loadEnvFile(resolve(import.meta.dirname, "../../.env"));
+} catch {
+  // .env is optional — generation routes fail with a clear error if a key is missing.
+}
+
 const PORT = process.env.PORT ?? 3001;
 const BRANDS_DIR = resolve(process.env.BRANDS_DIR ?? "../brands");
 
