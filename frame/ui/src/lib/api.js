@@ -24,3 +24,14 @@ export async function reflectAct0(answers) {
   const data = await postJson("/act0/reflect", answers);
   return data.reflection;
 }
+
+// tier: cheap — is this Act 1 answer weak?
+export async function checkAct1Answer(answer) {
+  const data = await postJson("/act1/check-answer", { answer });
+  return Boolean(data.weak);
+}
+
+// tier: smart — organise the Act 1 answer into facts / obstacles / opportunities
+export async function reflectAct1({ answer, oneLiner, values, purpose }) {
+  return postJson("/act1/reflect", { answer, oneLiner, values, purpose });
+}

@@ -4,6 +4,7 @@ import { join, resolve } from "path";
 import { parseBrandFile, createAdapter, BrandSpec, ContentBrief, CarouselOutput } from "@stencil-frame/core";
 import { buildSystemPrompt, buildCarouselPrompt } from "../prompts/carousel.js";
 import { buildWeakAnswerCheckPrompt, buildAct0ReflectionPrompt, Act0QuestionId } from "../prompts/act0.js";
+import { buildAct1WeakAnswerCheckPrompt, buildAct1ReflectionPrompt } from "../prompts/act1.js";
 
 // Load .env into process.env (no-op if the file doesn't exist).
 try {
@@ -195,6 +196,78 @@ async function reflectAct0(req: IncomingMessage, res: ServerResponse) {
   }
 }
 
+// POST /act1/check-answer — is this Act 1 answer weak?
+// Body: { answer: string, api_key?: string }
+// tier: cheap
+async function checkAct1Answer(req: IncomingMessage, res: ServerResponse) {
+  try {
+    const body = await readBody(req) as { answer?: string; api_key?: string };
+    if (typeof body.answer !== "string") {
+      return json(res, 400, { error: "answer is required" });
+    }
+
+    const adapter = createAdapter({
+      provider: "anthropic",
+      apiKey: body.api_key ?? process.env.ANTHROPIC_API_KEY,
+    });
+
+    const response = await adapter.call(
+      [{ role: "user", content: buildAct1WeakAnswerCheckPrompt(body.answer) }],
+      "cheap"
+    );
+
+    const clean = response.content.replace(/```json|```/g, "").trim();
+    const { weak } = JSON.parse(clean) as { weak: boolean };
+    json(res, 200, { weak: Boolean(weak) });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    json(res, 500, { error: message });
+  }
+}
+
+// POST /act1/reflect — organise the Act 1 answer into facts / obstacles / opportunities
+// Body: { answer: string, oneLiner?: string, values?: string, purpose?: string, api_key?: string }
+// tier: smart
+async function reflectAct1(req: IncomingMessage, res: ServerResponse) {
+  try {
+    const body = await readBody(req) as {
+      answer?: string;
+      oneLiner?: string;
+      values?: string;
+      purpose?: string;
+      api_key?: string;
+    };
+    if (!body.answer) {
+      return json(res, 400, { error: "answer is required" });
+    }
+
+    const adapter = createAdapter({
+      provider: "anthropic",
+      apiKey: body.api_key ?? process.env.ANTHROPIC_API_KEY,
+    });
+
+    const response = await adapter.call(
+      [{ role: "user", content: buildAct1ReflectionPrompt({ ...body, answer: body.answer }) }],
+      "smart"
+    );
+
+    const clean = response.content.replace(/```json|```/g, "").trim();
+    const { facts, obstacles, opportunities } = JSON.parse(clean) as {
+      facts: string[];
+      obstacles: string[];
+      opportunities: string[];
+    };
+    json(res, 200, {
+      facts: facts ?? [],
+      obstacles: obstacles ?? [],
+      opportunities: opportunities ?? [],
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    json(res, 500, { error: message });
+  }
+}
+
 // ─── Server ───────────────────────────────────────────────────────────────────
 
 const server = createServer(async (req, res) => {
@@ -215,7 +288,11 @@ const server = createServer(async (req, res) => {
     return json(res, 200, {
       status: "ok",
       version: "0.2",
-      routes: ["GET /brands", "GET /brands/:id", "POST /generate/carousel", "POST /act0/check-answer", "POST /act0/reflect"],
+      routes: [
+        "GET /brands", "GET /brands/:id", "POST /generate/carousel",
+        "POST /act0/check-answer", "POST /act0/reflect",
+        "POST /act1/check-answer", "POST /act1/reflect",
+      ],
     });
   }
   if (method === "GET" && url === "/brands") return listBrands(res);
@@ -226,6 +303,8 @@ const server = createServer(async (req, res) => {
   if (method === "POST" && url === "/generate/carousel") return generateCarousel(req, res);
   if (method === "POST" && url === "/act0/check-answer") return checkAct0Answer(req, res);
   if (method === "POST" && url === "/act0/reflect") return reflectAct0(req, res);
+  if (method === "POST" && url === "/act1/check-answer") return checkAct1Answer(req, res);
+  if (method === "POST" && url === "/act1/reflect") return reflectAct1(req, res);
 
   json(res, 404, { error: "Not found" });
 });
