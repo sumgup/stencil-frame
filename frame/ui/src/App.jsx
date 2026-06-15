@@ -1,17 +1,39 @@
 import { useState } from "react";
 import ActScreen from "./components/ActScreen.jsx";
 import MaskedReveal from "./components/MaskedReveal.jsx";
-import { useAct0, STEPS } from "./hooks/useAct0.js";
+import { useAct0, STEPS, PROMPTS } from "./hooks/useAct0.js";
 import { useAct1, ACT1_STEPS, ACT1_WATERMARK } from "./hooks/useAct1.js";
 
-const EXAMPLES = [
-  { brand: "Muji", text: "We make everyday products stripped of everything unnecessary." },
-  { brand: "Patagonia", text: "We make gear for the outdoors and fix it when it breaks." },
-  { brand: "Oatly", text: "We make oat-based food for people who want milk without the cow." },
-];
+// A single fully-worked example — one brand's answers to all three Act 0
+// questions plus its reflection — shown together so a user can see the whole
+// shape of the exercise before they start.
+const WORKED_EXAMPLE = {
+  brand: "Patagonia",
+  qa: [
+    {
+      prompt: PROMPTS[STEPS.Q1],
+      answer: "We make gear for the outdoors and fix it when it breaks instead of selling you a new one.",
+    },
+    {
+      prompt: PROMPTS[STEPS.Q2],
+      answer: "Gear that's built to be replaced every season, and a culture that treats that as normal.",
+    },
+    {
+      prompt: PROMPTS[STEPS.Q3],
+      answer: "People who'd rather repair what they own than keep buying — and who feel a little guilty every time they don't.",
+    },
+  ],
+  reflection:
+    "Here is what I am hearing: you make outdoor gear and you fix it rather than replace it. " +
+    "What makes you angry is an industry built on planned obsolescence, dressed up as normal. " +
+    "And you're really here for people who want to own less and use it longer, even when the " +
+    "industry around them makes that hard. Does this feel true? Is anything missing or wrong?",
+};
 
-// Act 0 is "Origin" — fast, restless, pure blob (geometryT 0).
-const ACT0_BLOB = { geometryT: 0, baseR: 72, speed: 0.008 };
+// Act 0 is "Origin" — fast, restless, pure blob (geometryT 0), nudging
+// slightly toward geometry with each of the three questions answered.
+const ACT0_BLOB_BASE = { baseR: 72, speed: 0.008 };
+const ACT0_GEOMETRY_STEP = 0.08;
 
 // Act 1 is "Opening up" — hints of geometry emerging, larger and slower.
 const ACT1_BLOB = { geometryT: 0.3, baseR: 90, speed: 0.005 };
@@ -23,7 +45,7 @@ export default function App() {
   const act1 = useAct1(act0.answers);
   const [act, setAct] = useState("act0");
   const [input, setInput] = useState("");
-  const [exampleOpen, setExampleOpen] = useState(false);
+  const [workedExampleOpen, setWorkedExampleOpen] = useState(false);
   const [heroKey] = useState(0);
   const [glowTrigger, setGlowTrigger] = useState(0);
 
@@ -33,7 +55,7 @@ export default function App() {
     if (active.loading) return;
     active.submitAnswer(input);
     setInput("");
-    setExampleOpen(false);
+    setWorkedExampleOpen(false);
   };
 
   const handleKeyDown = (e) => {
@@ -43,7 +65,11 @@ export default function App() {
     }
   };
 
-  const blob = act === "act0" ? ACT0_BLOB : ACT1_BLOB;
+  const act0AnsweredCount = Object.values(act0.answers).filter((a) => a.trim()).length;
+  const blob =
+    act === "act0"
+      ? { ...ACT0_BLOB_BASE, geometryT: act0AnsweredCount * ACT0_GEOMETRY_STEP }
+      : ACT1_BLOB;
 
   return (
     <ActScreen
@@ -54,9 +80,9 @@ export default function App() {
       speed={blob.speed}
       glowTrigger={glowTrigger}
       activeIndex={act === "act0" ? 0 : 1}
-      examples={act0.step === STEPS.Q1 || act0.step === STEPS.Q1_PUSH ? EXAMPLES : undefined}
-      exampleOpen={exampleOpen}
-      onExampleClose={() => setExampleOpen(false)}
+      workedExample={act0.step === STEPS.MODE || act0.step === STEPS.Q1 ? WORKED_EXAMPLE : undefined}
+      workedExampleOpen={workedExampleOpen}
+      onWorkedExampleClose={() => setWorkedExampleOpen(false)}
       honestText="Every strong brand starts with honest questions"
       continueReady={act === "act0" && act0.step === STEPS.DONE}
       onContinue={() => {
@@ -91,6 +117,14 @@ export default function App() {
               It already exists
             </button>
           </div>
+
+          <button
+            onClick={() => setWorkedExampleOpen((o) => !o)}
+            className="mt-[1.4rem] flex items-center gap-[10px] font-mono text-[8px] uppercase tracking-[0.22em] text-text-dim transition-colors hover:text-accent-dim"
+          >
+            <span className="block h-px w-[18px] bg-current transition-all" />
+            {workedExampleOpen ? "close example" : `see how ${WORKED_EXAMPLE.brand} answered all of this`}
+          </button>
         </>
       )}
 
@@ -105,7 +139,10 @@ export default function App() {
               rows={2}
               autoFocus
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => {
+                setInput(e.target.value);
+                act0.cancelDraft();
+              }}
               onKeyDown={handleKeyDown}
               placeholder="speak plainly..."
               disabled={act0.loading}
@@ -122,13 +159,56 @@ export default function App() {
             {act0.loading ? "thinking..." : "press enter to continue"}
           </p>
 
+          {act0.draftLoading && (
+            <p className="mt-[1.2rem] font-mono text-[9px] uppercase tracking-[0.22em] text-text-dim">
+              sketching a starting point...
+            </p>
+          )}
+
+          {act0.draft && (
+            <div className="mt-6 max-w-[460px] border border-text-ghost bg-[rgba(8,15,10,0.92)] px-4 py-[0.85rem]">
+              <p className="mb-3 font-mono text-[7px] tracking-[0.18em] uppercase text-accent-dim">
+                a starting point — yours to keep, edit, or ignore
+              </p>
+              <p className="font-serif italic text-[0.95rem] leading-[1.6] text-text-sub">{act0.draft}</p>
+              <div className="mt-4 flex gap-3">
+                <button
+                  onClick={() => {
+                    const text = act0.draft;
+                    act0.dismissDraft();
+                    setInput("");
+                    act0.submitAnswer(text);
+                  }}
+                  className="border border-accent-dim px-4 py-2 font-mono text-[9px] uppercase tracking-[0.2em] text-accent transition-colors hover:bg-accent/10"
+                >
+                  use this
+                </button>
+                <button
+                  onClick={() => {
+                    setInput(act0.draft);
+                    act0.dismissDraft();
+                  }}
+                  className="border border-text-dim px-4 py-2 font-mono text-[9px] uppercase tracking-[0.2em] text-text-sub transition-colors hover:border-text-sub"
+                >
+                  edit this
+                </button>
+                <button
+                  onClick={() => act0.dismissDraft()}
+                  className="border border-text-dim px-4 py-2 font-mono text-[9px] uppercase tracking-[0.2em] text-text-sub transition-colors hover:border-text-sub"
+                >
+                  write my own
+                </button>
+              </div>
+            </div>
+          )}
+
           {act0.step === STEPS.Q1 && (
             <button
-              onClick={() => setExampleOpen((o) => !o)}
+              onClick={() => setWorkedExampleOpen((o) => !o)}
               className="mt-[1.4rem] flex items-center gap-[10px] font-mono text-[8px] uppercase tracking-[0.22em] text-text-dim transition-colors hover:text-accent-dim"
             >
               <span className="block h-px w-[18px] bg-current transition-all" />
-              {exampleOpen ? "close example" : "show me an example"}
+              {workedExampleOpen ? "close example" : `see how ${WORKED_EXAMPLE.brand} answered all of this`}
             </button>
           )}
         </>

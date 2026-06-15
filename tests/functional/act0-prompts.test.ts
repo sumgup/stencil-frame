@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildWeakAnswerCheckPrompt, buildAct0ReflectionPrompt } from "../../frame/prompts/act0.js";
+import { buildWeakAnswerCheckPrompt, buildAct0DraftPrompt, buildAct0ReflectionPrompt } from "../../frame/prompts/act0.js";
 
 describe("act0 weak-answer check prompt", () => {
   it("includes the question text for q1", () => {
@@ -21,6 +21,28 @@ describe("act0 weak-answer check prompt", () => {
   it("asks for JSON-only output", () => {
     const prompt = buildWeakAnswerCheckPrompt("q1", "We make things.");
     expect(prompt).toContain('{"weak": true or false}');
+  });
+});
+
+describe("act0 draft prompt", () => {
+  it("includes the q2 question and the q1 answer for context", () => {
+    const prompt = buildAct0DraftPrompt("q2", { q1: "We help bakeries sell online." });
+    expect(prompt).toContain("What makes you angry about how things are done in your space? What exists that shouldn't?");
+    expect(prompt).toContain("We help bakeries sell online.");
+  });
+
+  it("includes q1 and q2 answers for q3 context", () => {
+    const prompt = buildAct0DraftPrompt("q3", {
+      q1: "We help bakeries sell online.",
+      q2: "Brands overcharge for logos on shirts.",
+    });
+    expect(prompt).toContain("We help bakeries sell online.");
+    expect(prompt).toContain("Brands overcharge for logos on shirts.");
+  });
+
+  it("asks for a plain draft answer with no markdown", () => {
+    const prompt = buildAct0DraftPrompt("q2", { q1: "a" });
+    expect(prompt).toContain("no preamble, no quotes, no markdown");
   });
 });
 

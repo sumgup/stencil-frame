@@ -3,7 +3,7 @@ import { readFile } from "fs/promises";
 import { join, resolve } from "path";
 import { parseBrandFile, createAdapter, BrandSpec, ContentBrief, CarouselOutput } from "@stencil-frame/core";
 import { buildSystemPrompt, buildCarouselPrompt } from "../prompts/carousel.js";
-import { buildWeakAnswerCheckPrompt, buildAct0ReflectionPrompt, Act0QuestionId } from "../prompts/act0.js";
+import { buildWeakAnswerCheckPrompt, buildAct0ReflectionPrompt, buildAct0DraftPrompt, Act0QuestionId } from "../prompts/act0.js";
 import { buildAct1WeakAnswerCheckPrompt, buildAct1ReflectionPrompt } from "../prompts/act1.js";
 
 // Load .env into process.env (no-op if the file doesn't exist).
@@ -169,6 +169,33 @@ async function checkAct0Answer(req: IncomingMessage, res: ServerResponse) {
   }
 }
 
+// POST /act0/draft — scaffold a draft answer for q2/q3 from prior answers
+// Body: { question: "q2"|"q3", q1: string, q2?: string, api_key?: string }
+// tier: cheap
+async function draftAct0Answer(req: IncomingMessage, res: ServerResponse) {
+  try {
+    const body = await readBody(req) as { question?: "q2" | "q3"; q1?: string; q2?: string; api_key?: string };
+    if ((body.question !== "q2" && body.question !== "q3") || typeof body.q1 !== "string") {
+      return json(res, 400, { error: "question (q2 or q3) and q1 are required" });
+    }
+
+    const adapter = createAdapter({
+      provider: "anthropic",
+      apiKey: body.api_key ?? process.env.ANTHROPIC_API_KEY,
+    });
+
+    const response = await adapter.call(
+      [{ role: "user", content: buildAct0DraftPrompt(body.question, { q1: body.q1, q2: body.q2 }) }],
+      "cheap"
+    );
+
+    json(res, 200, { draft: response.content.trim() });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    json(res, 500, { error: message });
+  }
+}
+
 // POST /act0/reflect — reflect the three Act 0 answers back as one paragraph
 // Body: { oneLiner: string, values: string, purpose: string, api_key?: string }
 // tier: smart
@@ -290,7 +317,7 @@ const server = createServer(async (req, res) => {
       version: "0.2",
       routes: [
         "GET /brands", "GET /brands/:id", "POST /generate/carousel",
-        "POST /act0/check-answer", "POST /act0/reflect",
+        "POST /act0/check-answer", "POST /act0/draft", "POST /act0/reflect",
         "POST /act1/check-answer", "POST /act1/reflect",
       ],
     });
@@ -302,6 +329,7 @@ const server = createServer(async (req, res) => {
   }
   if (method === "POST" && url === "/generate/carousel") return generateCarousel(req, res);
   if (method === "POST" && url === "/act0/check-answer") return checkAct0Answer(req, res);
+  if (method === "POST" && url === "/act0/draft") return draftAct0Answer(req, res);
   if (method === "POST" && url === "/act0/reflect") return reflectAct0(req, res);
   if (method === "POST" && url === "/act1/check-answer") return checkAct1Answer(req, res);
   if (method === "POST" && url === "/act1/reflect") return reflectAct1(req, res);

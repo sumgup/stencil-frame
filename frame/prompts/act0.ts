@@ -29,6 +29,24 @@ Is this answer weak? Respond with ONLY valid JSON, no markdown:
 {"weak": true or false}`;
 }
 
+// ─── Scaffolded draft ──────────────────────────────────────────────────────────
+// tier: cheap — short draft answer grounded only in what the user already said
+
+export function buildAct0DraftPrompt(question: "q2" | "q3", context: { q1: string; q2?: string }): string {
+  const priorAnswers = [`What they do: "${context.q1}"`];
+  if (question === "q3") priorAnswers.push(`What they believe / what makes them angry about their space: "${context.q2}"`);
+
+  return `A user is being asked: "${QUESTION_TEXT[question]}"
+
+So far they have told us:
+${priorAnswers.join("\n")}
+
+Write a short, plausible draft answer to the question above — one a person in this position
+might give. Ground it only in what they have already said; do not invent new facts about
+their brand. Plain language, first person, one to two sentences. Respond with ONLY the
+draft answer — no preamble, no quotes, no markdown.`;
+}
+
 // ─── Act 0 reflection ──────────────────────────────────────────────────────────
 // tier: smart — synthesises the three answers into one short paragraph
 

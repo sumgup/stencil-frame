@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { checkAct0Answer, reflectAct0 } from "../lib/api.js";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { checkAct0Answer, draftAct0Answer, reflectAct0 } from "../lib/api.js";
 
 // Act 0 — "Who Are You". State machine for the mode question, the three
 // identity questions (with at most one push-back each), and the closing
@@ -29,6 +29,10 @@ export const PROMPTS = {
 
 const NEXT_QUESTION = { q1: STEPS.Q2, q2: STEPS.Q3 };
 
+// Q2 and Q3 only — if the user pauses this long without typing, offer a draft.
+const DRAFT_DELAY_MS = 4000;
+const DRAFTABLE_STEPS = [STEPS.Q2, STEPS.Q3];
+
 export function useAct0() {
   const [step, setStep] = useState(STEPS.MODE);
   const [mode, setMode] = useState(null); // "new" | "existing"
@@ -37,6 +41,9 @@ export function useAct0() {
   const [reflection, setReflection] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [draft, setDraft] = useState(null);
+  const [draftLoading, setDraftLoading] = useState(false);
+  const draftTimerRef = useRef(null);
 
   const goToReflection = useCallback(async (finalAnswers) => {
     setStep(STEPS.REFLECTION);
@@ -60,6 +67,37 @@ export function useAct0() {
     setMode(value);
     setStep(STEPS.Q1);
   }, []);
+
+  // Offer a scaffolded draft if the user pauses on Q2/Q3 without typing.
+  useEffect(() => {
+    setDraft(null);
+    setDraftLoading(false);
+
+    if (!DRAFTABLE_STEPS.includes(step)) return;
+
+    draftTimerRef.current = setTimeout(async () => {
+      setDraftLoading(true);
+      try {
+        const text = await draftAct0Answer(step, { q1: answers.q1, q2: answers.q2 });
+        setDraft(text);
+      } catch {
+        // Draft is a nice-to-have — silently skip if it fails.
+      } finally {
+        setDraftLoading(false);
+      }
+    }, DRAFT_DELAY_MS);
+
+    return () => clearTimeout(draftTimerRef.current);
+  }, [step, answers.q1, answers.q2]);
+
+  // Call as soon as the user starts typing, so the draft doesn't appear underneath them.
+  const cancelDraft = useCallback(() => {
+    clearTimeout(draftTimerRef.current);
+    setDraft(null);
+    setDraftLoading(false);
+  }, []);
+
+  const dismissDraft = useCallback(() => setDraft(null), []);
 
   const submitAnswer = useCallback(
     async (text) => {
@@ -114,6 +152,10 @@ export function useAct0() {
     reflection,
     loading,
     error,
+    draft,
+    draftLoading,
+    cancelDraft,
+    dismissDraft,
     submitMode,
     submitAnswer,
     confirm,

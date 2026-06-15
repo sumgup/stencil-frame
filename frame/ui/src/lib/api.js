@@ -19,6 +19,12 @@ export async function checkAct0Answer(question, answer) {
   return Boolean(data.weak);
 }
 
+// tier: cheap — scaffold a draft answer for q2/q3 from prior answers
+export async function draftAct0Answer(question, { q1, q2 }) {
+  const data = await postJson("/act0/draft", { question, q1, q2 });
+  return data.draft;
+}
+
 // tier: smart — reflect the three Act 0 answers back as one paragraph
 export async function reflectAct0(answers) {
   const data = await postJson("/act0/reflect", answers);

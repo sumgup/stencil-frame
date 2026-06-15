@@ -95,6 +95,59 @@ describe("useAct0", () => {
     await waitFor(() => expect(result.current.error).toMatch(/ANTHROPIC_API_KEY/));
   });
 
+  it("offers a draft after a pause on Q2, and dismisses on cancelDraft", async () => {
+    vi.useFakeTimers();
+    vi.spyOn(api, "checkAct0Answer").mockResolvedValue(false);
+    vi.spyOn(api, "draftAct0Answer").mockResolvedValue("A drafted Q2 answer.");
+    const { result } = renderHook(() => useAct0());
+
+    act(() => result.current.submitMode("new"));
+    await act(async () => result.current.submitAnswer("We help bakeries sell online."));
+    expect(result.current.step).toBe(STEPS.Q2);
+    expect(result.current.draft).toBeNull();
+
+    await act(async () => vi.advanceTimersByTimeAsync(4000));
+    expect(result.current.draft).toBe("A drafted Q2 answer.");
+
+    act(() => result.current.cancelDraft());
+    expect(result.current.draft).toBeNull();
+
+    vi.useRealTimers();
+  });
+
+  it("does not offer a draft if the user starts typing before the pause", async () => {
+    vi.useFakeTimers();
+    vi.spyOn(api, "checkAct0Answer").mockResolvedValue(false);
+    const draftSpy = vi.spyOn(api, "draftAct0Answer").mockResolvedValue("A drafted Q2 answer.");
+    const { result } = renderHook(() => useAct0());
+
+    act(() => result.current.submitMode("new"));
+    await act(async () => result.current.submitAnswer("We help bakeries sell online."));
+    expect(result.current.step).toBe(STEPS.Q2);
+
+    act(() => result.current.cancelDraft());
+    await act(async () => vi.advanceTimersByTimeAsync(4000));
+    expect(result.current.draft).toBeNull();
+    expect(draftSpy).not.toHaveBeenCalled();
+
+    vi.useRealTimers();
+  });
+
+  it("does not offer a draft on Q1", async () => {
+    vi.useFakeTimers();
+    const draftSpy = vi.spyOn(api, "draftAct0Answer").mockResolvedValue("draft");
+    const { result } = renderHook(() => useAct0());
+
+    act(() => result.current.submitMode("new"));
+    expect(result.current.step).toBe(STEPS.Q1);
+
+    await act(async () => vi.advanceTimersByTimeAsync(4000));
+    expect(result.current.draft).toBeNull();
+    expect(draftSpy).not.toHaveBeenCalled();
+
+    vi.useRealTimers();
+  });
+
   it("confirm moves from reflection to done", async () => {
     vi.spyOn(api, "checkAct0Answer").mockResolvedValue(false);
     vi.spyOn(api, "reflectAct0").mockResolvedValue("reflection text");

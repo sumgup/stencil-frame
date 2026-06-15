@@ -4,12 +4,12 @@ import Spine from "./Spine.jsx";
 import Motif from "./Motif.jsx";
 import StructuralLines from "./StructuralLines.jsx";
 import ProgressIndicator from "./ProgressIndicator.jsx";
-import ExamplePanel from "./ExamplePanel.jsx";
+import WorkedExampleOverlay from "./WorkedExampleOverlay.jsx";
 
 /**
  * ActScreen — the shared full-bleed layout for every Investigate act:
  * blob backdrop, grain, vignette, structural lines, vertical hero,
- * spine + motif, progress rail, optional example panel, and a
+ * spine + motif, progress rail, optional worked-example overlay, and a
  * left-aligned "stage" for the act's own content (questions, input, etc).
  *
  * Each act provides its own stage content via `children` and controls
@@ -23,9 +23,9 @@ export default function ActScreen({
   speed = 0.008,
   glowTrigger = 0,
   activeIndex = 0,
-  examples,
-  exampleOpen = false,
-  onExampleClose,
+  workedExample,
+  workedExampleOpen = false,
+  onWorkedExampleClose,
   honestText,
   continueReady = false,
   onContinue,
@@ -49,8 +49,8 @@ export default function ActScreen({
       <Motif />
       <ProgressIndicator activeIndex={activeIndex} delay={5.5} />
 
-      {examples && (
-        <ExamplePanel open={exampleOpen} onClose={onExampleClose} examples={examples} />
+      {workedExample && (
+        <WorkedExampleOverlay open={workedExampleOpen} onClose={onWorkedExampleClose} example={workedExample} />
       )}
 
       <div className="fixed inset-0 z-10 flex flex-col justify-center px-[7rem] pl-[14rem]">
