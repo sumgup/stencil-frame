@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stencil + Frame — Your brand, before anyone else defines it</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=Fraunces:opsz,wght,ital@9..144,400,1;9..144,300,1&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap');
+
+  /* ── TOKENS ── */
+  :root {
+    --bg:       #080f0a;
+    --acc:      #c8a96e;
+    --acc-d:    #5a4520;
+    --acc-p:    rgba(200,169,110,0.06);
+    --vesica:   #e8673a;
+    --text:     #f0ede6;
+    --text-b:   #c0b8ac;
+    --text-c:   #7a8070;
+    --text-d:   #2a3a2a;
+    --text-e:   #111a12;
+    --green:    #4a8a5a;
+
+    /* Fluid type */
+    --t-micro:   clamp(0.55rem, 0.9vw,  0.65rem);
+    --t-whisper: clamp(0.65rem, 1.1vw,  0.75rem);
+    --t-label:   clamp(0.75rem, 1.3vw,  0.875rem);
+    --t-body:    clamp(0.9rem,  1.6vw,  1.05rem);
+    --t-sub:     clamp(1.05rem, 2vw,    1.3rem);
+    --t-heading: clamp(1.5rem,  3.5vw,  2.8rem);
+    --t-hero:    clamp(2.6rem,  6.5vw,  5.5rem);
+    --t-display: clamp(3.5rem,  10vw,   8.5rem);
+
+    /* Space */
+    --s-xs: clamp(0.35rem, 0.7vw, 0.55rem);
+    --s-sm: clamp(0.65rem, 1.3vw, 0.95rem);
+    --s-md: clamp(1rem,    2vw,   1.5rem);
+    --s-lg: clamp(1.5rem,  3vw,   2.5rem);
+    --s-xl: clamp(2rem,    5vw,   4rem);
+    --s-2x: clamp(3rem,    8vw,   6.5rem);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+
+  body {
+    background:var(--bg); color:var(--text);
+    font-family:'DM Sans',sans-serif;
+    font-size:var(--t-body); line-height:1.6;
+    overflow-x:hidden; min-height:100vh;
+  }
+
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity:0.5; pointer-events:none; z-index:0;
+  }
+
+  /* ══ NAV ══ */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:var(--s-sm) var(--s-lg);
+    border-bottom:1px solid var(--text-e);
+    background:rgba(8,15,10,0.92);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+  }
+
+  /* Vesica + wordmark */
+  .nav-brand {
+    display:flex; align-items:center; gap:10px;
+    text-decoration:none;
+  }
+
+  .vesica-mark {
+    width:32px; height:20px; flex-shrink:0;
+  }
+
+  .nav-wordmark {
+    font-family:'Fraunces',serif; font-weight:900;
+    font-size:var(--t-label); letter-spacing:0.04em;
+    text-transform:uppercase; color:var(--text);
+    line-height:1;
+  }
+  .nav-wordmark em { color:var(--vesica); font-style:normal; }
+
+  .nav-r { display:flex; gap:var(--s-sm); align-items:center; }
+
+  .btn-ghost {
+    background:transparent; border:0.5px solid var(--text-d);
+    color:var(--text-c); font-family:'DM Mono',monospace;
+    font-size:var(--t-whisper); letter-spacing:0.16em;
+    text-transform:uppercase; padding:0.45em 1em;
+    cursor:pointer; transition:all 0.25s; white-space:nowrap;
+  }
+  .btn-ghost:hover { border-color:var(--acc-d); color:var(--acc); }
+
+  .btn-cta {
+    background:transparent; border:1px solid var(--acc-d);
+    color:var(--acc); font-family:'DM Mono',monospace;
+    font-size:var(--t-whisper); letter-spacing:0.2em;
+    text-transform:uppercase; padding:0.5em 1.4em;
+    cursor:pointer; transition:all 0.3s; white-space:nowrap;
+  }
+  .btn-cta:hover { border-color:var(--acc); background:var(--acc-p); }
+
+  /* ══ HERO ══ */
+  .hero {
+    min-height:100svh; position:relative;
+    display:flex; align-items:center;
+    padding:clamp(5rem,12vw,8rem) var(--s-lg) var(--s-2x);
+    overflow:hidden;
+  }
+
+  /* Ghost authority word */
+  .ghost-word {
+    position:absolute; left:0; top:0; bottom:0;
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    font-family:'Fraunces',serif; font-weight:900;
+    font-size:var(--t-display); text-transform:uppercase;
+    letter-spacing:0.01em; user-select:none; pointer-events:none;
+    color:transparent;
+    -webkit-text-stroke:1px rgba(200,169,110,0.055);
+    display:flex; align-items:center;
+    padding:0 var(--s-sm); white-space:nowrap;
+    animation:ghostIn 2.5s ease 3.5s both;
+  }
+  @keyframes ghostIn { from{opacity:0;} to{opacity:1;} }
+
+  .hero-inner {
+    position:relative; z-index:2; width:100%;
+    padding-left:clamp(2.5rem, 9vw, 8rem);
+    max-width:min(960px, 95vw);
+  }
+
+  /* Kicker */
+  .kicker {
+    font-family:'DM Mono',monospace;
+    font-size:var(--t-whisper); letter-spacing:0.32em;
+    text-transform:uppercase; color:var(--acc-d);
+    margin-bottom:var(--s-lg);
+    display:flex; align-items:center; gap:var(--s-sm);
+    opacity:0; animation:fadeSlide 1s ease 0.5s forwards;
+  }
+  .kicker::before { content:''; width:clamp(14px,2.5vw,30px); height:1px; background:var(--acc-d); flex-shrink:0; }
+
+  /* ── KINETIC HEADLINE — slow dramatic reveal ── */
+  .headline {
+    font-family:'Fraunces',serif; font-weight:900;
+    font-size:var(--t-hero); line-height:0.96;
+    letter-spacing:-0.02em; margin-bottom:var(--s-xl);
+  }
+
+  .hl-row { display:block; overflow:hidden; }
+
+  .hl-word {
+    display:inline-block;
+    opacity:0;
+    transform:translateY(100%) skewY(3deg);
+    will-change:transform, opacity;
+    margin-right:0.18em;
+  }
+
+  .hl-word.g { color:var(--acc); }
+
+  .hl-word.it {
+    font-style:italic; font-weight:400;
+    color:var(--text-b);
+  }
+
+  .hl-word.vt {
+    writing-mode:vertical-lr;
+    font-size:0.44em; font-weight:400; font-style:italic;
+    color:var(--acc-d); letter-spacing:0.1em;
+    vertical-align:middle; margin:0 0.25em;
+    opacity:0; transform:translateX(-14px) skewX(3deg);
+  }
+
+  /* Copy A timings — slow and dramatic */
+  .hl-word.w1 { animation:wordUp 1.2s cubic-bezier(0.16,1,0.3,1) 1.0s forwards; }
+  .hl-word.w2 { animation:wordUp 1.2s cubic-bezier(0.16,1,0.3,1) 1.22s forwards; }
+  .hl-word.w3 { animation:wordVert 1.2s cubic-bezier(0.16,1,0.3,1) 1.44s forwards; }
+  .hl-word.w4 { animation:wordUp 1.2s cubic-bezier(0.16,1,0.3,1) 1.66s forwards; }
+  .hl-word.w5 { animation:wordUp 1.2s cubic-bezier(0.16,1,0.3,1) 1.88s forwards; }
+  .hl-word.w6 { animation:wordUp 1.2s cubic-bezier(0.16,1,0.3,1) 2.1s forwards; }
+  .hl-word.w7 { animation:wordUp 1.2s cubic-bezier(0.16,1,0.3,1) 2.32s forwards; }
+
+  @keyframes wordUp   { to { opacity:1; transform:translateY(0) skewY(0deg); } }
+  @keyframes wordVert { to { opacity:1; transform:translateX(0) skewX(0deg); } }
+
+  /* Copy switcher */
+  .copy-switch {
+    display:flex; gap:1px; margin-bottom:var(--s-xl);
+    opacity:0; animation:fadeSlide 0.8s ease 0.8s forwards;
+  }
+  .cs-btn {
+    background:transparent; border:0.5px solid var(--text-d);
+    color:var(--text-d); font-family:'DM Mono',monospace;
+    font-size:var(--t-micro); letter-spacing:0.14em;
+    text-transform:uppercase; padding:0.35em 0.7em;
+    cursor:pointer; transition:all 0.2s;
+  }
+  .cs-btn.on { background:var(--text-d); color:var(--text-c); }
+  .cs-btn:hover { border-color:var(--text-c); color:var(--text-c); }
+
+  /* Subheading */
+  .hero-sub {
+    font-family:'Fraunces',serif; font-weight:400; font-style:italic;
+    font-size:var(--t-sub); color:var(--text-c); line-height:1.7;
+    max-width:min(520px,90vw); margin-bottom:var(--s-xl);
+    opacity:0; animation:fadeSlide 1s ease 2.6s forwards;
+  }
+  .hero-sub strong { font-style:normal; color:var(--text-b); font-weight:400; }
+
+  /* CTAs */
+  .hero-ctas {
+    display:flex; flex-wrap:wrap; gap:var(--s-sm); align-items:center;
+    opacity:0; animation:fadeSlide 0.8s ease 3.0s forwards;
+  }
+
+  .cta-hero {
+    background:transparent; border:1px solid var(--acc-d);
+    color:var(--acc); font-family:'DM Mono',monospace;
+    font-size:var(--t-label); letter-spacing:0.22em;
+    text-transform:uppercase;
+    padding:clamp(0.7em,1.2vw,0.9em) clamp(1.5em,3vw,2.5em);
+    cursor:pointer; transition:all 0.3s;
+  }
+  .cta-hero:hover { border-color:var(--acc); background:var(--acc-p); }
+
+  .cta-text {
+    background:transparent; border:none; color:var(--text-c);
+    font-family:'DM Mono',monospace; font-size:var(--t-whisper);
+    letter-spacing:0.14em; text-transform:uppercase;
+    padding:0.7em 0; cursor:pointer; transition:color 0.25s;
+    display:flex; align-items:center; gap:0.4em;
+  }
+  .cta-text::after { content:'↓'; transition:transform 0.3s; }
+  .cta-text:hover { color:var(--text-b); }
+  .cta-text:hover::after { transform:translateY(3px); }
+
+  .hero-disclaimer {
+    position:absolute; bottom:var(--s-md); left:50%;
+    transform:translateX(-50%);
+    font-family:'DM Mono',monospace; font-size:var(--t-micro);
+    letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--text-e); white-space:nowrap;
+    opacity:0; animation:fadeSlide 1s ease 3.4s forwards;
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position:absolute; bottom:var(--s-lg); right:var(--s-lg);
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    opacity:0; animation:fadeSlide 1s ease 3.6s forwards;
+  }
+  .scroll-line {
+    width:1px; height:clamp(28px,4vh,48px);
+    background:linear-gradient(to bottom, var(--acc-d), transparent);
+    animation:scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+  .scroll-label {
+    font-family:'DM Mono',monospace; font-size:var(--t-micro);
+    letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--text-d); writing-mode:vertical-lr;
+  }
+
+  /* ══ PROBLEM / SOLUTION ══ */
+  .ps-section {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:1px; background:var(--text-e);
+    border-top:1px solid var(--text-e);
+  }
+  @media(max-width:640px) { .ps-section { grid-template-columns:1fr; } }
+
+  .ps-panel {
+    background:var(--bg);
+    padding:var(--s-xl) var(--s-lg);
+    display:flex; flex-direction:column; gap:var(--s-md);
+  }
+
+  .ps-label {
+    font-family:'DM Mono',monospace;
+    font-size:var(--t-whisper); letter-spacing:0.3em;
+    text-transform:uppercase; color:var(--text-d);
+  }
+
+  .ps-headline {
+    font-family:'Fraunces',serif; font-weight:700;
+    font-size:var(--t-heading); line-height:1.15;
+    color:var(--text-c);
+  }
+
+  .ps-headline-sol {
+    font-family:'Fraunces',serif; font-weight:900;
+    font-size:var(--t-heading); line-height:1.15; color:var(--text);
+  }
+  .ps-headline-sol em { color:var(--acc); font-style:italic; }
+
+  .ps-body {
+    font-size:var(--t-body); color:var(--text-c);
+    line-height:1.8; font-weight:300; max-width:420px;
+  }
+
+  /* ══ FIVE STEPS — SCROLL STRIP ══ */
+  .steps-section {
+    padding:var(--s-2x) var(--s-lg);
+    border-top:1px solid var(--text-e);
+  }
+
+  .steps-header {
+    display:flex; flex-wrap:wrap; align-items:baseline;
+    justify-content:space-between; gap:var(--s-md);
+    margin-bottom:var(--s-xl);
+  }
+
+  .steps-title {
+    font-family:'Fraunces',serif; font-weight:900;
+    font-size:var(--t-heading); color:var(--text); line-height:1.1;
+  }
+
+  .steps-note {
+    font-family:'DM Mono',monospace; font-size:var(--t-whisper);
+    letter-spacing:0.1em; color:var(--text-d); font-style:italic;
+  }
+
+  /* ── SCROLL STRIP ── */
+  .scroll-strip {
+    display:flex;
+    gap:1px;
+    background:var(--text-e);
+    border:1px solid var(--text-e);
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+    cursor:default;
+    /* Prevent layout jump on hover */
+    contain:layout;
+  }
+  .scroll-strip::-webkit-scrollbar { display:none; }
+
+  .step-card {
+    /* Compressed default — expands on hover */
+    flex:0 0 clamp(80px, 12vw, 140px);
+    min-height:clamp(260px, 40vh, 380px);
+    background:var(--bg);
+    display:flex; flex-direction:column;
+    position:relative; cursor:pointer;
+    overflow:hidden;
+    transition:flex-basis 0.5s cubic-bezier(0.16,1,0.3,1);
+    scroll-snap-align:start;
+  }
+
+  /* Active step slightly wider at rest */
+  .step-card.active {
+    flex-basis:clamp(120px, 18vw, 200px);
+  }
+
+  /* On hover — magnify to full read width */
+  .scroll-strip:hover .step-card { flex-basis:clamp(80px, 10vw, 120px); }
+  .scroll-strip:hover .step-card:hover { flex-basis:clamp(260px, 36vw, 400px); }
+  .scroll-strip:hover .step-card.active { flex-basis:clamp(100px, 14vw, 160px); }
+
+  /* Illustration background */
+  .step-illus {
+    position:absolute; inset:0;
+    overflow:hidden;
+  }
+
+  .step-illus img {
+    width:100%; height:100%; object-fit:cover;
+    opacity:0; filter:brightness(0.5) saturate(0.7);
+    transition:opacity 0.4s ease, transform 0.6s ease, filter 0.4s ease;
+    transform:scale(1.06);
+  }
+
+  .step-card:hover .step-illus img,
+  .step-card.active .step-illus img {
+    opacity:0.85;
+    transform:scale(1.0);
+    filter:brightness(0.6) saturate(0.85);
+  }
+
+  /* Illustration placeholder */
+  .step-illus-placeholder {
+    width:100%; height:100%;
+    background:var(--text-e);
+    display:flex; align-items:flex-end;
+    padding:var(--s-sm);
+  }
+
+  .step-illus-placeholder span {
+    font-family:'DM Mono',monospace; font-size:var(--t-micro);
+    letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--text-d);
+  }
+
+  /* Gradient over illustration */
+  .step-illus::after {
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(to top, rgba(8,15,10,0.95) 0%, rgba(8,15,10,0.3) 60%, transparent 100%);
+  }
+
+  /* Active top border */
+  .step-card.active::before {
+    content:''; position:absolute; top:0; left:0; right:0;
+    height:2px; background:var(--vesica); z-index:5;
+  }
+
+  /* Locked overlay */
+  .step-card.locked { cursor:not-allowed; }
+  .step-card.locked .step-illus img { opacity:0; }
+  .step-card.locked .step-illus-placeholder { opacity:0.35; }
+
+  /* Step content — sits over illustration */
+  .step-content {
+    position:relative; z-index:3;
+    margin-top:auto;
+    padding:var(--s-md) var(--s-sm) var(--s-sm);
+    display:flex; flex-direction:column; gap:var(--s-xs);
+  }
+
+  .step-num {
+    font-family:'DM Mono',monospace; font-size:var(--t-micro);
+    letter-spacing:0.2em; color:var(--text-d);
+    transition:color 0.3s;
+  }
+  .step-card.active .step-num { color:var(--vesica); }
+  .step-card:hover .step-num { color:var(--acc-d); }
+
+  .step-name {
+    font-family:'Fraunces',serif; font-weight:700;
+    font-size:var(--t-sub); color:var(--text); line-height:1.1;
+    /* Hidden until card is wide enough */
+    white-space:nowrap; overflow:hidden;
+    opacity:0;
+    transition:opacity 0.3s ease 0.1s;
+  }
+  .step-card.active .step-name,
+  .step-card:hover .step-name { opacity:1; }
+  .step-card.locked .step-name { color:var(--text-d); }
+
+  .step-desc {
+    font-size:var(--t-whisper); color:var(--text-c);
+    line-height:1.65; font-weight:300;
+    max-width:280px;
+    opacity:0; max-height:0; overflow:hidden;
+    transition:opacity 0.3s ease 0.15s, max-height 0.4s ease;
+  }
+  .step-card:hover .step-desc { opacity:1; max-height:120px; }
+
+  .step-badge {
+    font-family:'DM Mono',monospace; font-size:var(--t-micro);
+    letter-spacing:0.12em; text-transform:uppercase;
+    padding:0.3em 0.6em; border-radius:2px;
+    align-self:flex-start; margin-top:var(--s-xs);
+    opacity:0;
+    transition:opacity 0.3s ease 0.2s;
+  }
+  .step-card:hover .step-badge,
+  .step-card.active .step-badge { opacity:1; }
+
+  .step-badge.s { color:var(--acc-d); border:0.5px solid var(--acc-d); background:var(--acc-p); }
+  .step-badge.f { color:var(--green); border:0.5px solid var(--green); background:rgba(74,138,90,0.06); }
+  .step-badge.l { color:var(--text-d); border:0.5px solid var(--text-d); }
+
+  /* Strip hint */
+  .strip-hint {
+    font-family:'DM Mono',monospace; font-size:var(--t-micro);
+    letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--text-d); margin-top:var(--s-sm);
+    display:flex; align-items:center; gap:var(--s-sm);
+  }
+  .strip-hint::before { content:''; width:16px; height:1px; background:var(--text-d); }
+
+  /* ══ FOOTER ══ */
+  footer {
+    border-top:1px solid var(--text-e);
+    padding:var(--s-lg);
+    display:flex; justify-content:space-between;
+    align-items:center; flex-wrap:wrap; gap:var(--s-sm);
+  }
+
+  .footer-txt {
+    font-family:'DM Mono',monospace; font-size:var(--t-whisper);
+    letter-spacing:0.12em; color:var(--text-d);
+  }
+
+  .footer-attr {
+    font-family:'DM Mono',monospace; font-size:var(--t-micro);
+    letter-spacing:0.1em; color:var(--text-e); font-style:italic;
+  }
+
+  /* ══ RETURNING USER STATE ══ */
+  #screen-returning {
+    display:none; min-height:100vh;
+    padding:calc(var(--s-2x) + 3rem) var(--s-lg) var(--s-2x);
+    position:relative; flex-direction:column; justify-content:center;
+  }
+  #screen-returning.visible { display:flex; }
+
+  .dash-greeting {
+    font-family:'DM Mono',monospace; font-size:var(--t-whisper);
+    letter-spacing:0.28em; text-transform:uppercase;
+    color:var(--acc-d); margin-bottom:var(--s-md);
+  }
+
+  .dash-brand {
+    font-family:'Fraunces',serif; font-weight:900;
+    font-size:var(--t-display); text-transform:uppercase;
+    line-height:0.9; letter-spacing:-0.01em;
+    color:var(--text); margin-bottom:var(--s-xl);
+  }
+  .dash-brand span { color:var(--vesica); display:block; }
+
+  .dash-progress { margin-bottom:var(--s-xl); max-width:700px; }
+  .dp-track { display:flex; gap:2px; margin-bottom:var(--s-xs); }
+  .dp-seg { flex:1; height:4px; background:var(--text-e); transition:background 0.4s; }
+  .dp-seg.done { background:var(--acc); }
+  .dp-seg.active { background:var(--acc-d); }
+
+  .dp-labels { display:flex; gap:2px; }
+  .dp-lbl {
+    flex:1; font-family:'DM Mono',monospace;
+    font-size:var(--t-micro); letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--text-d);
+    padding-top:var(--s-xs);
+  }
+  .dp-lbl.done { color:var(--acc-d); }
+  .dp-lbl.active { color:var(--text-c); border-top:1px solid var(--acc-d); }
+
+  .dash-actions { display:flex; flex-wrap:wrap; gap:var(--s-sm); margin-bottom:var(--s-xl); }
+
+  /* ══ DEMO TOGGLE ══ */
+  .demo-toggle {
+    position:fixed; bottom:var(--s-md); right:var(--s-md);
+    display:flex; z-index:200;
+    border:0.5px solid var(--text-d); overflow:hidden;
+  }
+  .dt-btn {
+    background:var(--bg); border:none; color:var(--text-d);
+    font-family:'DM Mono',monospace; font-size:var(--t-micro);
+    letter-spacing:0.1em; text-transform:uppercase;
+    padding:0.45em 0.8em; cursor:pointer; transition:all 0.2s;
+  }
+  .dt-btn.on { background:var(--text-d); color:var(--text-c); }
+
+  @keyframes fadeSlide {
+    from { opacity:0; transform:translateY(10px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+
+  /* Mobile */
+  @media(max-width:640px) {
+    .scroll-strip { overflow-x:auto; }
+    .step-card { flex:0 0 75vw; }
+    .scroll-strip:hover .step-card { flex-basis:75vw; }
+    .scroll-strip:hover .step-card:hover { flex-basis:85vw; }
+    .step-name { opacity:1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a class="nav-brand" href="#">
+    <!-- Vesica Piscis logo -->
+    <svg class="vesica-mark" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="10" r="9" stroke="rgba(232,103,58,0.55)" stroke-width="0.8"/>
+      <circle cx="20" cy="10" r="9" stroke="rgba(232,103,58,0.55)" stroke-width="0.8"/>
+      <path d="M16 2.68C13.48 4.54 11.8 7.08 11.8 10s1.68 5.46 4.2 7.32C18.52 15.46 20.2 12.92 20.2 10s-1.68-5.46-4.2-7.32z" fill="rgba(232,103,58,0.3)"/>
+    </svg>
+    <span class="nav-wordmark">Stencil<em>+</em>Frame</span>
+  </a>
+  <div class="nav-r">
+    <button class="btn-ghost">GitHub</button>
+    <button class="btn-cta" id="nav-cta">Start free →</button>
+  </div>
+</nav>
+
+<!-- ══ NEW USER — LANDING ══ -->
+<div id="screen-new">
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="ghost-word">STENCIL</div>
+
+    <div class="hero-inner">
+      <p class="kicker" id="hero-kicker">Brand discovery — free and open source</p>
+
+      <!-- Copy switcher -->
+      <div class="copy-switch">
+        <button class="cs-btn on" onclick="setCopy('A',this)">A</button>
+        <button class="cs-btn" onclick="setCopy('B',this)">B</button>
+        <button class="cs-btn" onclick="setCopy('C',this)">C</button>
+      </div>
+
+      <!-- Kinetic headline — Copy A -->
+      <h1 class="headline" id="headline">
+        <span class="hl-row">
+          <span class="hl-word w1">Your</span>
+          <span class="hl-word g w2">brand,</span>
+        </span>
+        <span class="hl-row">
+          <span class="hl-word vt w3">before</span>
+          <span class="hl-word it w4">anyone</span>
+          <span class="hl-word it w5">else</span>
+        </span>
+        <span class="hl-row">
+          <span class="hl-word g w6">defines</span>
+          <span class="hl-word w7">it.</span>
+        </span>
+      </h1>
+
+      <p class="hero-sub" id="hero-sub">
+        Every branding tool assumes you already know who you are.
+        <strong>Stencil starts where they don't —</strong>
+        with the thinking before the logo, the colours, the copy.
+      </p>
+
+      <div class="hero-ctas">
+        <button class="cta-hero" id="cta-main">Begin the investigation →</button>
+        <button class="cta-text"
+          onclick="document.getElementById('problem').scrollIntoView({behavior:'smooth'})">
+          See how it works
+        </button>
+      </div>
+    </div>
+
+    <p class="hero-disclaimer">No account needed — your answers stay on your device</p>
+
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      <span class="scroll-label">Scroll</span>
+    </div>
+  </section>
+
+  <!-- Problem / Solution -->
+  <section class="ps-section" id="problem">
+    <div class="ps-panel">
+      <p class="ps-label">The problem</p>
+      <h2 class="ps-headline">Every brand tool<br>assumes you already<br>know who you are.</h2>
+      <p class="ps-body">
+        Canva asks you to pick colours. Looka asks for your industry.
+        Jasper asks for your brand voice. All of them assume the hard
+        work is already done. It isn't. That's where most brands fail —
+        not in execution, but in identity.
+      </p>
+    </div>
+    <div class="ps-panel" style="border-left:1px solid var(--text-e);">
+      <p class="ps-label">The solution</p>
+      <h2 class="ps-headline-sol">Stencil starts at<br>the <em>beginning</em> —<br>with you.</h2>
+      <p class="ps-body">
+        Who you are. What you stand against. Who you're really building
+        for. Where no one else is standing. Five guided steps that take
+        you from blank page to a brand that's genuinely yours.
+      </p>
+    </div>
+  </section>
+
+  <!-- Five steps — scroll strip -->
+  <section class="steps-section" id="steps">
+    <div class="steps-header">
+      <h2 class="steps-title">Five steps.<br>One honest process.</h2>
+      <p class="steps-note">Inspired by Michael Johnson's branding methodology</p>
+    </div>
+
+    <div class="scroll-strip" id="scroll-strip">
+
+      <div class="step-card active" onclick="document.getElementById('nav-cta').click()">
+        <div class="step-illus">
+          <!-- Replace with act0-origin.webp when available -->
+          <div class="step-illus-placeholder">
+            <span>Excavation</span>
+          </div>
+        </div>
+        <div class="step-content">
+          <span class="step-num">01</span>
+          <span class="step-name">Investigate</span>
+          <p class="step-desc">Find your gap. Map the competition, discover the space no one else occupies. The thinking that makes everything else possible.</p>
+          <span class="step-badge s">Stencil — available now</span>
+        </div>
+      </div>
+
+      <div class="step-card locked">
+        <div class="step-illus">
+          <div class="step-illus-placeholder"><span>Strategy</span></div>
+        </div>
+        <div class="step-content">
+          <span class="step-num">02</span>
+          <span class="step-name">Strategy</span>
+          <p class="step-desc">Turn the gap into a position. Define where you stand, who you speak to, and what you uniquely own.</p>
+          <span class="step-badge l">Coming — Stencil</span>
+        </div>
+      </div>
+
+      <div class="step-card locked">
+        <div class="step-illus">
+          <div class="step-illus-placeholder"><span>Narrative</span></div>
+        </div>
+        <div class="step-content">
+          <span class="step-num">02.5</span>
+          <span class="step-name">Narrative</span>
+          <p class="step-desc">Your verbal identity — words, tone, story — all derived from strategy, not invented in a vacuum.</p>
+          <span class="step-badge l">Coming — Stencil</span>
+        </div>
+      </div>
+
+      <div class="step-card locked">
+        <div class="step-illus">
+          <div class="step-illus-placeholder"><span>Design</span></div>
+        </div>
+        <div class="step-content">
+          <span class="step-num">03</span>
+          <span class="step-name">Design</span>
+          <p class="step-desc">Visual identity that comes from strategy, not trends. Logo, colour, typography — all earned.</p>
+          <span class="step-badge f">Coming — Frame</span>
+        </div>
+      </div>
+
+      <div class="step-card locked">
+        <div class="step-illus">
+          <div class="step-illus-placeholder"><span>Launch</span></div>
+        </div>
+        <div class="step-content">
+          <span class="step-num">04–05</span>
+          <span class="step-name">Build + Launch</span>
+          <p class="step-desc">Taking your brand into the world with everything Frame generates for you.</p>
+          <span class="step-badge f">Coming — Frame</span>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="strip-hint">hover to explore each step</p>
+  </section>
+
+  <footer>
+    <span class="footer-txt">Stencil + Frame — open source, free forever</span>
+    <span class="footer-txt">Your data never leaves your device</span>
+    <span class="footer-attr">Inspired by Michael Johnson's branding methodology</span>
+  </footer>
+
+</div>
+
+<!-- ══ RETURNING USER ══ -->
+<div id="screen-returning">
+  <div class="ghost-word" style="opacity:0.6;">STENCIL</div>
+
+  <p class="dash-greeting">Welcome back</p>
+  <h1 class="dash-brand">Color<span>Flix</span></h1>
+
+  <div class="dash-progress">
+    <div class="dp-track">
+      <div class="dp-seg done"></div>
+      <div class="dp-seg active"></div>
+      <div class="dp-seg"></div>
+      <div class="dp-seg"></div>
+      <div class="dp-seg"></div>
+    </div>
+    <div class="dp-labels">
+      <div class="dp-lbl done">Investigate</div>
+      <div class="dp-lbl active">Strategy</div>
+      <div class="dp-lbl">Narrative</div>
+      <div class="dp-lbl">Design</div>
+      <div class="dp-lbl">Launch</div>
+    </div>
+  </div>
+
+  <div class="dash-actions">
+    <button class="cta-hero">Continue — Strategy →</button>
+    <button class="btn-ghost">View brand.md</button>
+    <button class="btn-ghost">New brand</button>
+  </div>
+</div>
+
+<!-- Demo toggle -->
+<div class="demo-toggle">
+  <button class="dt-btn on" onclick="showNew();setDT(this)">New</button>
+  <button class="dt-btn" onclick="showRet();setDT(this)">Returning</button>
+</div>
+
+<script>
+// ── Copy variations ───────────────────────────────────────────
+const COPY = {
+  A: {
+    kicker: 'Brand discovery — free and open source',
+    sub: 'Every branding tool assumes you already know who you are. <strong>Stencil starts where they don\'t —</strong> with the thinking before the logo, the colours, the copy.',
+    cta: 'Begin the investigation →',
+    disclaimer: 'No account needed — your answers stay on your device'
+  },
+  B: {
+    kicker: 'Find your gap — free and open source',
+    sub: 'Most brands fail not in execution, but in identity. <strong>They skip the thinking.</strong> Stencil is the thinking — five guided steps to find where you genuinely belong.',
+    cta: 'Find your gap →',
+    disclaimer: 'Free forever — open source — your data stays on device'
+  },
+  C: {
+    kicker: 'Brand strategy — free and open source',
+    sub: 'Canva asks for your colours. Looka asks for your industry. Neither asks who you are. <strong>Stencil asks the hard questions</strong> before anything gets made.',
+    cta: 'Start thinking →',
+    disclaimer: 'No account — no subscription — no lock-in'
+  }
+};
+
+let currentCopy = 'A';
+
+function setCopy(v, btn){
+  if(v===currentCopy) return;
+  currentCopy=v;
+  document.querySelectorAll('.cs-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const c=COPY[v];
+  document.getElementById('hero-kicker').textContent=c.kicker;
+  document.getElementById('hero-sub').innerHTML=c.sub;
+  document.getElementById('cta-main').textContent=c.cta;
+  document.querySelector('.hero-disclaimer').textContent=c.disclaimer;
+}
+
+// ── View toggle ───────────────────────────────────────────────
+function showNew(){
+  document.getElementById('screen-new').style.display='block';
+  document.getElementById('screen-returning').classList.remove('visible');
+}
+function showRet(){
+  document.getElementById('screen-new').style.display='none';
+  document.getElementById('screen-returning').classList.add('visible');
+}
+function setDT(btn){
+  document.querySelectorAll('.dt-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+}
+
+// ── Nav CTA ───────────────────────────────────────────────────
+document.getElementById('nav-cta').addEventListener('click',()=>{
+  // In production: navigate to Act 0 session
+  alert('→ Opens Act 0 session\n(Illustration reveal → split screen → questions)');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+{
+  "brands": [
+    {
+      "id": "muji",
+      "name": "Muji",
+      "category": "Everyday goods",
+      "origin": "Japan",
+      "colour": "#8a8a82",
+      "colour_name": "Warm grey",
+      "tagline": "No brand. Just good.",
+      "q1": "We make everyday products stripped of everything unnecessary.",
+      "q2": "Products are designed to impress in the shop, not to last in your home.",
+      "q3": "She lives in a small flat that feels cluttered. She wants fewer things, better made. Nothing she owns quite fits.",
+      "gap_axes": {
+        "x": { "left": "branded", "right": "unbranded" },
+        "y": { "bottom": "mass market", "top": "considered quality" }
+      },
+      "gap": "The only brand that made no-brand a philosophy, not a budget choice.",
+      "values": ["Restraint", "Honesty", "Function over form"],
+      "purpose": "For people who are tired of being sold to. They deserve products that respect their intelligence and their space."
+    },
+    {
+      "id": "oatly",
+      "name": "Oatly",
+      "category": "Food and drink",
+      "origin": "Sweden",
+      "colour": "#f5e642",
+      "colour_name": "Oat yellow",
+      "tagline": "It's like milk but made for humans.",
+      "q1": "We make oat-based food for people who want milk without the cow.",
+      "q2": "The food industry spends more energy on marketing health than actually being healthy.",
+      "q3": "He cares about what he puts in his body but finds every alternative tastes like compromise.",
+      "gap_axes": {
+        "x": { "left": "corporate health", "right": "honest health" },
+        "y": { "bottom": "animal-based", "top": "plant-based" }
+      },
+      "gap": "The only plant-based brand that refuses to pretend it isn't trying to change the world.",
+      "values": ["Radical honesty", "Anti-corporate", "Planetary responsibility"],
+      "purpose": "For people who want to make better choices but won't sacrifice taste or be lectured to."
+    },
+    {
+      "id": "colorflix",
+      "name": "ColorFlix",
+      "category": "Cosmetics",
+      "origin": "India",
+      "colour": "#e8205a",
+      "colour_name": "Bold pink",
+      "tagline": "Colour for those who refuse to blend in.",
+      "q1": "We make bold colour cosmetics for Gen Z women who refuse to blend in.",
+      "q2": "Beauty brands tell Indian women their natural skin tone needs correcting.",
+      "q3": "She is 19, experimental, broke, and the beauty aisle was never designed for her skin or her budget.",
+      "gap_axes": {
+        "x": { "left": "corrective", "right": "expressive" },
+        "y": { "bottom": "premium", "top": "accessible" }
+      },
+      "gap": "The only Indian cosmetics brand that celebrates what you look like instead of fixing it.",
+      "values": ["Boldness", "Inclusivity", "Affordable self-expression"],
+      "purpose": "For young Indian women who want to experiment with colour without being told they need to look a certain way first."
+    },
+    {
+      "id": "paperboat",
+      "name": "Paper Boat",
+      "category": "Beverages",
+      "origin": "India",
+      "colour": "#d4521a",
+      "colour_name": "Warm orange",
+      "tagline": "Drinks and memories.",
+      "q1": "We make drinks that taste like the ones your grandmother made.",
+      "q2": "Packaged drinks erased the taste of real Indian ingredients and called it progress.",
+      "q3": "He is 35 and misses the taste of his childhood. Nothing he finds in a store comes close.",
+      "gap_axes": {
+        "x": { "left": "modern", "right": "nostalgic" },
+        "y": { "bottom": "artificial", "top": "authentic" }
+      },
+      "gap": "The only beverage brand that treats memory as an ingredient.",
+      "values": ["Nostalgia", "Authenticity", "Indian cultural heritage"],
+      "purpose": "For anyone who has lost the taste of something they grew up with and wants it back."
+    },
+    {
+      "id": "zepto",
+      "name": "Zepto",
+      "category": "Quick commerce",
+      "origin": "India",
+      "colour": "#6c3ce1",
+      "colour_name": "Electric purple",
+      "tagline": "10 minutes. Really.",
+      "q1": "We deliver groceries in ten minutes so your day doesn't stop.",
+      "q2": "Grocery shopping was designed around the store's convenience, not yours.",
+      "q3": "She is a working mother at 7pm realising dinner needs one ingredient she doesn't have. Time is the thing that's missing.",
+      "gap_axes": {
+        "x": { "left": "planned", "right": "instant" },
+        "y": { "bottom": "inconvenient", "top": "frictionless" }
+      },
+      "gap": "The only grocery service built around the moment you realise you need something, not the moment you planned to shop.",
+      "values": ["Speed", "Reliability", "Respecting people's time"],
+      "purpose": "For people whose time is the most valuable thing they have and who refuse to waste it on errands."
+    },
+    {
+      "id": "fridakahlo",
+      "name": "Frida Kahlo",
+      "category": "Art",
+      "origin": "Mexico",
+      "colour": "#c8254a",
+      "colour_name": "Frida magenta",
+      "tagline": "I paint my own reality.",
+      "q1": "I paint my reality so that the world cannot look away from what it refuses to see.",
+      "q2": "The art world demanded women paint beauty. I refused to hide the pain.",
+      "q3": "She is anyone who has been told her story is too small, too female, too brown to matter. What's missing is a mirror.",
+      "gap_axes": {
+        "x": { "left": "external world", "right": "inner truth" },
+        "y": { "bottom": "acceptable", "top": "confrontational" }
+      },
+      "gap": "The only artist who made personal suffering a universal language.",
+      "values": ["Radical self-expression", "Defiance", "Identity as art"],
+      "purpose": "For anyone whose truth has been called too much — and who needs proof that it is exactly enough."
+    },
+    {
+      "id": "basquiat",
+      "name": "Basquiat",
+      "category": "Art",
+      "origin": "USA",
+      "colour": "#e8c830",
+      "colour_name": "Crown gold",
+      "tagline": "The crown was never theirs to give.",
+      "q1": "I make art that puts Black identity and street knowledge where the establishment said it didn't belong.",
+      "q2": "The art world wanted to own Black creativity without crediting or paying the people it came from.",
+      "q3": "He is a young Black artist in a city that tells him his culture is entertainment but not fine art. What's missing is legitimacy on his own terms.",
+      "gap_axes": {
+        "x": { "left": "establishment", "right": "street" },
+        "y": { "bottom": "invisible", "top": "celebrated" }
+      },
+      "gap": "The only artist who forced fine art to reckon with what it had stolen.",
+      "values": ["Reclamation", "Raw truth", "Anti-erasure"],
+      "purpose": "For anyone whose culture has been appropriated, diluted, and sold back to them at a premium."
+    }
+    {
+      "id": "niharikavm",
+      "name": "Niharika NM",
+      "category": "Creative identity / Instagrammer",
+      "origin": "India",
+      "colour": "#ff6b35",
+      "colour_name": "Electric coral",
+      "tagline": "The voice you were told to keep quiet.",
+      "q1": "I make comedy that sounds exactly like the voice in every South Indian girl's head that she was told to keep quiet.",
+      "q2": "Influencer culture rewards polish and aspiration. I built an audience by being the opposite of both.",
+      "q3": "She is 22, from Chennai or Bangalore, consumes English content but lives a very Indian life. What's missing is someone who gets both without explaining either.",
+      "gap_axes": {
+        "x": { "left": "polished", "right": "raw" },
+        "y": { "bottom": "aspirational", "top": "relatable" }
+      },
+      "gap": "The only Indian creator who made being unapologetically herself a full creative identity — not a personality quirk.",
+      "values": ["Radical relatability", "Anti-polish", "South Indian female voice"],
+      "purpose": "For young Indian women who consume global content but live very Indian lives and have never seen themselves represented without apology."
+    }
+  ]
+}

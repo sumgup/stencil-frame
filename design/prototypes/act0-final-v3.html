@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stencil + Frame — Act 0</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;900&family=Fraunces:opsz,wght@9..144,900&family=DM+Sans:wght@300;400&family=DM+Mono:wght@300;400&display=swap');
+
+  :root {
+    --bg:     #080f0a;
+    --acc:    #c8a96e;
+    --acc-d:  #5a4520;
+    --text:   #f0ede6;
+    --text-b: #c0b8ac;
+    --text-c: #7a8070;
+    --text-d: #1a2a1a;
+    --text-e: #0e1a0f;
+    --vesica: #e8673a;
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; background:var(--bg); overflow:hidden; }
+
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:300; opacity:0.55;
+  }
+
+  /* ══ ILLUSTRATION ══ */
+  #illus-layer { position:fixed; inset:0; z-index:1; }
+  #illus-bg {
+    width:100%; height:100%; object-fit:cover;
+    opacity:0; filter:blur(20px) brightness(0.6); transform:scale(1.06);
+    transition:opacity 1.6s ease, filter 2s ease, transform 8s ease;
+  }
+  #illus-bg.arrive  { opacity:1; filter:blur(0px) brightness(0.75); transform:scale(1); }
+  #illus-bg.recede  { opacity:1; filter:blur(4px) brightness(0.22) saturate(0.4); transition:opacity 1.8s ease, filter 2.2s ease; }
+  .illus-vignette   { position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(8,15,10,0.1) 0%, rgba(8,15,10,0.72) 100%); pointer-events:none; }
+  #motion-canvas    { position:absolute; inset:0; pointer-events:none; z-index:2; transition:opacity 0.6s ease; }
+  #motion-canvas.hidden { opacity:0; pointer-events:none; }
+
+  /* ══ PHASE 1 — HERO ══ */
+  #phase-hero {
+    position:fixed; inset:0; z-index:10;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    pointer-events:none; transition:opacity 1s ease;
+  }
+  #phase-hero.receded { opacity:0; pointer-events:none; }
+
+  .hero-kicker {
+    font-family:'DM Mono',monospace; font-size:9px;
+    letter-spacing:0.35em; text-transform:uppercase;
+    color:var(--acc-d); margin-bottom:1.2rem;
+    opacity:0; transition:opacity 0.8s ease;
+  }
+  .hero-title {
+    font-family:'Fraunces',serif; font-weight:900;
+    font-size:clamp(3.5rem,10vw,8rem);
+    text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--text); line-height:0.95; text-align:center;
+    opacity:0; transform:translateY(12px);
+    transition:opacity 1s ease, transform 1s cubic-bezier(0.16,1,0.3,1);
+    text-shadow:0 4px 40px rgba(0,0,0,0.9);
+  }
+  .hero-continue {
+    margin-top:2.5rem;
+    font-family:'DM Mono',monospace; font-size:9px;
+    letter-spacing:0.3em; text-transform:uppercase;
+    color:var(--text-c); cursor:pointer; pointer-events:auto;
+    opacity:0; transition:opacity 0.6s ease;
+    animation:breathe 2.5s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%,100%{opacity:0.2;} 50%{opacity:0.7;} }
+  #phase-hero.arrived .hero-kicker,
+  #phase-hero.arrived .hero-title,
+  #phase-hero.arrived .hero-continue { opacity:1; transform:translateY(0); }
+
+  /* ══ PHASE 2 — SESSION ══ */
+  #phase-session {
+    position:fixed; inset:0; z-index:20;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity 0.6s ease;
+  }
+  #phase-session.visible { opacity:1; pointer-events:auto; }
+
+  /* HUD */
+  .hud {
+    position:absolute; top:0; left:0; right:0;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1.6rem 2.2rem; z-index:10;
+  }
+  .vesica-hud { width:30px; height:19px; flex-shrink:0; opacity:0.32; }
+  .motif { display:flex; align-items:flex-end; gap:3px; }
+  .m-bar { width:1.5px; border-radius:1px; background:var(--acc-d); animation:mP 5s ease-in-out infinite; }
+  .m-bar:nth-child(1){height:7px;} .m-bar:nth-child(2){height:11px;animation-delay:0.4s;}
+  .m-bar:nth-child(3){height:15px;animation-delay:0.8s;} .m-bar:nth-child(4){height:9px;animation-delay:1.2s;}
+  @keyframes mP{0%,100%{opacity:0.1;}50%{opacity:0.35;}}
+
+  /* Progress */
+  .progress {
+    position:absolute; right:1.4rem; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .p-item { display:flex; align-items:center; gap:6px; justify-content:flex-end; }
+  .p-name { font-family:'DM Mono',monospace; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-d); }
+  .p-item.on .p-name { color:var(--acc-d); }
+  .p-line { width:10px; height:1px; background:var(--text-d); }
+  .p-item.on .p-line { background:var(--acc); width:18px; }
+
+  /* Brand pill */
+  .brand-pill {
+    position:absolute; top:1.5rem; left:50%; transform:translateX(-50%);
+    cursor:pointer; white-space:nowrap;
+  }
+  .pill-inner {
+    display:flex; align-items:center; gap:7px;
+    border:0.5px solid var(--text-d); padding:5px 12px 5px 8px;
+    font-family:'DM Mono',monospace; font-size:8px;
+    letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--text-c); background:rgba(8,15,10,0.7); transition:all 0.3s;
+  }
+  .pill-inner:hover { border-color:var(--acc-d); color:var(--acc); }
+  .pill-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+  /* Focus layers */
+  .fl { transition:opacity 0.6s ease; }
+  .fl.receded { opacity:0.03; pointer-events:none; }
+  .fl.returning { transition:opacity 0.8s ease; }
+
+  /* ══ QUESTION ROW ══ */
+  #question-row {
+    position:relative; z-index:6;
+    display:flex; align-items:flex-start;
+    justify-content:center;
+    gap:clamp(0.6rem, 1.8vw, 1.2rem);
+    width:100%;
+    padding:0 clamp(2rem, 6vw, 5rem);
+    max-width:1100px;
+  }
+
+  /* Lit ground */
+  #question-row::before {
+    content:''; position:absolute; inset:-3rem -2rem;
+    background:radial-gradient(ellipse at center,
+      rgba(200,169,110,0.048) 0%,
+      rgba(232,103,58,0.01) 45%,
+      transparent 70%);
+    pointer-events:none; border-radius:8px;
+  }
+
+  /* ── VESICA MASCOT ── */
+  #vesica-mascot {
+    /* Optical height matches cap-height of question */
+    width:  clamp(2.6rem, 5vw, 5rem);
+    height: clamp(2.6rem, 5vw, 5rem);
+    flex-shrink:0;
+    margin-top:0.08em; /* align with cap-height */
+    opacity:0;
+    transition:opacity 0.5s ease;
+  }
+  /* Arrives with question, stays permanently at low opacity */
+  #vesica-mascot.present { opacity:0.22; }
+
+  /* Pulse once on arrival — draws attention then settles */
+  #vesica-mascot.pulse {
+    animation:mascotPulse 1.8s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes mascotPulse {
+    0%   { opacity:0;    transform:scale(0.82); }
+    35%  { opacity:0.85; transform:scale(1.06); }
+    65%  { opacity:0.85; transform:scale(1.0);  }
+    100% { opacity:0.22; transform:scale(1.0);  }
+  }
+
+  #vesica-mascot svg { width:100%; height:100%; }
+
+  /* Draw the circles on arrival */
+  .vm-circle {
+    stroke-dasharray:220; stroke-dashoffset:220;
+  }
+  #vesica-mascot.pulse .vm-circle {
+    animation:drawC 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  #vesica-mascot.pulse .vm-circle:nth-child(2) { animation-delay:0.1s; }
+  @keyframes drawC { to { stroke-dashoffset:0; } }
+
+  .vm-fill { opacity:0; }
+  #vesica-mascot.pulse .vm-fill {
+    animation:fillV 0.5s ease 0.55s forwards;
+  }
+  @keyframes fillV { to { opacity:1; } }
+
+  /* ── QUESTION TEXT ── */
+  #question-lines {
+    display:flex; flex-direction:column; align-items:flex-start;
+    min-width:0;
+  }
+
+  .q3-setup {
+    font-family:'DM Sans',sans-serif; font-weight:300;
+    font-size:clamp(0.9rem,1.6vw,1.1rem); color:var(--text-c);
+    margin-bottom:1rem; display:none; line-height:1.65;
+    opacity:0; transition:opacity 0.6s ease;
+  }
+
+  /* The actual question lines */
+  .q-line-wrap {
+    display:block;
+    overflow:hidden;
+    line-height:1.0;
+  }
+
+  .q-line {
+    display:block;
+    font-family:'Big Shoulders Display',sans-serif;
+    font-weight:700;
+    font-size:clamp(3.2rem, 7.5vw, 7rem);
+    line-height:0.95;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+    color:var(--text);
+    /* Start invisible — JS types characters in */
+    white-space:nowrap;
+  }
+  .q-line.acc { color:var(--acc); }
+
+  /* Kinetic char — each character slides up into view */
+  .q-char {
+    display:inline-block;
+    opacity:0;
+    transform:translateY(0.3em);
+    transition:opacity 0.18s ease, transform 0.22s cubic-bezier(0.16,1,0.3,1);
+  }
+  .q-char.in {
+    opacity:1;
+    transform:translateY(0);
+  }
+  /* Space char */
+  .q-char.sp { display:inline-block; width:0.28em; }
+
+  /* Q2 rotate */
+  .q2-rotate {
+    display:none; margin-top:0.8rem; background:transparent; border:none; padding:0;
+    font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--text-d); cursor:pointer; transition:color 0.2s;
+  }
+  .q2-rotate:hover { color:var(--acc-d); }
+  .q2-rotate::before { content:'↻  '; }
+
+  /* Whisper — lowercase always */
+  .whisper {
+    font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.2em;
+    color:var(--text-c); margin-top:1.4rem;
+    opacity:0; transition:opacity 0.8s ease;
+  }
+
+  /* ── INPUTS ── */
+  .input-wrap {
+    max-width:560px; width:100%; position:relative;
+    margin:1.6rem auto 0; opacity:0; transition:opacity 0.6s ease; z-index:6;
+  }
+  .input-wrap.visible { opacity:1; }
+
+  .inp-label {
+    font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.15em; text-transform:uppercase;
+    color:var(--text-d); margin-bottom:0.4rem; display:none; text-align:left;
+  }
+
+  textarea, input[type=text] {
+    width:100%; background:transparent; border:none; border-bottom:1px solid var(--text-d);
+    padding:0.7rem 0; font-family:'DM Sans',sans-serif; font-weight:300;
+    font-size:clamp(1rem,1.8vw,1.2rem); color:var(--text); outline:none; resize:none;
+    line-height:1.65; caret-color:var(--acc); transition:border-color 0.4s;
+  }
+  input[type=text] { min-height:auto; }
+  textarea { min-height:56px; }
+  textarea::placeholder, input::placeholder {
+    color:var(--text-d); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.18em; font-weight:300;
+  }
+  textarea:focus, input:focus { border-bottom-color:var(--acc-d); }
+  .input-line { position:absolute; bottom:0; left:0; height:1px; width:0; background:var(--acc); transition:width 0.7s cubic-bezier(0.16,1,0.3,1); }
+  textarea:focus ~ .input-line, input:focus ~ .input-line { width:100%; }
+
+  /* Mad libs */
+  .madlibs-wrap {
+    display:none; flex-direction:column; gap:1rem; margin:1.6rem auto 0;
+    max-width:560px; width:100%; opacity:0; transition:opacity 0.5s ease; z-index:6; position:relative;
+  }
+  .madlibs-wrap.visible { display:flex; opacity:1; }
+  .slot-wrap { position:relative; }
+  .slot-label { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.13em; color:var(--acc-d); margin-bottom:0.25rem; display:block; text-align:left; }
+
+  /* Typewriter hint */
+  .tw-hint {
+    display:flex; align-items:flex-start; gap:9px; margin:0.9rem auto 0;
+    opacity:0; transition:opacity 0.5s ease; max-width:560px; width:100%; z-index:6; position:relative;
+  }
+  .tw-hint.visible { opacity:1; }
+  .tw-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+  .tw-label { font-family:'DM Mono',monospace; font-size:7px; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-d); margin-bottom:3px; }
+  .tw-text { font-family:'DM Sans',sans-serif; font-weight:300; font-size:clamp(0.85rem,1.4vw,1rem); color:var(--text-c); line-height:1.55; }
+  .tw-cursor { display:inline-block; width:2px; height:13px; background:var(--acc); margin-left:1px; vertical-align:middle; animation:blink 0.9s ease infinite; }
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+  /* Draft card */
+  .draft-card {
+    max-width:560px; width:100%; margin:1rem auto 0; z-index:6; position:relative;
+    border:0.5px solid var(--text-d); padding:1.2rem 1.4rem;
+    background:rgba(8,15,10,0.75); backdrop-filter:blur(8px);
+    opacity:0; transform:translateY(8px);
+    transition:opacity 0.5s ease, transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    display:none; text-align:left;
+  }
+  .draft-card.visible { opacity:1; transform:translateY(0); display:block; }
+  .draft-label { font-family:'DM Mono',monospace; font-size:7px; letter-spacing:0.18em; text-transform:uppercase; color:var(--acc-d); margin-bottom:0.7rem; display:flex; align-items:center; gap:5px; }
+  .draft-pulse { width:4px; height:4px; border-radius:50%; background:var(--acc); animation:mP 2s ease-in-out infinite; }
+  .draft-loading { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.14em; color:var(--text-d); display:none; }
+  .draft-loading.vis { display:block; }
+  .draft-text { font-family:'DM Sans',sans-serif; font-weight:300; font-size:clamp(0.9rem,1.5vw,1.05rem); line-height:1.7; color:var(--text); margin-bottom:1rem; }
+  .draft-actions { display:flex; gap:5px; flex-wrap:wrap; }
+  .d-btn { background:transparent; border:0.5px solid var(--text-d); color:var(--text-c); font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.12em; text-transform:uppercase; padding:0.4rem 0.8rem; cursor:pointer; transition:all 0.2s; }
+  .d-btn:hover { border-color:var(--text-c); color:var(--text); }
+  .d-btn.primary { border-color:var(--acc-d); color:var(--acc); }
+  .d-btn.primary:hover { border-color:var(--acc); }
+
+  /* Bottom bar */
+  .bottom-bar { position:absolute; bottom:1.8rem; left:0; right:0; display:flex; justify-content:space-between; align-items:center; padding:0 2.2rem; }
+  .honest { font-family:'DM Mono',monospace; font-size:7px; letter-spacing:0.14em; color:var(--text-e); }
+  .cont-btn { background:transparent; border:0.5px solid var(--text-d); color:var(--text-c); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.18em; text-transform:uppercase; padding:0.52rem 1.1rem; cursor:pointer; transition:all 0.3s; pointer-events:none; }
+  .cont-btn.ready { pointer-events:auto; border-color:var(--acc-d); color:var(--acc); }
+  .cont-btn.ready:hover { border-color:var(--acc); }
+
+  /* Example overlay */
+  .ex-overlay { position:fixed; inset:0; z-index:400; background:rgba(4,8,5,0.97); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity 0.5s ease; }
+  .ex-overlay.open { opacity:1; pointer-events:auto; }
+  .ex-inner { max-width:660px; width:100%; padding:3rem; position:relative; }
+  .ex-brand { font-family:'Big Shoulders Display',sans-serif; font-weight:900; font-size:clamp(3rem,7vw,6rem); text-transform:uppercase; line-height:0.9; margin-bottom:2.5rem; letter-spacing:0.02em; }
+  .ex-qa { margin-bottom:1.8rem; }
+  .ex-q { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:0.2em; text-transform:uppercase; color:var(--acc-d); margin-bottom:0.5rem; }
+  .ex-a { font-family:'DM Sans',sans-serif; font-weight:300; font-size:clamp(0.95rem,1.6vw,1.1rem); line-height:1.65; color:var(--text-c); }
+  .ex-close { position:absolute; top:2rem; right:2rem; background:transparent; border:0.5px solid var(--text-d); color:var(--text-c); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:0.15em; text-transform:uppercase; padding:0.45rem 0.9rem; cursor:pointer; transition:all 0.2s; }
+  .ex-close:hover { border-color:var(--text-c); color:var(--text); }
+
+  /* Blob + structural */
+  #blob { position:fixed; inset:0; pointer-events:none; z-index:0; }
+  .h-line { position:fixed; left:0; right:0; height:1px; background:var(--text-e); z-index:350; transform:scaleX(0); transform-origin:left; }
+  .h-line.t { top:0; animation:xLine 1.4s cubic-bezier(0.16,1,0.3,1) 0.1s forwards; }
+  .h-line.b { bottom:0; animation:xLine 1.4s cubic-bezier(0.16,1,0.3,1) 0.2s forwards; }
+  @keyframes xLine { to{transform:scaleX(1);} }
+</style>
+</head>
+<body>
+
+<div class="h-line t"></div>
+<div class="h-line b"></div>
+<canvas id="blob"></canvas>
+
+<!-- ══ ILLUSTRATION ══ -->
+<div id="illus-layer">
+  <img id="illus-bg"
+    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1344' height='896'%3E%3Crect width='100%25' height='100%25' fill='%23080f0a'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' fill='%231a2a1a' font-family='serif' font-size='13' dy='.3em'%3Ereplace with act0-origin.webp%3C/text%3E%3C/svg%3E"
+    alt="">
+  <div class="illus-vignette"></div>
+  <canvas id="motion-canvas"></canvas>
+</div>
+
+<!-- ══ PHASE 1 — HERO ══ -->
+<div id="phase-hero">
+  <p class="hero-kicker">Before everything else</p>
+  <h1 class="hero-title">Find Your Gap</h1>
+  <p class="hero-continue" onclick="startSession()">click anywhere to begin</p>
+</div>
+
+<!-- ══ PHASE 2 — SESSION ══ -->
+<div id="phase-session">
+
+  <div class="hud fl" id="fl-hud">
+    <svg class="vesica-hud" viewBox="0 0 30 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="11" cy="9.5" r="8.5" stroke="rgba(232,103,58,0.45)" stroke-width="0.7"/>
+      <circle cx="19" cy="9.5" r="8.5" stroke="rgba(232,103,58,0.45)" stroke-width="0.7"/>
+      <path d="M15 2.3C12.6 4.1 11.1 6.6 11.1 9.5s1.5 5.4 3.9 7.2c2.4-1.8 3.9-4.3 3.9-7.2s-1.5-5.4-3.9-7.2z" fill="rgba(232,103,58,0.22)"/>
+    </svg>
+    <div class="motif">
+      <div class="m-bar"></div><div class="m-bar"></div>
+      <div class="m-bar"></div><div class="m-bar"></div>
+    </div>
+  </div>
+
+  <div class="brand-pill fl" id="brand-pill" onclick="openOverlay()">
+    <div class="pill-inner">
+      <div class="pill-dot" id="pill-dot" style="background:#8a8a82"></div>
+      <span id="pill-label">See how Muji answered all of this</span>
+    </div>
+  </div>
+
+  <div class="progress fl" id="fl-prog">
+    <div class="p-item on"><span class="p-name">Who</span><div class="p-line"></div></div>
+    <div class="p-item"><span class="p-name">Warm</span><div class="p-line"></div></div>
+    <div class="p-item"><span class="p-name">Research</span><div class="p-line"></div></div>
+    <div class="p-item"><span class="p-name">Map</span><div class="p-line"></div></div>
+    <div class="p-item"><span class="p-name">Confirm</span><div class="p-line"></div></div>
+  </div>
+
+  <!-- ══ QUESTION ROW — mascot + text together ══ -->
+  <div id="question-row">
+
+    <!-- Vesica mascot — left, permanent -->
+    <div id="vesica-mascot">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle class="vm-circle" cx="32" cy="40" r="26" stroke="rgba(232,103,58,0.9)" stroke-width="1.4"/>
+        <circle class="vm-circle" cx="48" cy="40" r="26" stroke="rgba(232,103,58,0.9)" stroke-width="1.4"/>
+        <path class="vm-fill"
+          d="M40 15.5C35.2 19.4 32.2 25.4 32.2 32v16c0 6.6 3 12.6 7.8 16.5C44.8 60.6 47.8 54.6 47.8 48V32c0-6.6-3-12.6-7.8-16.5z"
+          fill="rgba(232,103,58,0.5)"/>
+      </svg>
+    </div>
+
+    <!-- Question lines — JS stamps characters in -->
+    <div id="question-lines">
+      <p class="q3-setup" id="q3-setup">Think of one person who genuinely needs what you're building.</p>
+      <div id="q-display">
+        <div class="q-line-wrap"><span class="q-line" id="ql1"></span></div>
+        <div class="q-line-wrap"><span class="q-line acc" id="ql2"></span></div>
+      </div>
+      <button class="q2-rotate" id="q2-rotate" onclick="rotateQ2()">
+        This question doesn't feel right — try a different angle
+      </button>
+      <p class="whisper" id="whisper">if you need industry words, the sentence isn't done yet</p>
+    </div>
+
+  </div>
+
+  <!-- Main input -->
+  <div class="input-wrap" id="main-wrap">
+    <textarea id="main-inp" rows="2" placeholder="speak plainly..."></textarea>
+    <div class="input-line"></div>
+  </div>
+
+  <!-- Q3 name input -->
+  <div class="input-wrap" id="name-wrap" style="display:none;">
+    <p class="inp-label" style="display:block;">What's their name?</p>
+    <input type="text" id="name-inp" placeholder="Priya, Marcus, Zara...">
+    <div class="input-line"></div>
+  </div>
+
+  <!-- Mad libs -->
+  <div class="madlibs-wrap" id="madlibs">
+    <div class="slot-wrap">
+      <span class="slot-label">describe them in a few words</span>
+      <input type="text" id="slot1" placeholder="19-year-old who loves bold colour">
+      <div class="input-line"></div>
+    </div>
+    <div class="slot-wrap">
+      <span class="slot-label">the feeling they carry</span>
+      <input type="text" id="slot2" placeholder="invisible">
+      <div class="input-line"></div>
+    </div>
+    <div class="slot-wrap">
+      <span class="slot-label">the moment this matters most</span>
+      <input type="text" id="slot3" placeholder="trying to find a shade that matches her skin">
+      <div class="input-line"></div>
+    </div>
+    <button class="d-btn primary" onclick="buildScene()" style="margin-top:0.4rem;align-self:flex-start;">show me their day →</button>
+  </div>
+
+  <!-- Typewriter hint -->
+  <div class="tw-hint" id="tw-hint">
+    <div class="tw-dot" id="tw-dot"></div>
+    <div>
+      <p class="tw-label" id="tw-label">Example</p>
+      <p class="tw-text" id="tw-text"><span class="tw-cursor"></span></p>
+    </div>
+  </div>
+
+  <!-- Draft -->
+  <div class="draft-card" id="draft-card">
+    <div class="draft-label"><span class="draft-pulse"></span>a starting point — not your answer</div>
+    <p class="draft-loading" id="draft-loading">drafting something from what you've said...</p>
+    <p class="draft-text" id="draft-text"></p>
+    <div class="draft-actions">
+      <button class="d-btn primary" onclick="useDraft()">this is right →</button>
+      <button class="d-btn" onclick="editDraft()">edit this</button>
+      <button class="d-btn" onclick="writeOwn()">write my own</button>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <p class="honest fl">the clearer you are here, the sharper everything gets later</p>
+    <button class="cont-btn fl" id="cont-btn">now let's look outward →</button>
+  </div>
+
+</div>
+
+<!-- Example overlay -->
+<div class="ex-overlay" id="ex-overlay">
+  <div class="ex-inner">
+    <button class="ex-close" onclick="closeOverlay()">close ×</button>
+    <div class="ex-brand" id="ov-name">Muji</div>
+    <div class="ex-qa"><p class="ex-q">What does your brand do</p><p class="ex-a" id="ov-q1"></p></div>
+    <div class="ex-qa"><p class="ex-q">What would you change</p><p class="ex-a" id="ov-q2"></p></div>
+    <div class="ex-qa"><p class="ex-q">Who needs this most</p><p class="ex-a" id="ov-q3"></p></div>
+  </div>
+</div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────
+const BRANDS = [
+  { name:'Muji',       colour:'#8a8a82', q1:'We make everyday products stripped of everything unnecessary.', q2:'Products are designed to impress in the shop, not to last in your home.', q3:'Keiko is a minimalist who feels exhausted trying to find something made to last.' },
+  { name:'Oatly',      colour:'#c8b820', q1:'We make oat-based food for people who want milk without the cow.', q2:'The food industry spends more energy marketing health than actually being healthy.', q3:'Arjun cares about what he eats but every alternative tastes like compromise.' },
+  { name:'ColorFlix',  colour:'#e8205a', q1:'We make bold colour cosmetics for Gen Z women who refuse to blend in.', q2:'Beauty brands tell Indian women their natural skin tone needs correcting.', q3:'Zara is 19, experimental, broke, and the beauty aisle was never designed for her.' },
+  { name:'Paper Boat', colour:'#d4521a', q1:'We make drinks that taste like the ones your grandmother made.', q2:'Packaged drinks erased the taste of real Indian ingredients and called it progress.', q3:'Vikram is 38 and misses the taste of his childhood. Nothing in a store comes close.' },
+  { name:'Zepto',      colour:'#6c3ce1', q1:'We deliver groceries in ten minutes so your day doesn\'t stop.', q2:'Grocery shopping was designed around the store\'s convenience, not yours.', q3:'Meera is a working mother at 7pm realising dinner needs one ingredient she doesn\'t have.' },
+  { name:'Frida Kahlo',colour:'#c8254a', q1:'I paint my reality so the world cannot look away from what it refuses to see.', q2:'The art world demanded women paint beauty. I refused to hide the pain.', q3:'Carmen is a painter who feels erased every time she shows work honest about her body.' },
+  { name:'Basquiat',   colour:'#e8c830', q1:'I make art that puts Black identity where the establishment said it didn\'t belong.', q2:'The art world wanted to own Black creativity without crediting the people it came from.', q3:'Marcus tags walls and feels invisible every time his work ends up in a gallery without his name.' },
+  { name:'Niharika NM',colour:'#ff6b35', q1:'I make comedy that sounds like the voice every South Indian girl was told to keep quiet.', q2:'Influencer culture rewards polish and aspiration. I built an audience by being the opposite.', q3:'Divya is funny. She posts a reel and gets twelve likes. The algorithm buries it.' }
+];
+
+const Q2 = [
+  { l1:'What does your industry do', l2:'that\'s dishonest, lazy, or just plain wrong?' },
+  { l1:'What do you find yourself',  l2:'complaining about most in your space?' },
+  { l1:'What do your future customers', l2:'quietly put up with that they shouldn\'t?' }
+];
+
+const QS = [
+  { l1:'What does your', l2:'brand do?',  whisper:'if you need industry words, the sentence isn\'t done yet', scaffold:false, q3:false },
+  { l1:Q2[0].l1, l2:Q2[0].l2,            whisper:'even if others think it\'s normal — what bothers you most?', scaffold:true,  q3:false },
+  { l1:null, l2:null,                     whisper:'',                                                            scaffold:false, q3:true  }
+];
+
+// ── State ─────────────────────────────────────────────────────
+let cQ=0, cB=0, q2i=0, customerName='';
+let warmth=0, twTimer=null, draftTimer=null, twTyping=false;
+let focused=false, retTimer=null;
+let charTimers=[];
+
+// ── Blob ──────────────────────────────────────────────────────
+const bc=document.getElementById('blob'), bx=bc.getContext('2d');
+function rbz(){ bc.width=innerWidth; bc.height=innerHeight; }
+rbz(); addEventListener('resize',rbz);
+const bCX=()=>bc.width/2, bCY=()=>bc.height/2;
+const N=12; let bR=62,tBR=62,bt=0,bop=0;
+const pts=Array.from({length:N},(_,i)=>({ angle:(i/N)*Math.PI*2, f1:.3+Math.random()*.4, f2:.15+Math.random()*.25, f3:.07+Math.random()*.1, a1:6+Math.random()*9, a2:3+Math.random()*6, a3:2+Math.random()*5, p1:Math.random()*Math.PI*2, p2:Math.random()*Math.PI*2, p3:Math.random()*Math.PI*2 }));
+function gR(p){ return bR+(p.a1*Math.sin(bt*p.f1+p.p1)+p.a2*Math.sin(bt*p.f2+p.p2)+p.a3*Math.sin(bt*p.f3+p.p3))*(1-warmth*.22); }
+function bSp(bp){ bx.beginPath(); const l=bp.length; for(let i=0;i<l;i++){ const p0=bp[(i-1+l)%l],p1=bp[i],p2=bp[(i+1)%l],p3=bp[(i+2)%l]; if(!i)bx.moveTo(p1.x,p1.y); bx.bezierCurveTo(p1.x+(p2.x-p0.x)/6,p1.y+(p2.y-p0.y)/6,p2.x-(p3.x-p1.x)/6,p2.y-(p3.y-p1.y)/6,p2.x,p2.y); } bx.closePath(); }
+function drawBlob(){
+  bx.clearRect(0,0,bc.width,bc.height);
+  if(bop<1)bop+=.002; bt+=.007; bR+=(tBR-bR)*.02;
+  const bp=pts.map(p=>({x:bCX()+gR(p)*Math.cos(p.angle),y:bCY()+gR(p)*Math.sin(p.angle)}));
+  for(let l=4;l>=1;l--){ const sc=1+l*.16,al=(.016/l)*bop; bx.save();bx.translate(bCX(),bCY());bx.scale(sc,sc);bx.translate(-bCX(),-bCY());bSp(bp);bx.fillStyle=`rgba(143,186,122,${al})`;bx.fill();bx.restore(); }
+  bSp(bp);
+  const g=bx.createRadialGradient(bCX(),bCY(),0,bCX(),bCY(),bR*1.4);
+  g.addColorStop(0,`rgba(143,186,122,${(.05+warmth*.03)*bop})`);g.addColorStop(1,'rgba(143,186,122,0)');
+  bx.fillStyle=g;bx.fill();
+  bx.strokeStyle=`rgba(143,186,122,${(.09+warmth*.07)*bop})`;bx.lineWidth=.7+warmth*.4;bx.stroke();
+  requestAnimationFrame(drawBlob);
+}
+drawBlob();
+
+// ── Motion canvas ─────────────────────────────────────────────
+const mc=document.getElementById('motion-canvas'), mx=mc.getContext('2d');
+function rmz(){ mc.width=innerWidth; mc.height=innerHeight; }
+rmz(); addEventListener('resize',rmz);
+let zigP=0,smokeY=0,smokeOp=0,motionOn=false;
+function animMotion(){
+  mx.clearRect(0,0,mc.width,mc.height);
+  if(zigP<1)zigP+=.005; if(smokeOp<.25)smokeOp+=.002;
+  smokeY=(smokeY-.25+mc.height*.3)%(mc.height*.3);
+  const zx=mc.width*.56,zy=mc.height*.07,zw=mc.width*.36,zh=mc.height*.11,segs=6;
+  const zp=Array.from({length:segs+1},(_,i)=>({x:zx+(i/segs)*zw,y:zy+(i%2===0?0:zh)}));
+  const tl=segs*Math.sqrt((zw/segs)**2+zh**2); let drawn=0,tgt=zigP*tl;
+  mx.beginPath();mx.strokeStyle=`rgba(200,169,110,${.6*zigP})`;mx.lineWidth=2;mx.lineCap='round';mx.lineJoin='round';
+  let st=false;
+  for(let i=0;i<zp.length-1;i++){
+    const sl=Math.sqrt((zp[i+1].x-zp[i].x)**2+(zp[i+1].y-zp[i].y)**2);
+    if(drawn>=tgt)break; if(!st){mx.moveTo(zp[i].x,zp[i].y);st=true;}
+    if(drawn+sl<=tgt){mx.lineTo(zp[i+1].x,zp[i+1].y);drawn+=sl;}
+    else{const t=(tgt-drawn)/sl;mx.lineTo(zp[i].x+(zp[i+1].x-zp[i].x)*t,zp[i].y+(zp[i+1].y-zp[i].y)*t);drawn=tgt;}
+  } mx.stroke();
+  const sx=mc.width*.62,syb=mc.height*.41;
+  for(let p=0;p<3;p++){const py=syb-smokeY-p*28,a=smokeOp*(1-p*.3)*(.5+.5*Math.sin(Date.now()*.001+p));mx.beginPath();mx.arc(sx+Math.sin(py*.03)*7,py,3+p*2,0,Math.PI*2);mx.fillStyle=`rgba(200,169,110,${a*.25})`;mx.fill();}
+  if(motionOn)requestAnimationFrame(animMotion);
+}
+
+// ── Phase 1 ───────────────────────────────────────────────────
+const iImg=document.getElementById('illus-bg');
+const phHero=document.getElementById('phase-hero');
+
+setTimeout(()=>{
+  iImg.classList.add('arrive'); motionOn=true; animMotion();
+  setTimeout(()=>phHero.classList.add('arrived'), 800);
+}, 300);
+
+document.body.addEventListener('click', e=>{
+  if(document.getElementById('phase-session').classList.contains('visible'))return;
+  if(document.getElementById('ex-overlay').classList.contains('open'))return;
+  startSession();
+},{once:true});
+
+function startSession(){
+  document.getElementById('motion-canvas').classList.add('hidden');
+  motionOn=false;
+  iImg.classList.remove('arrive'); iImg.classList.add('recede');
+  phHero.classList.add('receded');
+  setTimeout(()=>{
+    document.getElementById('phase-session').classList.add('visible');
+    // Mascot and question arrive together
+    kickMascotAndQuestion();
+    startPillCycle();
+  }, 1000);
+}
+
+// ── Mascot + question together ────────────────────────────────
+function kickMascotAndQuestion(){
+  const vm=document.getElementById('vesica-mascot');
+  // Mascot pulses in (draws + pulses bright then settles)
+  vm.classList.add('pulse');
+  // Keep it present after animation ends
+  setTimeout(()=>{ vm.classList.remove('pulse'); vm.classList.add('present'); }, 1900);
+  // Question characters start rolling in with the mascot
+  revealQuestion(true);
+}
+
+// ── Kinetic character reveal ──────────────────────────────────
+// Stamps each character with a per-character slide-up, left to right
+// Line 1 starts, line 2 begins after line 1 is ~40% done
+function typeQuestion(l1text, l2text, onDone){
+  charTimers.forEach(t=>clearTimeout(t)); charTimers=[];
+
+  const ql1=document.getElementById('ql1');
+  const ql2=document.getElementById('ql2');
+  ql1.innerHTML=''; ql2.innerHTML='';
+
+  // Medium-high speed: 42ms per char, line 2 starts after line1 is 40% through
+  const CHAR_MS = 42;
+  const LINE2_START_AFTER = Math.floor(l1text.length * 0.4) * CHAR_MS;
+
+  // Build line 1
+  [...l1text].forEach((ch, i)=>{
+    const span=document.createElement('span');
+    span.className = ch===' ' ? 'q-char sp' : 'q-char';
+    span.textContent = ch===' ' ? '\u00A0' : ch;
+    ql1.appendChild(span);
+    const t=setTimeout(()=>span.classList.add('in'), i * CHAR_MS);
+    charTimers.push(t);
+  });
+
+  // Build line 2 — starts partway through line 1
+  [...l2text].forEach((ch, i)=>{
+    const span=document.createElement('span');
+    span.className = ch===' ' ? 'q-char sp' : 'q-char';
+    span.textContent = ch===' ' ? '\u00A0' : ch;
+    ql2.appendChild(span);
+    const t=setTimeout(()=>span.classList.add('in'), LINE2_START_AFTER + i * CHAR_MS);
+    charTimers.push(t);
+  });
+
+  const totalMs = LINE2_START_AFTER + l2text.length * CHAR_MS;
+  const t=setTimeout(onDone, totalMs + 100);
+  charTimers.push(t);
+}
+
+// ── Question reveal ───────────────────────────────────────────
+function revealQuestion(firstTime){
+  const q=QS[cQ];
+  const whisper=document.getElementById('whisper');
+  const q3s=document.getElementById('q3-setup');
+  const nw=document.getElementById('name-wrap');
+  const mw=document.getElementById('main-wrap');
+  const ml=document.getElementById('madlibs');
+  const qd=document.getElementById('q-display');
+  const q2r=document.getElementById('q2-rotate');
+
+  // Reset
+  q3s.style.display='none'; q3s.style.opacity='0';
+  nw.style.display='none'; mw.style.display='block';
+  ml.classList.remove('visible'); q2r.style.display='none';
+  hideDraft();
+  clearTimeout(twTimer); clearTimeout(draftTimer); twTyping=false;
+  document.getElementById('tw-hint').classList.remove('visible');
+  whisper.style.opacity='0';
+
+  if(q.q3){
+    qd.style.display='none'; q3s.style.display='block';
+    setTimeout(()=>q3s.style.opacity='1', 100);
+    mw.style.display='none'; nw.style.display='block'; nw.classList.add('visible');
+    document.getElementById('name-inp').value='';
+    setTimeout(()=>document.getElementById('name-inp').focus(), 200);
+  } else {
+    qd.style.display='block';
+    if(cQ===1) q2r.style.display='block';
+
+    // Kinetic reveal
+    typeQuestion(q.l1, q.l2, ()=>{
+      // After characters done: show whisper + input
+      whisper.textContent=q.whisper;
+      whisper.style.transition='opacity 0.9s ease';
+      whisper.style.opacity='1';
+      mw.classList.remove('visible');
+      setTimeout(()=>{ mw.classList.add('visible'); document.getElementById('main-inp').value=''; document.getElementById('main-inp').focus(); }, 200);
+      twTimer=setTimeout(showTypewriter, 3500);
+      if(q.scaffold) draftTimer=setTimeout(showDraft, 3500);
+    });
+  }
+}
+
+// ── Q2 rotation ───────────────────────────────────────────────
+function rotateQ2(){
+  q2i=(q2i+1)%Q2.length; const f=Q2[q2i];
+  // Update QS[1] live
+  QS[1].l1=f.l1; QS[1].l2=f.l2;
+  hideDraft();
+  document.getElementById('whisper').style.opacity='0';
+  typeQuestion(f.l1, f.l2, ()=>{
+    document.getElementById('whisper').style.opacity='1';
+    document.getElementById('main-inp').value=''; document.getElementById('main-inp').focus();
+  });
+}
+
+// ── Q3 ────────────────────────────────────────────────────────
+document.getElementById('name-inp').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){ e.preventDefault(); const n=document.getElementById('name-inp').value.trim(); if(!n)return; customerName=n; showMadLibs(); }
+});
+function showMadLibs(){
+  document.getElementById('name-wrap').style.display='none';
+  document.getElementById('q3-setup').style.display='none';
+  document.getElementById('q-display').style.display='none';
+  document.getElementById('madlibs').classList.add('visible');
+  document.getElementById('slot1').focus();
+}
+function buildScene(){
+  const s1=document.getElementById('slot1').value.trim(), s2=document.getElementById('slot2').value.trim(), s3=document.getElementById('slot3').value.trim();
+  if(!s1||!s2||!s3)return;
+  const text=`"${customerName} is ${s1} who feels ${s2} — especially ${s3}."`;
+  const dc=document.getElementById('draft-card'), dl=document.getElementById('draft-loading'), dt=document.getElementById('draft-text');
+  dl.textContent='putting their story together...'; dl.classList.add('vis'); dt.textContent='';
+  dc.style.display='block'; requestAnimationFrame(()=>dc.classList.add('visible'));
+  setTimeout(()=>{ dl.classList.remove('vis'); dt.textContent=text; }, 1500);
+}
+
+// ── Typewriter example ────────────────────────────────────────
+function showTypewriter(){
+  if(twTyping)return;
+  const b=BRANDS[cB], text=cQ===1?b.q2:b.q1;
+  const hint=document.getElementById('tw-hint'), tw=document.getElementById('tw-text');
+  document.getElementById('tw-dot').style.background=b.colour;
+  document.getElementById('tw-label').textContent=b.name;
+  tw.innerHTML='<span class="tw-cursor"></span>';
+  hint.classList.add('visible'); twTyping=true; let i=0;
+  function tc(){ if(i<text.length){ tw.innerHTML=text.slice(0,i+1)+'<span class="tw-cursor"></span>'; i++; setTimeout(tc,26+Math.random()*16); } else { setTimeout(()=>{ hint.classList.remove('visible'); setTimeout(()=>{ twTyping=false; cB=(cB+1)%BRANDS.length; updatePill(); twTimer=setTimeout(showTypewriter,3000); },500); },2500); } }
+  tc();
+}
+
+// ── Draft ─────────────────────────────────────────────────────
+function showDraft(){
+  const inp=document.getElementById('main-inp'); if(inp.value.trim())return;
+  const b=BRANDS[cB];
+  const dc=document.getElementById('draft-card'), dl=document.getElementById('draft-loading'), dt=document.getElementById('draft-text');
+  dl.textContent='drafting something from what you\'ve said...'; dl.classList.add('vis'); dt.textContent='';
+  dc.style.display='block'; requestAnimationFrame(()=>dc.classList.add('visible'));
+  setTimeout(()=>{ dl.classList.remove('vis'); dt.textContent=`"${b.q2}"`; }, 1600);
+}
+function hideDraft(){ const dc=document.getElementById('draft-card'); dc.classList.remove('visible'); setTimeout(()=>{ dc.style.display='none'; document.getElementById('draft-loading').classList.remove('vis'); },500); }
+function useDraft(){ const t=document.getElementById('draft-text').textContent.replace(/^"|"$/g,''); document.getElementById('main-inp').value=t; hideDraft(); onAnswer(t); }
+function editDraft(){ const t=document.getElementById('draft-text').textContent.replace(/^"|"$/g,''); const i=document.getElementById('main-inp'); i.value=t; hideDraft(); i.focus(); }
+function writeOwn(){ hideDraft(); document.getElementById('main-inp').focus(); }
+
+// ── Answer ────────────────────────────────────────────────────
+function onAnswer(val){
+  if(cQ<2){ cQ++; warmth=cQ/3; tBR=62+cQ*9; revealQuestion(false); }
+  else { document.getElementById('cont-btn').classList.add('ready'); }
+}
+
+// ── Input events ──────────────────────────────────────────────
+const mi=document.getElementById('main-inp');
+mi.addEventListener('input',()=>{ clearTimeout(twTimer); clearTimeout(draftTimer); twTyping=false; document.getElementById('tw-hint').classList.remove('visible'); hideDraft(); enterFocus(); exitFocus(); });
+mi.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); const v=mi.value.trim(); if(v.length>2)onAnswer(v); } });
+mi.addEventListener('blur',()=>{ if(!mi.value.trim())returnFocus(); });
+
+// ── Focus mode ────────────────────────────────────────────────
+const fls=document.querySelectorAll('.fl');
+function enterFocus(){ if(focused)return; focused=true; clearTimeout(retTimer); fls.forEach(e=>{e.classList.remove('returning');e.classList.add('receded');}); }
+function exitFocus(){ clearTimeout(retTimer); retTimer=setTimeout(returnFocus,2000); }
+function returnFocus(){ focused=false; fls.forEach(e=>{e.classList.add('returning');e.classList.remove('receded');setTimeout(()=>e.classList.remove('returning'),900);}); }
+
+// ── Brand pill ────────────────────────────────────────────────
+function updatePill(){ const b=BRANDS[cB]; document.getElementById('pill-dot').style.background=b.colour; document.getElementById('pill-label').textContent=`See how ${b.name} answered all of this`; }
+function startPillCycle(){ setInterval(()=>{ cB=(cB+1)%BRANDS.length; updatePill(); },5000); }
+
+// ── Overlay ───────────────────────────────────────────────────
+function openOverlay(){ const b=BRANDS[cB]; document.getElementById('ov-name').textContent=b.name; document.getElementById('ov-name').style.color=b.colour; document.getElementById('ov-q1').textContent=`"${b.q1}"`; document.getElementById('ov-q2').textContent=`"${b.q2}"`; document.getElementById('ov-q3').textContent=`"${b.q3}"`; document.getElementById('ex-overlay').classList.add('open'); }
+function closeOverlay(){ document.getElementById('ex-overlay').classList.remove('open'); }
+
+// ── Continue ──────────────────────────────────────────────────
+document.getElementById('cont-btn').addEventListener('click',()=>{ if(!document.getElementById('cont-btn').classList.contains('ready'))return; document.body.style.transition='opacity 1.2s ease'; document.body.style.opacity='0'; });
+</script>
+</body>
+</html>

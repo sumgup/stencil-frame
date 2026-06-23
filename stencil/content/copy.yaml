@@ -1,0 +1,102 @@
+# Stencil + Frame — Marketing Copy
+# All landing page copy lives here.
+# Switch between variations without touching code.
+# Voice principles: plain, honest, no jargon, authority through restraint.
+
+variations:
+  A:
+    # Identity focused — "before anyone else defines it"
+    kicker: "Brand discovery — free and open source"
+    headline_1: "Your brand,"
+    headline_2: "before anyone else"
+    headline_3: "defines it."
+    subheading: >
+      Every branding tool assumes you already know who you are.
+      Stencil starts where they don't — with the thinking
+      before the logo, the colours, the copy.
+    cta_primary: "Begin the investigation"
+    cta_secondary: "See how it works"
+    honest_line: "No account needed — your answers stay on your device"
+
+  B:
+    # Gap focused — "the space no one else is standing in"
+    kicker: "Find your gap — free and open source"
+    headline_1: "The space"
+    headline_2: "no one else"
+    headline_3: "is standing in."
+    subheading: >
+      Most brands fail not in execution, but in identity.
+      They skip the thinking. Stencil is the thinking —
+      five guided steps to find where you genuinely belong.
+    cta_primary: "Find your gap"
+    cta_secondary: "See the process"
+    honest_line: "Free forever — open source — your data stays on device"
+
+  C:
+    # Process honest — "think first, build after"
+    kicker: "Brand strategy — free and open source"
+    headline_1: "Think first."
+    headline_2: "Build"
+    headline_3: "after."
+    subheading: >
+      Canva asks for your colours. Looka asks for your industry.
+      Neither asks who you are. Stencil asks the hard questions
+      before anything gets made.
+    cta_primary: "Start thinking"
+    cta_secondary: "See the five steps"
+    honest_line: "No account — no subscription — no lock-in"
+
+problem:
+  label: "The problem"
+  headline: "Every brand tool assumes\nyou already know\nwho you are."
+  body: >
+    Canva asks you to pick colours. Looka asks for your industry.
+    Jasper asks for your brand voice. All of them assume the hard
+    work is already done. It isn't. That's where most brands fail —
+    not in execution, but in identity.
+
+solution:
+  label: "The solution"
+  headline_1: "Stencil starts"
+  headline_2: "at the beginning —"
+  headline_3: "with you."
+  body: >
+    Who you are. What you stand against. Who you're really building
+    for. Where no one else is standing. Five guided steps that take
+    you from blank page to a brand that's genuinely yours.
+
+steps:
+  - num: "01"
+    name: "Investigate"
+    desc: "Find your gap. Understand the market, map the competition, and discover the space no one else occupies."
+    owner: "Stencil"
+    status: "active"
+
+  - num: "02"
+    name: "Strategy"
+    desc: "Turn the gap into a position. Define where you stand, who you speak to, and what you uniquely own."
+    owner: "Stencil"
+    status: "coming"
+
+  - num: "02.5"
+    name: "Narrative"
+    desc: "Your brand's verbal identity. The words, tone, and story — all derived from strategy."
+    owner: "Stencil"
+    status: "coming"
+
+  - num: "03"
+    name: "Design"
+    desc: "Visual identity that comes from strategy, not trends. Logo, colour, typography — all earned."
+    owner: "Frame"
+    status: "coming"
+
+  - num: "04–05"
+    name: "Build + Launch"
+    desc: "Implementation and engagement. Taking your brand into the world with everything Frame generates."
+    owner: "Frame"
+    status: "coming"
+
+footer:
+  left: "Stencil + Frame — open source, free forever"
+  right: "Your data never leaves your device"
+  attribution: "Inspired by Michael Johnson's branding methodology"
