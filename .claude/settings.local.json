@@ -14,7 +14,22 @@
       "Bash(netstat -ano)",
       "PowerShell($p = \\(Get-NetTCPConnection -LocalPort 3001 -EA SilentlyContinue | Select -First 1\\).OwningProcess; if \\($p\\) { Stop-Process -Id $p -Force })",
       "Bash(\"C:\\\\Users\\\\sumit\\\\Documents\\\\Claude\\\\Projects\\\\stencil-frame\\\\stencil-frame\\\\node_modules\\\\.bin\\\\tsx\" server/index.ts)",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Bash(grep -iE \"^\\(react|react-dom|tailwindcss|postcss|autoprefixer\\)$\")",
+      "Bash(npx vite *)",
+      "mcp__Claude_in_Chrome__navigate",
+      "mcp__Claude_in_Chrome__tabs_create_mcp",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__computer",
+      "mcp__Claude_in_Chrome__javascript_tool",
+      "Bash(node -e \"console.log\\(require\\('tailwindcss/package.json'\\).version\\)\")",
+      "Bash(curl -s \"http://localhost:5174/src/index.css\")",
+      "Bash(curl -s \"http://localhost:5173/src/index.css\")",
+      "Bash(curl -s \"http://localhost:5175/src/index.css\")",
+      "Bash(node -e ' *)",
+      "Bash(curl -s \"http://localhost:5173/\")",
+      "Bash(printf '@tailwind base;\\\\n@tailwind components;\\\\n@tailwind utilities;\\\\n')",
+      "Bash(rm test.css)"
     ]
   }
 }
