@@ -117,6 +117,12 @@ export function useAct0() {
         return;
       }
 
+      // Only Q1 gets a push-back check. Q2 and Q3 always advance directly.
+      if (base !== "q1") {
+        advance();
+        return;
+      }
+
       setLoading(true);
       setError(null);
       let weak = false;

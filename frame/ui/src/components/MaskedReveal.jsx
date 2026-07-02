@@ -4,7 +4,7 @@
  *
  * `delay` (seconds) staggers successive lines so they reveal one after another.
  */
-export default function MaskedReveal({ children, delay = 0, className = "" }) {
+export default function MaskedReveal({ children, delay = 0, className = "", style }) {
   return (
     <div className="overflow-hidden leading-[1.08] mb-[0.1em]">
       <span
@@ -12,6 +12,7 @@ export default function MaskedReveal({ children, delay = 0, className = "" }) {
         style={{
           animation: "slideUp 1s cubic-bezier(0.16,1,0.3,1) forwards",
           animationDelay: `${delay}s`,
+          ...style,
         }}
       >
         {children}

@@ -16,18 +16,21 @@ const PHASE_CLASS = {
   recede: "recede",
 };
 
+import { useState } from "react";
+
 export default function IllusLayer({ phase }) {
+  const [imgError, setImgError] = useState(false);
   return (
     <div className="illus-layer">
-      <div className="illus-fallback">
-        <span>act0-origin.webp missing</span>
-      </div>
+      {imgError && (
+        <div className="illus-fallback">
+          <span>act0-origin.webp missing — add it to frame/ui/public/assets/illustrations/</span>
+        </div>
+      )}
       <img
         src="/assets/illustrations/act0-origin.webp"
         alt=""
-        onError={(e) => {
-          e.target.style.display = "none";
-        }}
+        onError={() => setImgError(true)}
         className={`illus-bg ${PHASE_CLASS[phase] || ""}`}
       />
       <div className="illus-vignette" />

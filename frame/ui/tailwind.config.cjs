@@ -15,6 +15,7 @@ module.exports = {
         "text-ghost": "#0e1a0f",
       },
       fontFamily: {
+        display: ["Big Shoulders Display", "sans-serif"],
         fraunces: ["Fraunces", "serif"],
         serif: ["DM Serif Display", "serif"],
         mono: ["DM Mono", "monospace"],

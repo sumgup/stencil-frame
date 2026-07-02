@@ -1,0 +1,13 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "frame-ui",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "ui"],
+      "cwd": "${workspaceFolder}/frame",
+      "port": 5173,
+      "autoPort": true
+    }
+  ]
+}

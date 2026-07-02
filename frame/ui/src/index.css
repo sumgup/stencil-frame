@@ -10,6 +10,7 @@
   --text-sub: #6a7a6a;
   --text-dim: #1a2a1a;
   --text-ghost: #0e1a0f;
+  --vesica: #e8673a;
 }
 
 html,
@@ -88,3 +89,362 @@ body {
     heroPeak 0.6s ease 0.3s forwards,
     heroRecede 2.2s cubic-bezier(0.4, 0, 0.2, 1) 3.8s forwards;
 }
+
+/* ── Act 0 — Illustration layer ── */
+.illus-layer { position: fixed; inset: 0; z-index: 1; }
+.illus-bg {
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; filter: blur(20px) brightness(0.6); transform: scale(1.06);
+  transition: opacity 1.6s ease, filter 2s ease, transform 8s ease;
+}
+.illus-bg.arrive {
+  opacity: 1; filter: blur(0px) brightness(0.75); transform: scale(1);
+}
+.illus-bg.recede {
+  opacity: 1; filter: blur(4px) brightness(0.22) saturate(0.4);
+  transition: opacity 1.8s ease, filter 2.2s ease;
+}
+.illus-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgba(8,15,10,0.1) 0%, rgba(8,15,10,0.72) 100%);
+  pointer-events: none;
+}
+
+/* Graceful fallback when act0-origin.webp is missing — sits behind the img,
+   becomes visible once onError hides the broken <img>. Never shows a broken
+   image icon. */
+.illus-fallback {
+  position: absolute; inset: 0;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+}
+.illus-fallback span {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: lowercase;
+  color: var(--text-dim);
+}
+
+/* ── Act 0 — Vesica mascot ── */
+.vesica-mascot {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  flex-shrink: 0;
+}
+.vesica-mascot.pulsing {
+  animation: mascotPulse 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.vesica-mascot.present { opacity: 0.22; }
+
+@keyframes mascotPulse {
+  0%   { opacity: 0;    transform: scale(0.82); }
+  35%  { opacity: 0.85; transform: scale(1.06); }
+  65%  { opacity: 0.85; transform: scale(1.0);  }
+  100% { opacity: 0.22; transform: scale(1.0);  }
+}
+
+.vm-circle {
+  /* circumference of r=16 ≈ 100.5 */
+  stroke-dasharray: 101;
+  stroke-dashoffset: 101;
+}
+.vesica-mascot.pulsing .vm-circle {
+  animation: drawCircle 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.vesica-mascot.pulsing .vm-circle:nth-child(2) { animation-delay: 0.1s; }
+@keyframes drawCircle { to { stroke-dashoffset: 0; } }
+
+.vm-fill { opacity: 0; }
+.vesica-mascot.pulsing .vm-fill {
+  animation: fillVesica 0.5s ease 0.55s forwards;
+}
+@keyframes fillVesica { to { opacity: 1; } }
+
+/* Ensure circles + fill stay visible in present state */
+.vesica-mascot.present .vm-circle { stroke-dashoffset: 0; }
+.vesica-mascot.present .vm-fill  { opacity: 1; }
+
+/* ── Act 0 — Kinetic char reveal ── */
+.q-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(0.3em);
+  animation: charIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.q-char.sp { display: inline-block; width: 0.28em; }
+
+@keyframes charIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Act 0 — Whisper ── */
+.act0-whisper {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--text-sub);
+  margin-top: 1.4rem;
+  opacity: 0;
+}
+
+/* ── Act 0 — Focus mode (fl = focus layer) ── */
+.fl { transition: opacity 0.6s ease; }
+.fl.receded { opacity: 0.03; pointer-events: none; }
+
+/* ── Act 0 — Input gold underline ── */
+.act0-input-line {
+  position: absolute; bottom: 0; left: 0;
+  height: 1px; width: 0;
+  background: var(--accent);
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.act0-input-wrap:focus-within .act0-input-line { width: 100%; }
+
+/* ── Act 0 — Brand pill ── */
+.brand-pill {
+  position: absolute; top: 1.5rem; left: 50%; transform: translateX(-50%);
+  cursor: pointer; white-space: nowrap;
+}
+.pill-inner {
+  display: flex; align-items: center; gap: 7px;
+  border: 0.5px solid var(--text-dim); padding: 5px 12px 5px 8px;
+  font-family: "DM Mono", monospace; font-size: 8px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-sub); background: rgba(8,15,10,0.7);
+  transition: all 0.3s;
+}
+.pill-inner:hover { border-color: var(--accent-dim); color: var(--accent); }
+.pill-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── Act 0 — Typewriter hint ── */
+.tw-hint {
+  display: flex; align-items: flex-start; gap: 9px;
+  opacity: 0; transition: opacity 0.5s ease;
+  max-width: 560px; width: 100%;
+}
+.tw-hint.visible { opacity: 1; }
+.tw-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.tw-label {
+  font-family: "DM Mono", monospace; font-size: 7px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 3px;
+}
+.tw-text {
+  font-family: "DM Sans", sans-serif; font-weight: 300;
+  font-size: clamp(0.85rem, 1.4vw, 1rem); color: var(--text-sub); line-height: 1.55;
+}
+.tw-cursor {
+  display: inline-block; width: 2px; height: 13px;
+  background: var(--accent); margin-left: 1px;
+  vertical-align: middle;
+  animation: blink 0.9s ease infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+/* ── Act 0 — Draft card ── */
+.draft-card {
+  max-width: 560px; width: 100%;
+  border: 0.5px solid var(--text-dim); padding: 1.2rem 1.4rem;
+  background: rgba(8,15,10,0.75); backdrop-filter: blur(8px);
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+}
+.draft-card.visible { opacity: 1; transform: translateY(0); }
+.draft-label {
+  font-family: "DM Mono", monospace; font-size: 7px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent-dim); margin-bottom: 0.7rem;
+  display: flex; align-items: center; gap: 5px;
+}
+.draft-pulse {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--accent); animation: mPulse 2s ease-in-out infinite;
+}
+.draft-text {
+  font-family: "DM Sans", sans-serif; font-weight: 300;
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem); line-height: 1.7;
+  color: var(--text); margin-bottom: 1rem;
+}
+.draft-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+.d-btn {
+  background: transparent; border: 0.5px solid var(--text-dim);
+  color: var(--text-sub); font-family: "DM Mono", monospace;
+  font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.4rem 0.8rem; cursor: pointer; transition: all 0.2s;
+}
+.d-btn:hover { border-color: var(--text-sub); color: var(--text); }
+.d-btn.primary { border-color: var(--accent-dim); color: var(--accent); }
+.d-btn.primary:hover { border-color: var(--accent); }
+
+/* ── Act 0 — Q2 rotate button ── */
+.q2-rotate {
+  background: transparent; border: none; padding: 0;
+  font-family: "DM Mono", monospace; font-size: 8px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim); cursor: pointer; transition: color 0.2s;
+  margin-top: 0.8rem;
+}
+.q2-rotate:hover { color: var(--accent-dim); }
+.q2-rotate::before { content: "↻  "; }
+
+/* ── Act 0 — Hero breathe ── */
+@keyframes breathe { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.7; } }
+
+/* ── Act 0 — Brand example overlay ── */
+.brand-ex-overlay {
+  position: fixed; inset: 0; z-index: 400;
+  background: rgba(4,8,5,0.97);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.5s ease;
+}
+.brand-ex-overlay.open { opacity: 1; pointer-events: auto; }
+.brand-ex-inner { max-width: 660px; width: 100%; padding: 3rem; position: relative; }
+.brand-ex-name {
+  font-family: "Big Shoulders Display", sans-serif; font-weight: 900;
+  font-size: clamp(3rem, 7vw, 6rem); text-transform: uppercase;
+  line-height: 0.9; margin-bottom: 2.5rem; letter-spacing: 0.02em;
+}
+.brand-ex-qa { margin-bottom: 1.8rem; }
+.brand-ex-q {
+  font-family: "DM Mono", monospace; font-size: 8px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent-dim); margin-bottom: 0.5rem;
+}
+.brand-ex-a {
+  font-family: "DM Sans", sans-serif; font-weight: 300;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem); line-height: 1.65;
+  color: var(--text-sub);
+}
+.brand-ex-close {
+  position: absolute; top: 2rem; right: 2rem;
+  background: transparent; border: 0.5px solid var(--text-dim);
+  color: var(--text-sub); font-family: "DM Mono", monospace;
+  font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 0.45rem 0.9rem; cursor: pointer; transition: all 0.2s;
+}
+.brand-ex-close:hover { border-color: var(--text-sub); color: var(--text); }
+
+/* ── Act 0 — slot labels (Q3 mad libs) ── */
+.slot-label {
+  font-family: "DM Mono", monospace; font-size: 8px;
+  letter-spacing: 0.13em; color: var(--accent-dim);
+  margin-bottom: 0.25rem; display: block; text-align: left;
+}
+
+/* ── Act 0 — Question blur reveal (wraps each question-stage block) ── */
+@keyframes blurReveal {
+  from { opacity: 0; filter: blur(24px); }
+  to   { opacity: 1; filter: blur(0); }
+}
+.q-blur-reveal {
+  animation: blurReveal 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ── Landing — Five Steps scroll strip ── */
+.scroll-strip {
+  display: flex;
+  gap: 1px;
+  background: var(--text-ghost);
+  border: 1px solid var(--text-ghost);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.scroll-strip::-webkit-scrollbar { display: none; }
+
+.step-card {
+  flex: 0 0 140px;
+  min-height: 320px;
+  background: #0e1a0f;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  transition: flex-basis 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.step-card.active { flex-basis: 200px; }
+.step-card.locked { cursor: not-allowed; opacity: 0.6; }
+
+/* Hovering anywhere in the strip compresses every card to ~100px except
+   the one actually under the cursor, which expands to ~400px. Specificity
+   is layered deliberately: generic compress < active compress < hovered
+   expand < active-hovered expand, so the right rule always wins regardless
+   of declaration order. */
+.scroll-strip:hover .step-card { flex-basis: 100px; }
+.scroll-strip:hover .step-card.active { flex-basis: 100px; }
+.scroll-strip:hover .step-card:hover { flex-basis: 400px; }
+.scroll-strip:hover .step-card.active:hover { flex-basis: 400px; }
+
+.step-card.active::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: var(--vesica); z-index: 5;
+}
+
+.step-illus {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+}
+.step-illus::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(8,15,10,0.95) 0%, rgba(8,15,10,0.3) 60%, transparent 100%);
+}
+
+.step-content {
+  position: relative; z-index: 3; margin-top: auto;
+  padding: 1rem 0.65rem 0.65rem;
+  display: flex; flex-direction: column; gap: 0.35rem;
+}
+.step-num {
+  font-family: "DM Mono", monospace; font-size: 9px;
+  letter-spacing: 0.2em; color: var(--text-dim); transition: color 0.3s;
+}
+.step-card.active .step-num { color: var(--vesica); }
+.step-card:hover .step-num { color: var(--accent-dim); }
+
+.step-name {
+  font-family: "Fraunces", serif; font-weight: 700;
+  font-size: clamp(1.05rem, 2vw, 1.3rem); color: var(--text); line-height: 1.1;
+  white-space: nowrap; overflow: hidden;
+  opacity: 1; transition: opacity 0.3s ease 0.1s;
+}
+.step-card.locked .step-name { color: var(--text-dim); }
+
+.step-desc {
+  font-size: 0.8rem; color: var(--text-sub); line-height: 1.65; font-weight: 300;
+  max-width: 280px; opacity: 0; max-height: 0; overflow: hidden;
+  transition: opacity 0.3s ease 0.15s, max-height 0.4s ease;
+}
+.step-card:hover .step-desc { opacity: 1; max-height: 120px; }
+
+.step-badge {
+  font-family: "DM Mono", monospace; font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.3em 0.6em; align-self: flex-start; margin-top: 0.35rem;
+  opacity: 0; transition: opacity 0.3s ease 0.2s;
+}
+.step-card:hover .step-badge, .step-card.active .step-badge { opacity: 1; }
+.step-badge.s { color: var(--accent-dim); border: 0.5px solid var(--accent-dim); background: rgba(200,169,110,0.06); }
+.step-badge.f { color: #4a8a5a; border: 0.5px solid #4a8a5a; background: rgba(74,138,90,0.06); }
+.step-badge.l { color: var(--text-dim); border: 0.5px solid var(--text-dim); }
+
+.strip-hint {
+  font-family: "DM Mono", monospace; font-size: 9px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-dim); margin-top: 0.9rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.strip-hint::before { content: ""; width: 16px; height: 1px; background: var(--text-dim); }
+
+/* ── Act 0 — HUD motif bars ── */
+.m-bar {
+  width: 1.5px; border-radius: 1px;
+  background: var(--accent-dim);
+  animation: mPulse 5s ease-in-out infinite;
+}
+.m-bar:nth-child(1) { height: 7px; }
+.m-bar:nth-child(2) { height: 11px; animation-delay: 0.4s; }
+.m-bar:nth-child(3) { height: 15px; animation-delay: 0.8s; }
+.m-bar:nth-child(4) { height: 9px;  animation-delay: 1.2s; }
