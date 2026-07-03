@@ -44,9 +44,9 @@ If the user names a type not on this list (video script, email subject line, ad 
 
 Mandatory for every content_type, listed or unlisted. There is no content_type for which technique selection can be skipped — if the brief doesn't obviously map to one of the core four, that means think harder about the reader's awareness level and audience frustration, not skip the step.
 
-Before writing, select the primary technique from `frameworks.md` that matches the content_type and brief. State it in one line:
+Before writing, select the primary technique from `copy-frameworks.md` that matches the content_type and brief. State it in one line:
 
-> *Technique: [name from frameworks.md] — [one-sentence reason it fits this brief]*
+> *Technique: [name from copy-frameworks.md] — [one-sentence reason it fits this brief]*
 
 Do not apply more than one major technique per piece. v0 is not the place for synthesis.
 
@@ -131,5 +131,5 @@ Do not rewrite for the user here — name the problem, let them decide. The anti
 
 ---
 
-Reference: `frameworks.md`
+Reference: `copy-frameworks.md`
 Brand source of truth: `brand.md`
