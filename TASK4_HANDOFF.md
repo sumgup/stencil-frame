@@ -7,7 +7,7 @@ filled, including Personality). This task builds Frame's v0 copywriting
 engine as a Claude Code Skill.
 
 ## Goal
-One `SKILL.md` + one `frameworks.md`, reading `brand.md` for context. Input:
+One `SKILL.md` + one `copy-frameworks.md` (skills/copy-engine/), reading `brand.md` for context. Input:
 {content_type + short brief}. Output: on-voice copy, self-checked against
 brand.md's Voice do's/don'ts before returning.
 
@@ -26,7 +26,7 @@ brand.md's Voice do's/don'ts before returning.
    - Do a light anti-slop pass (cut buzzwords, hedging language, exclamation
      points doing emotional work — see brand.md Guardrails section)
 
-2. `frameworks.md` — reference material the skill draws on:
+2. `copy-frameworks.md` — reference material the skill draws on:
    - Core four: Schwartz, Ogilvy, Halbert, Wiebe (canon, described not
      reproduced — paraphrase technique/approach, don't quote their copy)
    - CoppieGPT 232-formula taxonomy (from the saved competitive landscape
