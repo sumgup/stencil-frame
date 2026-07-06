@@ -2,7 +2,7 @@
 ## Stencil + Frame — Art Direction Engine
 
 > **Status:** Territory + Style DNA LOCKED (anchor set confirmed).
-> **Next stage:** Device Library (6–8 visual moves mapped to positioning concepts) — not yet written.
+> **Device Library:** COMPLETE — 8 devices, all mapped and scaffolded, see §9.
 > **Companion skills:** copywriting engine (SKILL.md), interface engine, Rubato (typography & motion).
 
 ---

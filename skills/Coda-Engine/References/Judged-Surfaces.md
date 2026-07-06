@@ -74,6 +74,8 @@ Priority tiers:
 
 &#x20; `prefers-reduced-motion` (static crossed-out version shown, no animation).
 
+\- \*\*Implementation spec:\*\* `DESIGN.md §6` (kinetic reveal timing, stagger.reveal token, GSAP setup).
+
 
 
 \### 03 · Scroll narrative

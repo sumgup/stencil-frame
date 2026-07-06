@@ -52,6 +52,10 @@ principle maps to what this feature *does*? Then use that structure literally.
 
 ## Dopamine and work structure
 
+> *Personal workflow context — describes how Sumit structures his own creative sessions.
+> Not a rule for Claude to apply when designing interfaces or evaluating design decisions.
+> For system design rules, see §Cross-domain fusion and §Instructions for Claude.*
+
 Productive dopamine comes from **surprise at your own output**.
 Structure every session to hit this:
 

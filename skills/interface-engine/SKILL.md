@@ -29,6 +29,9 @@ be traced, it doesn't ship. (Same auditability rule as the Copy Engine.)
    #e8673a coral — logo mark only), typefaces (Mona Sans Variable for
    display + body roles, DM Mono for code/UI chrome), and any component
    tokens defined. Full token spec: `design/tokens.json`.
+   For Stencil session screens: also load `EMOTIONAL_DESIGN_LANGUAGE.md`
+   for the session's emotional arc, act-by-act vocabulary, and typography
+   layer grammar (session-hero / session-question / body token presets).
 
 ## The six steps — run in order, show your work
 
@@ -87,8 +90,17 @@ Shneiderman governs: overview first, zoom and filter, details on demand.
 5. Overview-layer design
 6. Gates + audit trail
 
-## Known limits (v0)
-- Reference files are stubs until Step 2 (Strategy & Narrative) design
-  begins; until then, cite principles from this file directly.
-- No accessibility pass yet — planned as step 6.5 (contrast after any
-  translucency, reduced-motion fallbacks, target sizes).
+## Known gaps (v0)
+
+The following reference files are **non-operational stubs** — placeholder text only;
+must not be cited as authoritative until written:
+
+- `references/ui-controls.md` — control-to-need mapping rules
+- `references/ui-patterns.md` — macro patterns (wizard, hub, progressive disclosure)
+- `references/ui-motion.md` — motion gate rules
+- `references/ui-overview.md` — overview mechanisms (minimap, constellation, etc.)
+- `references/ui-spatial.md` — 3D gate + depth-as-hierarchy principles
+
+Until these exist: cite principles from §The six steps directly in the audit trail.
+No accessibility pass yet — planned as step 6.5 (contrast after any translucency,
+reduced-motion fallbacks, target sizes).

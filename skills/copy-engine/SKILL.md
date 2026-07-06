@@ -97,6 +97,7 @@ Do not silently fix anything. The check is the point.
 ## Step 6 — Anti-slop pass
 
 After the self-check (or revision if there was one), output `## Anti-slop pass`.
+*(Rationale for each test in `copy-frameworks.md §Anti-slop`.)*
 
 Check for and call out each of the following if present in the final copy (or the revision, if it exists):
 

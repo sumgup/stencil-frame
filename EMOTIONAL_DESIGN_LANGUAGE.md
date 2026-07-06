@@ -51,11 +51,11 @@ Speed, direction, and easing carry emotional meaning. Never animate without reas
 ### Typography
 Four layers. Each layer has one job, one axis, one scale, one opacity.
 
-**Layer 1 — Vertical hero (Mona Sans Variable — display role, wght 800, wdth 125, uppercase)**
-The session name runs full height, bottom to top. Arrives bold. Holds. Recedes to atmospheric. Sets the stage before anything else appears. Authority through scale and restraint.
+**Layer 1 — Vertical hero (Mona Sans Variable — session-hero token, wght 700, wdth 100, uppercase, letterSpacing 0.05em)**
+The session name runs full height, bottom to top. Arrives bold. Holds. Recedes to atmospheric. Sets the stage before anything else appears. Authority through scale and restraint. Weight restrained vs. landing page display (800/125) — session register is introspective, not editorial.
 
-**Layer 2 — The question (DM Serif Display)**
-Horizontal. Masked slide-up reveal. Line by line. The actor entering after the curtain has risen. Mixed upright and italic — upright is statement, italic is invitation.
+**Layer 2 — The question (Mona Sans Variable — session-question token, wght 350, wdth 100)**
+Horizontal. Masked slide-up reveal. Line by line. The actor entering after the curtain has risen. Mixed upright and italic — upright is statement, italic is invitation. Lighter than body (400/100) — reads as genuinely questioning rather than declarative.
 
 **Layer 3 — Labels (DM Mono, tiny, high letter-spacing)**
 Structural. Never decorative. Encodes position in the journey.
@@ -70,7 +70,7 @@ Vertical hero arrives first (authority) → recedes → question slides up (huma
 - `#080f0a` — British Racing Green deep dark. Not black. Not forest. Heritage authority.
 - `#c8a96e` — Gold accent. Warmth within authority. Used sparingly — one element per screen maximum.
 - `#f0ede6` — Warm white for primary text. Never pure white.
-- `#6a7a6a` — Muted green-grey for secondary text.
+- Secondary text: `opacity: 0.7` on `#f0ede6` — canonical approach per `design/tokens.json`. (`#6a7a6a` superseded.)
 - Everything else approaches darkness.
 
 ### Sound
@@ -115,46 +115,51 @@ Example — Act 0:
 
 ## Visual Art Direction
 
-### The Gap Obys fills that we identified
+**Governing direction (locked):** The session is a recessive surface — the founder's answer is
+the hero; art recedes. In-product visual direction: quiet C-marks only (a pencil underline when
+an answer is accepted — the softest possible reward). Art does not compete for attention during
+the session. See `skills/Art-Direction/ART_DIRECTION_SKILL.md §2` placement map for the full
+system.
 
-Typography and motion alone are structural. They create authority and emotional shape but they do not create the felt sense of a world. Images — the right kind — pull attention before the brain engages. That is what Obys has that we identified as missing.
+---
 
-### What we are NOT doing
+### Explored and superseded — archived as creative record
 
-- No stock photography
-- No AI-generated images that feel generic or textured in the recognisable AI way
-- No illustration that explains the content (that is decoration, not emotion)
+The following generative/surrealist approach was explored June 2026 before the art direction
+territory was locked. Preserved here as creative record, not as governing direction. The
+placement map in ART_DIRECTION_SKILL.md supersedes it.
 
-### What we ARE doing — Two tracks
+**What we identified (Obys reference):** Typography and motion alone are structural — they
+don't create the felt sense of a world. Images pull attention before the brain engages. That
+gap was real at the time of this investigation.
 
-**Track 1 — p5.js generative backgrounds (build first)**
+**Track 1 explored — p5.js generative backgrounds**
 
-Each act has a generative visual canvas running behind everything. Not the blob — something separate. A visual that embodies the emotional word of that act.
+Each act would have had a generative visual canvas running behind everything. A visual embodying
+the emotional word of that act.
 
-| Act | Emotional word | Generative visual |
+| Act | Emotional word | Generative visual explored |
 |---|---|---|
-| Act 0 | Origin | Particles slowly coalescing from chaos into a loose form. Something being gathered from nothing. |
-| Act 1 | Noise | Overlapping signals, interference patterns. Information competing for space, gradually sorting. |
-| Act 2b | Gap | A vast field. Small clustered objects at the edges. The centre is empty and open. |
-| Act 3 | Born | A single clear form emerging from darkness. Stillness after movement. |
+| Act 0 | Origin | Particles slowly coalescing from chaos into a loose form |
+| Act 1 | Noise | Overlapping signals, interference patterns |
+| Act 2b | Gap | A vast field; small clustered objects at edges; empty centre |
+| Act 3 | Born | A single clear form emerging from darkness |
 
-These are not decorative. The visual IS the emotion made visible. Structural correspondence.
+**Track 2 explored — One hero image per act**
 
-**Track 2 — One hero image per act (add after Track 1)**
+Dark, textural, surrealist. Emotionally true, not literally true — in the tradition of Magritte.
 
-Sourced from public domain art or generated with precise aesthetic direction. Dark, textural, surrealist leaning. Emotionally true, not literally true — in the tradition of Magritte.
+| Act | Conceptual direction explored |
+|---|---|
+| Act 0 | A hand holding clay that has not yet taken shape |
+| Act 1 | Multiple voices speaking simultaneously, overlapping |
+| Act 2b | A wide landscape with a clearing in the centre |
+| Act 3 | The same hand, clay now formed, releasing it |
 
-Conceptual direction per act:
-- Act 0 — A hand holding clay that has not yet taken shape
-- Act 1 — Multiple voices speaking simultaneously, overlapping
-- Act 2b — A wide landscape with a clearing in the centre
-- Act 3 — The same hand, clay now formed, releasing it
-
-Start with Track 1. See if generative art alone is enough. Add Track 2 only if something still feels missing.
-
-### The surrealism principle
-
-Magritte works because the image is impossible but emotionally true. We want images that make no logical sense and perfect emotional sense. Not realistic. Not explanatory. Emotionally true.
+**Why superseded:** The generative approach, however emotionally rigorous, would have made the
+session a designed experience to observe rather than a conversation to inhabit. The brand.md
+differentiator — "the experience of being asked is itself the differentiator" — requires the
+founder to be the only protagonist on screen. Art recedes so the question can land.
 
 ---
 
@@ -166,7 +171,8 @@ This is the meta-level. The thinking process that generates everything above.
 Before designing any screen: what is the user feeling when they arrive? What do they need to feel when they leave? Design the transition between those two states.
 
 **2. Find the structural correspondence.**
-What in music, visual art, or nature has the same emotional shape as this screen? Use that structure literally, not decoratively. The blob morph follows sonata form. The typographic arrival follows counterpoint. These are not metaphors — they are the actual structure.
+*(Principle: `DESIGN_PHILOSOPHY.md §Cross-domain fusion` — use that structure literally, not decoratively.)*
+Applied here: the blob morph follows sonata form. The typographic arrival follows counterpoint. These are not metaphors — they are the actual structure.
 
 **3. Design the contrast.**
 Emotion only exists in relation to something else. Act 3 feels settled only because Act 0 felt searching. Design the arc, not the individual moment. Every screen needs to know what came before and what comes after.

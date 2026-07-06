@@ -36,11 +36,11 @@ Vertical typesetting.
 - **Notes:** `mixed` keeps CJK upright, rotates Latin runs; `upright` forces all upright (illegible for Latin). CJK vertical is native — treat as always-allow for CJK scripts regardless of other signals; Latin vertical is a legibility risk that must go through the full scoring pass.
 
 ## axis-choreo
-Variable-font axis animation (weight/optical-size/custom axes like Fraunces' SOFT/WONK).
+Variable-font axis animation (wght/wdth/optical-size axes on Mona Sans Variable, or custom axes on other variable fonts).
 - **Implementation:** register each axis as a typed `@property` custom property; CSS transitions/keyframes; GSAP for multi-axis sequencing
 - **Fallback:** static axis values at the brand's default display setting (this is the treatment's own resting state, not a separate catalog entry)
 - **Motion tokens used:** `duration.moderate`, `easing.expressive`, optionally `stagger` if per-character
-- **Notes:** Fraunces-specific — SOFT and WONK are display-only; WONK auto-substitutes off at opsz ≤18 and must be capped at body sizes regardless of brand tokens (this is a hard technical ceiling, not a style choice).
+- **Notes:** Extreme axis ranges (very high wght + wide wdth) are display-only; avoid animated wdth at body sizes — the width delta is imperceptible at small sizes and the rendering cost isn't justified. Keep wdth animations to hero/display scale only. *(Migrated 2026-07-06: previously referenced Fraunces SOFT/WONK axes; those are no longer in the S+F stack. General principle — extreme ranges display-only — applies equally to Mona Sans wght/wdth.)*
 
 ## split-stagger
 Per-character/word/line entrance stagger.

@@ -49,18 +49,25 @@ specified in `investigate-agent-design.md`. Implement exactly as written.
 --accent:     #c8a96e;   /* gold */
 --accent-dim: #5a4520;
 --text:       #f0ede6;   /* warm white, never pure white */
---text-sub:   #6a7a6a;
+/* secondary text: opacity 0.7 on --text — see design/tokens.json body.$description. --text-sub removed; #6a7a6a superseded. */
 --text-dim:   #1a2a1a;
 --text-ghost: #0e1a0f;
 ```
 
 ### Typography
-- **Fraunces 900** — vertical hero text only (uppercase, full session name)
-- **DM Serif Display** — questions, masked slide-up reveal (mixed upright + italic)
-- **DM Mono** — labels, whispers, structural text (high letter-spacing, 0.2–0.35em)
-- **DM Sans** — body/input text where needed
+Source of truth: `design/tokens.json`. Session UI uses a calmer, conversational register
+than the landing page — axis presets differ accordingly.
 
-All fonts free, Google Fonts, already commercially licensed.
+- **session-hero** — Mona Sans Variable, wght 700, wdth 100, uppercase, letterSpacing 0.05em.
+  Vertical hero (full session name). Authority through scale and vertical treatment; weight
+  restrained vs. landing page display (800/125) to suit the session's introspective register.
+- **session-question** — Mona Sans Variable, wght 350, wdth 100, italic available.
+  Questions, masked slide-up reveal. Lighter than body (400/100) — reads as genuinely
+  questioning rather than declarative. Italic for invitation lines; upright for statements.
+- **body / input** — existing `typography.body` token (wght 400, wdth 100). Unchanged.
+- **DM Mono** — labels, whispers, structural text (high letter-spacing, 0.2–0.35em). Unchanged.
+
+Fonts: Mona Sans Variable via `@fontsource-variable/mona-sans` (jsDelivr, OFL); DM Mono via Google Fonts. Both free.
 
 ### Motion — Emotional Words (internal only, never shown in UI)
 | Act | Word | Blob speed | Geometry target |
@@ -84,7 +91,7 @@ All fonts free, Google Fonts, already commercially licensed.
 1. Vertical hero text reveals bottom→top (clip-path), arrives bold gold
 2. Holds at peak ~1.5s
 3. Recedes to atmospheric (~5% opacity) over ~2s
-4. While receding: question masks slide up line by line (DM Serif Display)
+4. While receding: question masks slide up line by line (Mona Sans Variable session-question token)
 5. Whisper text fades in last (DM Mono, tiny)
 
 ### Sonic Identity
@@ -129,8 +136,8 @@ Rules:
 ## UX Reference Prototypes
 
 Located in `design/prototypes/`:
-- `act0-typographic.html` — **final direction**, Fraunces 900 vertical hero,
-  three-phase animation, blob, examples panel
+- `act0-typographic.html` — **final direction**, typography now Mona Sans Variable
+  (session-hero/session-question tokens per `design/tokens.json`), three-phase animation, blob, examples panel
 - `act1.html` — question + reflection cards (facts/obstacles/opportunities)
 - `act2a.html` — research prompt generation, copy/paste flow
 - `act2b.html` — axis selection, animated competitor plotting, gap reveal
@@ -152,8 +159,8 @@ references.
 3. **Shared components:**
    - `<BlobMorph>` — canvas component, accepts `geometryT`, `baseR`, `speed`
      props, reusable across all acts
-   - `<VerticalHero>` — Fraunces 900 vertical text with three-phase animation
-   - `<MaskedReveal>` — DM Serif Display line-by-line slide-up
+   - `<VerticalHero>` — Mona Sans Variable session-hero token, vertical text with three-phase animation
+   - `<MaskedReveal>` — Mona Sans Variable session-question token, line-by-line slide-up
    - `<ProgressIndicator>` — Who/Warm/Research/Map/Confirm
    - `<ExamplePanel>` — "show me an example" trigger + slide-in panel
 4. **Build Act 0** — full component matching `act0-typographic.html`,

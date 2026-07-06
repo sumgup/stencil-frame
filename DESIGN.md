@@ -131,10 +131,10 @@ line states the wrong, expected claim; the real line reveals underneath it
 in full color/weight. This is the single signature moment the page should be
 remembered for — everything else on the page is quiet execution around it.
 
-**Kinetic reveal (secondary, body copy)** — 42ms per character; line 2 of
-any multi-line reveal starts when line 1 is 40% through. Built with GSAP
-SplitText (free as of 3.13) + `aria-label`/`aria-hidden` split for
-accessibility.
+**Kinetic reveal (secondary, body copy)** — `stagger.reveal` token (42ms) per character;
+line 2 of any multi-line reveal starts when line 1 is 40% through. Built with GSAP
+SplitText (free as of 3.13) + `aria-label`/`aria-hidden` split for accessibility.
+Must satisfy Surface 02 pass condition (`skills/Coda-Engine/References/Judged-Surfaces.md §02`).
 
 **Rubato (page-wide, not v1-blocking)** — variable font axes shift with
 scroll velocity. Sustained page behavior, not hero-specific. Can be layered

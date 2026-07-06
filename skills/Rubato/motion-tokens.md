@@ -27,8 +27,9 @@ treatment in `treatments.md` references a token name from here.
     },
     "stagger": {
       "$type": "number",
-      "tight": { "$value": 0.02 },
-      "loose": { "$value": 0.08 }
+      "tight":  { "$value": 0.02 },
+      "loose":  { "$value": 0.08 },
+      "reveal": { "$value": 0.042, "$description": "42ms per character — The Correction reveal and any kinetic character-by-character reveal on the landing page. Line 2 starts when line 1 is 40% through. Design-specific value; not for general character-stagger use." }
     }
   }
 }
@@ -49,6 +50,7 @@ treatment in `treatments.md` references a token name from here.
 | `easing.settle` | `split-stagger`, `3d-extruded` entrance | Gentle overshoot-then-settle, good for elements arriving individually |
 | `stagger.tight` | `split-stagger` (word/line splits), `collage-grid` (dense fragments) | Characters/words feel like one gesture |
 | `stagger.loose` | `split-stagger` (character splits on short display strings), `collage-grid` (sparse fragments) | Individual elements read as distinct beats |
+| `stagger.reveal` | `split-stagger` (The Correction + any kinetic landing-page reveal) | 42ms per character; line 2 starts when line 1 is 40% through. Design-specific — not a general stagger default. |
 
 ## Perf/lazy-load tier (not a DTCG motion type — a Rubato-specific gate)
 
