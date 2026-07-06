@@ -1,6 +1,6 @@
 # Motion Agent
 **Pipeline position:** 6 of 6 (before Testing)  
-**Input:** Styled component(s) + `visual-direction.md` motion intent section  
+**Input:** Styled component(s) + `visual-direction.md` motion intent section + `skills/Rubato/motion-tokens.md`  
 **Output:** Motion layer added to components — CSS keyframes, Framer Motion variants, or vanilla JS  
 **Tier:** Cheap  
 **Runs in:** Claude Code
@@ -25,6 +25,12 @@ Stencil + Frame's sonic identity uses a suspension-to-resolution arc — the mot
 
 ### What you read
 
+**`skills/Rubato/motion-tokens.md`** — load first, before anything else. Every duration,
+easing, and stagger value in your output must reference a named token from this file
+(e.g. `duration.moderate`, `easing.settle`, `stagger.reveal`). Never hardcode a millisecond
+value or bezier curve that isn't in motion-tokens.md. If you need a value that doesn't
+exist there, flag it as a gap — do not invent a one-off.
+
 **`visual-direction.md` motion intent section:**
 - The emotional quality of transitions (sharp? contemplative? snappy?)
 - Any musical structure governing timing
@@ -39,39 +45,47 @@ Stencil + Frame's sonic identity uses a suspension-to-resolution arc — the mot
 
 **Option A — CSS keyframes** (preferred for simple, looping, or performance-critical motion):
 ```css
+/* Token values resolved from skills/Rubato/motion-tokens.md at build time.
+   Cite the token name in the comment — never hardcode the value. */
 @keyframes sf-resolve {
   0%   { opacity: 0; transform: translateY(4px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
-/* Usage */
+/* Usage — duration.moderate (400ms) + easing.settle ([0.16, 1, 0.3, 1]) */
 .result-appears {
-  animation: sf-resolve 280ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: sf-resolve var(--duration-moderate) var(--ease-settle) forwards;
 }
 ```
 
 **Option B — Framer Motion variants** (for complex, chained, or interactive motion):
 ```jsx
+// Resolve token values from motion-tokens.md; annotate the token name used.
+// duration.moderate = 0.4s | easing.settle = [0.16, 1, 0.3, 1]
+// duration.fast = 0.2s
 const variants = {
   hidden:  { opacity: 0, y: 6 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] } },
-  exit:    { opacity: 0, transition: { duration: 0.15 } }
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }, // duration.moderate + easing.settle
+  exit:    { opacity: 0, transition: { duration: 0.2 } } // duration.fast
 }
 ```
 
 **Option C — vanilla JS** (for canvas-based or WebGL motion — rare, justify explicitly):
 Only if Three.js or p5.js is already in scope for this feature.
 
-### Timing reference (align with sonic identity)
+### Timing reference (Rubato token names — values in `skills/Rubato/motion-tokens.md`)
 
-| Moment | Duration | Easing | Why |
-|---|---|---|---|
-| State entry (text, content) | 240–320ms | ease-out cubic | Information appearing — should feel natural, not instant |
-| State exit | 140–180ms | ease-in cubic | Leaving — faster than entering, clears space |
-| Micro-interaction (hover, press) | 80–120ms | ease-out | Immediate feedback — must feel snappy |
-| Loading pulse / hold | 1400–2000ms loop | ease-in-out sine | Suspension — held tension, not spinning |
-| Success / resolution | 280–360ms + 80ms pause | ease-out cubic | The resolution beat — allow it to breathe |
-| Step transition | 200ms | ease-in-out | Punctuation — brief, purposeful |
+| Moment | Rubato token | Why |
+|---|---|---|
+| State entry (text, content) | `duration.moderate` + `easing.settle` | Information appearing — should feel natural, not instant |
+| State exit | `duration.fast` + `easing.expressive` | Leaving — faster than entering, clears space |
+| Micro-interaction (hover, press) | `duration.fast` + `easing.settle` | Immediate feedback |
+| Loading pulse / hold | `duration.ambient` + `easing.linear` (loop) | Suspension — held tension, not spinning |
+| Success / resolution | `duration.moderate` + `easing.settle` + 80ms pause | The resolution beat — allow it to breathe |
+| Step transition | `duration.fast` + `easing.expressive` | Punctuation — brief, purposeful |
+| Character-by-character reveal | `stagger.reveal` (42ms/char) | Landing-page Correction and kinetic reveals only |
+
+**Always read motion-tokens.md for current values before implementing.** Token values may be overridden per brand via brand.md — use the token name, not a hardcoded value, so brand overrides propagate automatically.
 
 ### Rules
 
@@ -89,8 +103,8 @@ Only if Three.js or p5.js is already in scope for this feature.
 ```bash
 "Add motion to the components at /frame/ui/src/components/ResearchInvestigate/
  using the motion intent from /design/features/research-investigate/visual-direction.md
- Follow the timing reference in the Motion Agent prompt.
- Do not animate data-static elements."
+ Load motion tokens from /skills/Rubato/motion-tokens.md — cite token names in comments,
+ never hardcode durations or bezier curves. Do not animate data-static elements."
 ```
 
 **Via chat:**

@@ -12,15 +12,20 @@
 - **CHEAP** — small JS on event, no per-frame work
 - **BUDGETED** — per-frame JS or paint; must appear in the perf gate recording
 
-## Global tokens (single source — mirror in motion-tokens.md when Rubato Stage 2 lands)
-```css
---ease-out:   cubic-bezier(0.22, 1, 0.36, 1);   /* arrivals */
---ease-in-out:cubic-bezier(0.65, 0, 0.35, 1);   /* state changes */
---t-fast: 150ms;  /* acknowledgments */
---t-base: 300ms;  /* state changes */
---t-slow: 600ms;  /* entrances */
-```
-Rule: three durations, two eases, site-wide. A new duration requires a written reason.
+## Global tokens (source of truth: `skills/Rubato/motion-tokens.md`)
+
+This file references Rubato token names; implementation reads values from motion-tokens.md.
+Rubato is Stage 2 — these are no longer provisional.
+
+| Token name | Rubato value | Use in these patterns |
+|---|---|---|
+| `duration.fast` | 200ms | Acknowledgments (P-02) |
+| `duration.moderate` | 400ms | State changes (P-07) |
+| `duration.slow` | 800ms | Entrances (P-04, P-05) |
+| `easing.settle` | [0.16, 1, 0.3, 1] | Arrivals — gentle overshoot |
+| `easing.expressive` | [0.2, 0.8, 0.2, 1] | Standard motion curve |
+
+Rule: three durations, two eases, site-wide. A new duration requires a written reason and a new entry in motion-tokens.md first.
 
 ---
 
@@ -34,7 +39,7 @@ Rule: three durations, two eases, site-wide. A new duration requires a written r
 ## P-02 · Press acknowledgment (buttons)
 - **Use:** all buttons incl. waitlist submit
 - **Trace:** "nothing accidental" — every input is answered
-- **How:** `:active { transform: translateY(1px) scale(0.995) }`, `--t-fast`;
+- **How:** `:active { transform: translateY(1px) scale(0.995) }`, `duration.fast` (200ms);
   release springs back instantly (no transition on release)
 - **Cost:** FREE
 
@@ -49,15 +54,15 @@ Rule: three durations, two eases, site-wide. A new duration requires a written r
 - **Use:** every section below the fold; the ONLY entrance pattern on the site
 - **Trace:** restraint — repetition is coherence; spectacle belongs to the signature moment alone
 - **How:** IntersectionObserver adds a class: `opacity 0→1`, `translateY(12px)→0`,
-  `--t-slow` `--ease-out`, `once: true`. Children may stagger ≤ 80ms, max 4 items
+  `duration.slow` (800ms) + `easing.settle`, `once: true`. Children may stagger ≤ 80ms, max 4 items
 - **Cost:** CHEAP
 
 ## P-05 · The strike-through (signature moment only)
 - **Use:** hero Correction. NOWHERE else — scarcity is what makes it signature
 - **Trace:** the audit-trail thesis performed; corrections left visible
 - **How:** SVG path over the generic headline, `stroke-dashoffset` animated
-  `--t-slow`; real headline enters via SplitText chars, 42ms/char (existing kinetic
-  reveal spec); struck version stays at 22% opacity (existing settle token)
+  `duration.slow` (800ms); real headline enters via SplitText chars,
+  `stagger.reveal` (42ms/char, see motion-tokens.md); struck version stays at 22% opacity after settle
 - **Cost:** BUDGETED (one-time, ≤ 2s window)
 
 ## P-06 · Rubato axes (sustained hero behavior)
@@ -71,7 +76,7 @@ Rule: three durations, two eases, site-wide. A new duration requires a written r
 - **Use:** waitlist input validation
 - **Trace:** Register C annotations; errors in brand voice
 - **How:** inline `<span role="alert">` beside field, DM Mono, gold; enters with
-  P-04's motion at `--t-base`. Success = a small drawn check (SVG stroke, P-05's
+  P-04's motion at `duration.moderate` (400ms). Success = a small drawn check (SVG stroke, P-05's
   technique at 1/10 scale). No browser default popups (`novalidate` + JS)
 - **Cost:** CHEAP
 
@@ -114,7 +119,5 @@ Rule: three durations, two eases, site-wide. A new duration requires a written r
 - Skeleton screens (we have the Correction beat; skeletons are someone else's brand)
 
 ## Known gaps (v0)
-- Tokens here are provisional until Rubato's motion-tokens.md is written — that
-  file becomes the source of truth and this one references it
 - No pattern yet for in-product Stencil session surfaces (this file is landing-page
   scoped; session patterns follow ART_DIRECTION_SKILL.md's recessive placement map)

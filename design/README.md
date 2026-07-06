@@ -42,7 +42,16 @@ Update `FEATURES.md` every time a feature ships.
       wireframe.html
       wireframe.md
       test-spec.md
+      journey-map.md  ← Stencil session features only (see note below)
 ```
+
+**`journey-map.md` scope note:** Required only for Stencil session features (the guided
+brand-discovery flow — Act 0 through Act N). Not required for landing page features or
+Frame features. `ux-flow.md` already specifies emotional arc and five states for all
+features; `journey-map.md` supplements it with the act-by-act current-state arc
+(what the user feels before the session, act by act, and what shifts) that
+`EMOTIONAL_DESIGN_LANGUAGE.md` uses as its source material. Do not create it for
+non-session features — that would add overhead without benefit.
 
 ## Execution modes
 

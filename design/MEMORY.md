@@ -75,6 +75,16 @@ No agent may skip an earlier agent's output. Each agent's input is the previous 
 # /design/DESIGN.md
 *The visual system. Styling Agent and Motion Agent read this as source of truth.*
 
+> **System boundary (2026-07-06):** This is Frame's product-UI system — deliberately
+> separate from the brand system in root `DESIGN.md`. Governs Frame's functional screens
+> (carousel generator, etc.) **only**. NOT the Stencil session, which uses the brand
+> stack (Fraunces + Mona Sans Variable + DM Mono) per `EMOTIONAL_DESIGN_LANGUAGE.md`.
+>
+> ⚠ Current values below (Instrument Serif, Syne, multi-accent palette) are an early
+> placeholder, not a deliberate design decision. Do not treat them as final — Frame's
+> product UI needs its own design pass before real screens are built. Logged in root
+> `DESIGN.md §0` as an open decision.
+
 ---
 
 ## Color tokens (from brand.md visual layer)

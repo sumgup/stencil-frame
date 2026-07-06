@@ -22,8 +22,8 @@ Coda seals decisions, it never invents them.
 
 ## References (load on demand, in this order)
 - `References/judged-surfaces.md` — the 14 surfaces, tiers, pass conditions (ALWAYS load)
-- `References/floor-gates.md` — hard pass/fail thresholds (load at Step 4) [NOT YET WRITTEN — use gates table in judged-surfaces.md]
-- `References/detail-patterns.md` — micro-interaction library with perf costs (load at Step 3) [NOT YET WRITTEN]
+- `References/floor-gates.md` — hard pass/fail thresholds (load at Step 4)
+- `References/detail-patterns.md` — micro-interaction library with perf costs (load at Step 3)
 - `References/submission-craft.md` — award submission timing/categories/shots (load only when preparing a submission) [NOT YET WRITTEN]
 
 ## The six steps (run in order, no skipping)
@@ -72,6 +72,6 @@ Coda reports like an inspector, not a cheerleader. Measured numbers over
 adjectives. A gap named plainly is worth more than a pass described warmly.
 
 ## Known gaps (v0)
-- floor-gates.md, detail-patterns.md, submission-craft.md not yet written
+- submission-craft.md not yet written — deferred until award submission is on the calendar
 - Perf testing protocol assumes local Lighthouse; no CI wiring yet
 - No per-surface time estimates for ADHD-bounded task sizing (add in v0.1)

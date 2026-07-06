@@ -31,6 +31,27 @@ directly — don't leave both versions sitting in the file.
   if the winning UI material or lighting treatment needs it (e.g. a second
   accent color, coral used beyond the mascot). Don't reopen unilaterally —
   surface it as a question if a Claude Design direction seems to need it.
+- **Frame product UI's own type/color system** — `design/MEMORY.md §DESIGN.md`
+  currently specifies Instrument Serif + Syne + a three-accent palette (amber,
+  blue, sage). These are an early placeholder, not a deliberate design decision.
+  Frame's functional screens (carousel generator, brand picker, etc.) need their
+  own dedicated design pass before any screen is built for real. Do not treat
+  current MEMORY.md values as final; do not correct them silently — surface it
+  here first when that pass is ready.
+- **Coral (#e8673a) restriction** — currently locked to the Vesica Piscis mark
+  only (§3). `skills/Coda-Engine/References/detail-patterns.md` P-07 proposes
+  using coral as the error-state color for form feedback, which would break that
+  restriction. Not decided — requires an explicit call on whether coral can be
+  used beyond the mascot before P-07's implementation is built.
+- **Provenance/audit-trail UI interaction model** — the product's core
+  differentiator (every asset traces to brand.md) has no UI spec. Three candidate
+  shapes: hover tooltip (low friction, for users who trust output), expandable
+  footnote (higher trust signal, always-reachable trace), sidebar panel (highest
+  transparency, for systematic auditing). The right choice depends on the user's
+  emotional relationship to provenance — which should be answered in that
+  feature's `brief.md` before any design starts. Flagship entry in
+  `skills/interface-engine/references/ui-patterns.md` once the interaction model
+  is chosen.
 
 ---
 
