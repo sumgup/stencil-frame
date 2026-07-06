@@ -132,15 +132,15 @@ Priority tiers:
 
 \- \*\*What winners do:\*\* Oversized type with flawless fallback behavior.
 
-\- \*\*S+F treatment:\*\* Mona Sans Variable with size-adjusted system fallback
+\- \*\*S+F treatment:\*\* Fraunces (display/headline) + Mona Sans Variable (body), both
 
-&#x20; (`font-display: swap` + metric overrides so the Correction doesn't reflow).
+&#x20; with size-adjusted system fallbacks (`font-display: swap` + metric overrides so the
 
-&#x20; Axis presets from `design/tokens.json` — typography.display (wght 800, wdth 125) for
+&#x20; Correction doesn't reflow). Token presets: typography.display (Fraunces opsz 144)
 
-&#x20; the hero; typography.body (wght 400, wdth 100) elsewhere. Fluid scale (Utopia-style)
+&#x20; for the hero; typography.body (Mona Sans wght 400, wdth 100) elsewhere. See `DESIGN.md §4`.
 
-&#x20; already in Rubato research.
+&#x20; Fluid scale (Utopia-style) already in Rubato research.
 
 \- \*\*Pass:\*\* Zero layout shift on font load (CLS < 0.02). Headline legible at 320px
 

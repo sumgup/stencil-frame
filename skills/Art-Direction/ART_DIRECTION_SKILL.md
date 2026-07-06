@@ -95,9 +95,10 @@ frame, museum-catalog gravity, muted tones, fine film grain
 ```
 
 ### Register D (type)
-Built live in the browser (Mona Sans Variable — display role, wght 800 wdth 125 at hero scale;
-see `design/tokens.json` typography.display). Midjourney is never used for letterforms.
-C-marks that sit on type
+Built live in the browser (Fraunces — display role, opsz 144 at landing page hero scale,
+opsz 72 for session hero; SOFT/WONK available per treatment for engineered imperfection.
+See `design/tokens.json` typography.display and `DESIGN.md §4`). Midjourney is never used
+for letterforms. C-marks that sit on type
 (strikethroughs, annotations, guide lines) are generated or scanned as
 transparent overlays and composited.
 

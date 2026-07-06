@@ -62,33 +62,35 @@ whitespace carry the hierarchy, not decoration.
 
 ---
 
-## 4. Typography — Mona Sans, unified
+## 4. Typography — split stack (source of truth)
 
-**Decision this cycle:** Mona Sans replaces Fraunces, Big Shoulders Display,
-and DM Sans across both display and body roles. One variable superfamily,
-hierarchy driven entirely by axis values rather than separate typefaces.
-DM Mono is unchanged (separate role — code/technical accents, `brand.md`
-editor UI) and isn't part of this decision.
+Every other file should point to this table, not restate it.
 
-**Font:** Mona Sans Variable (GitHub, OFL, free) — axes `wght` 200–900,
-`wdth` 75–125, `opsz`, plus italic.
+| Role | Font | Axes / notes |
+|---|---|---|
+| Display / headline | Fraunces | `opsz` 9–144, `wght` 100–900, `SOFT` 0–100, `WONK` 0–1, italic. Expressive register — serifs, SOFT/WONK for "engineered imperfection." |
+| Body copy | Mona Sans Variable | `wght` 400, `wdth` 100. `opacity: 0.7` on `--warm-white` for secondary reads. Replaces DM Sans. |
+| CTA / link | Mona Sans Variable | `wght` 500, `wdth` 100. Lowercase — voice register, not chrome. |
+| Subhead / eyebrow | Mona Sans Variable | `wght` 600, `wdth` 100. Uppercase, `letter-spacing: 0.1em` — UI chrome register. |
+| Code / technical | DM Mono | Unchanged. Code, `brand.md` editor UI, margin annotations. |
 
-| Role | wght | wdth | Notes |
-|---|---|---|---|
-| Display / headline | 800 | 125 | Expanded + black. Tight letter-spacing (-0.01em). |
-| Subhead / eyebrow | 600 | 100 | Uppercase, letter-spacing 0.1em — UI chrome register. |
-| Body | 400 | 100 | Normal width and weight. `opacity: 0.7` on `--warm-white` for secondary reads. |
-| CTA / link | 500 | 100 | Lowercase — voice register, not chrome. |
+**Fraunces** (Google Fonts, OFL, free) — variable: `opsz` 9–144, `wght`
+100–900, `SOFT` 0–100, `WONK` 0–1, italic. The expressive display face.
+SOFT rounds serifs; WONK enables stylistic alternates. Both are display-only
+axes — never animate or apply at body sizes.
 
-**Token update required:** `font.family.display` and `font.family.sans` in
-the DTCG tokens file both point to Mona Sans; only axis presets differ.
-Load via `@fontsource-variable/mona-sans` or self-hosted variable woff2 —
-register axes as typed `@property` custom properties for smooth
-interpolation if any scroll-driven or hover-driven axis animation is added
-later (Rubato engine, not required for v1 of this page).
+**Mona Sans Variable** (GitHub/jsDelivr, OFL, free) — `wght` 200–900,
+`wdth` 75–125, italic. Replaces DM Sans in the body/UI role. Does not serve
+the display/headline role in this system.
+
+**DM Mono** (Google Fonts, OFL, free) — unchanged.
+
+**Big Shoulders Display** — retired. Fraunces covers all display duty.
 
 **Caps rule (unchanged):** human-voice copy is lowercase; UI chrome
 (eyebrow labels, nav, badges) is uppercase.
+
+Full token spec: `design/tokens.json`.
 
 ---
 

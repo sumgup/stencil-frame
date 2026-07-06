@@ -4,12 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Frame — Content Engine</title>
-<!-- Mona Sans Variable — wght 200–900, wdth 75–125 — tokens: font.family.display / font.family.sans -->
-<!-- Source: design/tokens.json. Load via @fontsource-variable; verify path at cdn.jsdelivr.net -->
+<!-- Fraunces variable — display/headline role — token: font.family.display — DESIGN.md §4 -->
+<!-- axes: opsz 9–144, wght 100–900, SOFT 0–100, WONK 0–1, italic -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap" rel="stylesheet">
+<!-- Mona Sans Variable — body/UI role — token: font.family.sans — replaces DM Sans -->
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/mona-sans@latest/index.min.css">
-<!-- DM Mono — unchanged — token: font.family.mono -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<!-- DM Mono — code/technical accents — token: font.family.mono — unchanged -->
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,9 +26,9 @@
   --text: #e2e2ec;
   --muted: #6b6b82;
   --dim: #3a3a4a;
-  /* typography tokens — source of truth: design/tokens.json */
-  --display: 'Mona Sans Variable', 'Mona Sans', system-ui, sans-serif; /* font.family.display — wght 800, wdth 125 at hero scale */
-  --sans: 'Mona Sans Variable', 'Mona Sans', system-ui, sans-serif;    /* font.family.sans    — wght 400, wdth 100 at body scale */
+  /* typography tokens — source: design/tokens.json + DESIGN.md §4 */
+  --display: 'Fraunces', Georgia, serif;                                /* font.family.display — Fraunces opsz/wght/SOFT/WONK — display/headline */
+  --sans: 'Mona Sans Variable', 'Mona Sans', system-ui, sans-serif;    /* font.family.sans    — wght 400, wdth 100 — body/UI (replaces DM Sans) */
   --mono: 'DM Mono', monospace;                                         /* font.family.mono    — unchanged */
   --brand-primary: #C8102E;
   --brand-accent: #E91E63;

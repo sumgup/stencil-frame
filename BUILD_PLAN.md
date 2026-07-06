@@ -58,16 +58,17 @@ specified in `investigate-agent-design.md`. Implement exactly as written.
 Source of truth: `design/tokens.json`. Session UI uses a calmer, conversational register
 than the landing page — axis presets differ accordingly.
 
-- **session-hero** — Mona Sans Variable, wght 700, wdth 100, uppercase, letterSpacing 0.05em.
-  Vertical hero (full session name). Authority through scale and vertical treatment; weight
-  restrained vs. landing page display (800/125) to suit the session's introspective register.
+- **session-hero** — Fraunces, opsz 72, wght 700, uppercase, letterSpacing 0.05em.
+  Vertical hero (full session name). Fraunces at large (not max) optical size — authority
+  restrained relative to landing page display (opsz 144, wght 900) to suit the session's
+  introspective register. Token: `typography.session-hero`.
 - **session-question** — Mona Sans Variable, wght 350, wdth 100, italic available.
   Questions, masked slide-up reveal. Lighter than body (400/100) — reads as genuinely
   questioning rather than declarative. Italic for invitation lines; upright for statements.
 - **body / input** — existing `typography.body` token (wght 400, wdth 100). Unchanged.
 - **DM Mono** — labels, whispers, structural text (high letter-spacing, 0.2–0.35em). Unchanged.
 
-Fonts: Mona Sans Variable via `@fontsource-variable/mona-sans` (jsDelivr, OFL); DM Mono via Google Fonts. Both free.
+Fonts: Fraunces via Google Fonts (OFL); Mona Sans Variable via `@fontsource-variable/mona-sans` (jsDelivr, OFL); DM Mono via Google Fonts. All free. See `DESIGN.md §4`.
 
 ### Motion — Emotional Words (internal only, never shown in UI)
 | Act | Word | Blob speed | Geometry target |
@@ -136,8 +137,9 @@ Rules:
 ## UX Reference Prototypes
 
 Located in `design/prototypes/`:
-- `act0-typographic.html` — **final direction**, typography now Mona Sans Variable
-  (session-hero/session-question tokens per `design/tokens.json`), three-phase animation, blob, examples panel
+- `act0-typographic.html` — **final direction**, split stack: Fraunces (session-hero token,
+  opsz 72/wght 700) + Mona Sans Variable (session-question token) per `design/tokens.json`,
+  three-phase animation, blob, examples panel
 - `act1.html` — question + reflection cards (facts/obstacles/opportunities)
 - `act2a.html` — research prompt generation, copy/paste flow
 - `act2b.html` — axis selection, animated competitor plotting, gap reveal
@@ -159,7 +161,7 @@ references.
 3. **Shared components:**
    - `<BlobMorph>` — canvas component, accepts `geometryT`, `baseR`, `speed`
      props, reusable across all acts
-   - `<VerticalHero>` — Mona Sans Variable session-hero token, vertical text with three-phase animation
+   - `<VerticalHero>` — Fraunces session-hero token (opsz 72, wght 700), vertical text with three-phase animation
    - `<MaskedReveal>` — Mona Sans Variable session-question token, line-by-line slide-up
    - `<ProgressIndicator>` — Who/Warm/Research/Map/Confirm
    - `<ExamplePanel>` — "show me an example" trigger + slide-in panel

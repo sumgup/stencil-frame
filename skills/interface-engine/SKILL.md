@@ -26,9 +26,9 @@ be traced, it doesn't ship. (Same auditability rule as the Copy Engine.)
    action). If any element is missing, ask for it — do not infer.
 2. **Theme tokens** — the active visual system from `brand.md` /
    DTCG tokens: colors (#080f0a bg, #c8a96e gold, #f0ede6 warm white,
-   #e8673a coral — logo mark only), typefaces (Mona Sans Variable for
-   display + body roles, DM Mono for code/UI chrome), and any component
-   tokens defined. Full token spec: `design/tokens.json`.
+   #e8673a coral — logo mark only), typefaces (Fraunces for display/headlines,
+   Mona Sans Variable for body/UI roles, DM Mono for code/UI chrome), and any
+   component tokens defined. Full token spec: `design/tokens.json` and `DESIGN.md §4`.
    For Stencil session screens: also load `EMOTIONAL_DESIGN_LANGUAGE.md`
    for the session's emotional arc, act-by-act vocabulary, and typography
    layer grammar (session-hero / session-question / body token presets).

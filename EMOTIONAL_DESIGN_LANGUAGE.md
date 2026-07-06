@@ -51,8 +51,8 @@ Speed, direction, and easing carry emotional meaning. Never animate without reas
 ### Typography
 Four layers. Each layer has one job, one axis, one scale, one opacity.
 
-**Layer 1 — Vertical hero (Mona Sans Variable — session-hero token, wght 700, wdth 100, uppercase, letterSpacing 0.05em)**
-The session name runs full height, bottom to top. Arrives bold. Holds. Recedes to atmospheric. Sets the stage before anything else appears. Authority through scale and restraint. Weight restrained vs. landing page display (800/125) — session register is introspective, not editorial.
+**Layer 1 — Vertical hero (Fraunces — session-hero token, opsz 72, wght 700, uppercase, letterSpacing 0.05em)**
+The session name runs full height, bottom to top. Arrives bold. Holds. Recedes to atmospheric. Sets the stage before anything else appears. Authority through scale and restraint. Fraunces at large (not max) optical size — session register is introspective, not editorial.
 
 **Layer 2 — The question (Mona Sans Variable — session-question token, wght 350, wdth 100)**
 Horizontal. Masked slide-up reveal. Line by line. The actor entering after the curtain has risen. Mixed upright and italic — upright is statement, italic is invitation. Lighter than body (400/100) — reads as genuinely questioning rather than declarative.
