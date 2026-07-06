@@ -95,8 +95,9 @@ frame, museum-catalog gravity, muted tones, fine film grain
 ```
 
 ### Register D (type)
-Built live in the browser (Fraunces / stack TBD — re-auditioning).
-Midjourney is never used for letterforms. C-marks that sit on type
+Built live in the browser (Mona Sans Variable — display role, wght 800 wdth 125 at hero scale;
+see `design/tokens.json` typography.display). Midjourney is never used for letterforms.
+C-marks that sit on type
 (strikethroughs, annotations, guide lines) are generated or scanned as
 transparent overlays and composited.
 
@@ -285,5 +286,4 @@ Given a placement: (1) identify the section's argument (critique / method /
 soul / personality); (2) shortlist devices carrying that argument;
 (3) check register fits the placement map (§2); (4) check the page's device
 budget — max 3 distinct devices per page, D7 max once; (5) run the §8 audit
-gate. If no device fits, the section may not need an image (R0 is a valid
-answer).
+gate. If 

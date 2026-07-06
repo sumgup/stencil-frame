@@ -51,7 +51,7 @@ Speed, direction, and easing carry emotional meaning. Never animate without reas
 ### Typography
 Four layers. Each layer has one job, one axis, one scale, one opacity.
 
-**Layer 1 — Vertical hero (Fraunces 900, uppercase)**
+**Layer 1 — Vertical hero (Mona Sans Variable — display role, wght 800, wdth 125, uppercase)**
 The session name runs full height, bottom to top. Arrives bold. Holds. Recedes to atmospheric. Sets the stage before anything else appears. Authority through scale and restraint.
 
 **Layer 2 — The question (DM Serif Display)**
@@ -204,5 +204,4 @@ This is Sumit's design language. It emerged from building Stencil. It will outla
 - **Nils Frahm / Ólafur Arnalds** — restraint and space as design principle
 - **Magritte** — emotionally true over literally true
 - **Bach** — structural correspondence, counterpoint, fugue as design grammar
-- **p5.js / Three.js** — generative visuals as original, alive, structurally honest art
-
+- **p5.js / Three.js** — generative visuals as

@@ -130,11 +130,15 @@ Priority tiers:
 
 \- \*\*What winners do:\*\* Oversized type with flawless fallback behavior.
 
-\- \*\*S+F treatment:\*\* Fraunces variable with size-adjusted system fallback
+\- \*\*S+F treatment:\*\* Mona Sans Variable with size-adjusted system fallback
 
 &#x20; (`font-display: swap` + metric overrides so the Correction doesn't reflow).
 
-&#x20; Fluid scale (Utopia-style) already in Rubato research.
+&#x20; Axis presets from `design/tokens.json` — typography.display (wght 800, wdth 125) for
+
+&#x20; the hero; typography.body (wght 400, wdth 100) elsewhere. Fluid scale (Utopia-style)
+
+&#x20; already in Rubato research.
 
 \- \*\*Pass:\*\* Zero layout shift on font load (CLS < 0.02). Headline legible at 320px
 
@@ -332,9 +336,4 @@ Every surface's commit/PR must state:
 
 &#x20; don't exist yet; treatments above are provisional until motion-tokens.md lands
 
-\- Submission-craft surfaces (presentation shots, category choice) deferred to
-
-&#x20; `submission-craft.md`
-
-\- No dark/light mode surface — S+F is single-scheme by design; record as decision
-
+\- Submission-craft surfaces (presen

@@ -26,8 +26,9 @@ be traced, it doesn't ship. (Same auditability rule as the Copy Engine.)
    action). If any element is missing, ask for it — do not infer.
 2. **Theme tokens** — the active visual system from `brand.md` /
    DTCG tokens: colors (#080f0a bg, #c8a96e gold, #f0ede6 warm white,
-   #e8673a coral — logo mark only), typefaces (Big Shoulders Display,
-   Fraunces, DM Mono, DM Sans), and any component tokens defined.
+   #e8673a coral — logo mark only), typefaces (Mona Sans Variable for
+   display + body roles, DM Mono for code/UI chrome), and any component
+   tokens defined. Full token spec: `design/tokens.json`.
 
 ## The six steps — run in order, show your work
 
@@ -89,5 +90,4 @@ Shneiderman governs: overview first, zoom and filter, details on demand.
 ## Known limits (v0)
 - Reference files are stubs until Step 2 (Strategy & Narrative) design
   begins; until then, cite principles from this file directly.
-- No accessibility pass yet — planned as step 6.5 (contrast after any
-  translucency, reduced-motion fallbacks, target sizes).
+- No accessibility pass yet — planned as step 6.5 (contrast afte
