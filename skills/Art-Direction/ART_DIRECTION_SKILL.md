@@ -286,4 +286,5 @@ Given a placement: (1) identify the section's argument (critique / method /
 soul / personality); (2) shortlist devices carrying that argument;
 (3) check register fits the placement map (§2); (4) check the page's device
 budget — max 3 distinct devices per page, D7 max once; (5) run the §8 audit
-gate. If 
+gate. If no device fits, the section may not need an image (R0 is a valid
+answer).

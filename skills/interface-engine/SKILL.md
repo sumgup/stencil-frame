@@ -90,4 +90,5 @@ Shneiderman governs: overview first, zoom and filter, details on demand.
 ## Known limits (v0)
 - Reference files are stubs until Step 2 (Strategy & Narrative) design
   begins; until then, cite principles from this file directly.
-- No accessibility pass yet — planned as step 6.5 (contrast afte
+- No accessibility pass yet — planned as step 6.5 (contrast after any
+  translucency, reduced-motion fallbacks, target sizes).

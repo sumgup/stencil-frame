@@ -336,4 +336,9 @@ Every surface's commit/PR must state:
 
 &#x20; don't exist yet; treatments above are provisional until motion-tokens.md lands
 
-\- Submission-craft surfaces (presen
+\- Submission-craft surfaces (presentation shots, category choice) deferred to
+
+&#x20; `submission-craft.md`
+
+\- No dark/light mode surface — S+F is single-scheme by design; record as decision
+

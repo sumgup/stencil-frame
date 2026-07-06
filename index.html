@@ -746,4 +746,28 @@ async function generate() {
     const res = await fetch(`${API}/generate/carousel`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ brandId: selectedBrand.id, br
+      body: JSON.stringify({ brandId: selectedBrand.id, brief }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    renderSlides(data);
+  } catch (err) {
+    document.getElementById('statusPill').textContent = 'error';
+    document.getElementById('statusPill').className = 'status-pill';
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate carousel';
+  }
+}
+
+// Allow Enter in brief to generate (Ctrl/Cmd+Enter)
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('briefInput').addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') generate();
+  });
+  init();
+});
+</script>
+</body>
+</html>

@@ -204,4 +204,5 @@ This is Sumit's design language. It emerged from building Stencil. It will outla
 - **Nils Frahm / Ólafur Arnalds** — restraint and space as design principle
 - **Magritte** — emotionally true over literally true
 - **Bach** — structural correspondence, counterpoint, fugue as design grammar
-- **p5.js / Three.js** — generative visuals as
+- **p5.js / Three.js** — generative visuals as original, alive, structurally honest art
+
