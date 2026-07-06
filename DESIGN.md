@@ -6,6 +6,34 @@ document, not a separate creative brief.*
 
 ---
 
+## 0. Open Decisions (not yet locked — do not treat as rules)
+
+These are live questions currently being explored in Claude Design.
+Anything below may override a rule stated later in this document. When one
+gets resolved, move it out of this section and update the relevant §
+directly — don't leave both versions sitting in the file.
+
+- **General UI surface material** — currently flat/matte (archival ledger,
+  no glow/blur/gradient, per §5). Exploring alternatives: frosted glass,
+  precision-instrument (flat, corner-bracket/calibration readout feel),
+  dashboard/HUD (glowing thin lines). Whichever wins may require revisiting
+  the no-blur/no-gradient rule in §5 — that rule is NOT settled until this is.
+- **Lighting treatment** — not yet addressed anywhere in this document.
+  Exploring directional/cinematic lighting (single implied light source,
+  hard shadow, high-contrast pooling, per-section color temperature tied to
+  the emotional arc) as a layer independent of surface material. Should end
+  up as its own subsection once resolved, not folded silently into §5 or §6.
+- **Whiteboard / sticky-note material for brainstorming surfaces**
+  (positioning map, gap map, brainstorm capture) — proposed as photographed-
+  artifact content within the existing archival frame (ties to the Perverse
+  Banality register, §5), not yet confirmed. Does not apply to general UI.
+- **Color palette (§3)** — locked as-is for now, but flagged as reopenable
+  if the winning UI material or lighting treatment needs it (e.g. a second
+  accent color, coral used beyond the mascot). Don't reopen unilaterally —
+  surface it as a question if a Claude Design direction seems to need it.
+
+---
+
 ## 1. Brand context
 
 **What it is** — Stencil + Frame is an open-source, AI-agnostic brand engine.
