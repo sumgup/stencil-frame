@@ -4,6 +4,7 @@
 > **Status:** Territory + Style DNA LOCKED (anchor set confirmed).
 > **Device Library:** COMPLETE — 8 devices, all mapped and scaffolded, see §9.
 > **Companion skills:** copywriting engine (SKILL.md), interface engine, Rubato (typography & motion).
+> **Overture:** narrative layer for §7 (motion) — spine → hook → form casting → storyboard gate runs before any motion asset built against this device library.
 
 ---
 
