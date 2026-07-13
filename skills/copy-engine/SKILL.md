@@ -44,6 +44,8 @@ If the user names a type not on this list (video script, email subject line, ad 
 
 Mandatory for every content_type, listed or unlisted. There is no content_type for which technique selection can be skipped — if the brief doesn't obviously map to one of the core four, that means think harder about the reader's awareness level and audience frustration, not skip the step.
 
+First, identify which failure mode the reader is living in — consult `failure-modes.md`. If a mode applies, the misdiagnosis (not the symptom) is the primary copy target. If no mode applies, proceed to framework selection as before.
+
 Before writing, select the primary technique from `copy-frameworks.md` that matches the content_type and brief. State it in one line:
 
 > *Technique: [name from copy-frameworks.md] — [one-sentence reason it fits this brief]*
@@ -132,5 +134,5 @@ Do not rewrite for the user here — name the problem, let them decide. The anti
 
 ---
 
-Reference: `copy-frameworks.md`
+Reference: `copy-frameworks.md`, `failure-modes.md`
 Brand source of truth: `brand.md`

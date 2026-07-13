@@ -1,3 +1,3 @@
-# UI Patterns
+# UI Patterns — Macro Flow Patterns + Sourcing
 
-Macro flow patterns + when they earn their place. Stub until Step 2 design.
+Reference for Interface Engine Step 4 (Selec
