@@ -96,7 +96,6 @@ The following reference files are **non-operational stubs** — placeholder text
 must not be cited as authoritative until written:
 
 - `references/ui-controls.md` — control-to-need mapping rules
-- `references/ui-patterns.md` — macro patterns (wizard, hub, progressive disclosure)
 - `references/ui-motion.md` — motion gate rules
 - `references/ui-overview.md` — overview mechanisms (minimap, constellation, etc.)
 - `references/ui-spatial.md` — 3D gate + depth-as-hierarchy principles
