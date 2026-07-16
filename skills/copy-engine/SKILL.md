@@ -1,138 +1,172 @@
 ---
-name: copy
-description: Generate on-voice copy for Stencil + Frame — reads brand.md, writes to voice, self-checks against 5 do's / 5 don'ts, flags violations visibly
+name: copy-engine
+description: 7-step co-thinking copywriting process. Reads brand.md for voice/positioning and personas/*.md for audience targeting. Two modes — co-thinking (interactive, for high-stakes copy) and generation (auto-populated, for microcopy and bulk). Every output traces to raw material gathered in the process — no invented claims, no filler.
 ---
 
-# Copywriting Skill — Stencil + Frame v0
+# Copy Engine — Co-Thinking Copywriting Process
+## Stencil + Frame
 
-When this skill is invoked, execute the steps below in order. Do not skip steps or merge them.
+> **Why "co-thinking":** The old pipeline generated copy FROM brand.md.
+> This skill generates copy WITH the writer, using brand.md and persona.md
+> as inputs. The writer's involvement is not optional — it's the mechanism
+> that produces copy worth reading.
+>
+> **Position in the stack:** brand.md provides identity/voice. persona.md
+> provides audience/language. Art-Direction provides visual register.
+> Rubato provides typographic performance. **Copy-engine provides the words
+> and the process to find them.**
 
----
-
-## Step 1 — Load brand context
-
-Read `brand.md` from the project root. Hold the following sections verbatim in context for the duration of the task — do not paraphrase or compress them:
-
-- The full **Voice** section: philosophy, 5 Do's, 5 Don'ts, reference moves, anti-examples
-- **Personality** and **Personality tension** from Positioning
-- The full **Guardrails** section
-
-The brand.md is the source of truth. If anything in these instructions conflicts with brand.md, brand.md wins.
-
----
-
-## Step 2 — Accept input
-
-Require two things from the user before writing a word:
-
-**`content_type`** — one of:
-- `tagline` — 5–9 words, the brand's stated position
-- `hero line` — 1–2 sentences, top-of-page premise
-- `manifesto paragraph` — 3–5 sentences, the belief stated plainly
-- `CTA` — call to action, 3–12 words
-- `boilerplate` — 3–4 sentences, the brand in plain description for bios, footers, press
-- `social post` — single post, platform-agnostic, 280-char ceiling unless specified
-- `headline` — ad or article headline, single sentence
-
-If the user names a type not on this list (video script, email subject line, ad copy, etc.), accept it. An unlisted content_type changes only the length guidance you apply in Step 4 — it is not a reason to shorten the pipeline. Steps 3, 4, and 5 still run in full, in order, exactly as they would for `tagline` or any other listed type.
-
-**`brief`** — one sentence describing the angle, context, or specific claim to make. If the brief is vague ("write something good"), ask one clarifying question before proceeding.
+When this skill is invoked, determine the mode first, then execute steps
+in order. Do not skip steps or merge them.
 
 ---
 
-## Step 3 — Choose technique
+## Mode Selection
 
-Mandatory for every content_type, listed or unlisted. There is no content_type for which technique selection can be skipped — if the brief doesn't obviously map to one of the core four, that means think harder about the reader's awareness level and audience frustration, not skip the step.
+Ask on invocation (or infer from the request):
 
-First, identify which failure mode the reader is living in — consult `failure-modes.md`. If a mode applies, the misdiagnosis (not the symptom) is the primary copy target. If no mode applies, proceed to framework selection as before.
+**CO-THINKING MODE** (default for new content types, high-stakes copy,
+landing pages, manifestos, brand copy, any first-time piece):
+- Steps 1–5 are interactive — the writer is interrogated
+- Steps 6–7 are generation + check
+- Best when: the strategic decisions haven't been made yet
 
-Before writing, select the primary technique from `copy-frameworks.md` that matches the content_type and brief. State it in one line:
-
-> *Technique: [name from copy-frameworks.md] — [one-sentence reason it fits this brief]*
-
-Do not apply more than one major technique per piece. v0 is not the place for synthesis.
-
----
-
-## Step 4 — Generate copy
-
-Write the copy. Output it under the heading `## Copy`.
-
-**Length guidance by type:**
-- Tagline: 1 version. One clause or short sentence.
-- Hero line: 1–2 variants. 1–2 sentences each. Present both if you write two.
-- Manifesto paragraph: 1 version. 3–5 sentences, no more.
-- CTA: 1 primary + 1 alternative.
-- Boilerplate: 1 version. 3–4 sentences, dense, no filler.
-- Social post: 1 version. Hard 280-char ceiling.
-- Headline: 1–2 variants.
-
-Write as if the reader is a solo founder who has been tweaking their Canva template for three weeks and suspects the problem is not the template. The voice is already in brand.md — follow it, don't interpret it.
+**GENERATION MODE** (for microcopy, social posts, email subject lines,
+bulk content, iteration on an established piece):
+- Steps 1–4 auto-populate from brand.md + active persona.md
+- Steps 5–7 execute with the writer choosing structure
+- Best when: positioning, audience, and angle are already locked
+- The skill NEVER silently defaults to generation mode for a new content type
 
 ---
 
-## Step 5 — Self-check
+## Step 0 — Load context
 
-Mandatory for every content_type, listed or unlisted. An unfamiliar content_type is a reason to run this step more carefully, not a reason to skip it — there's no prior example to lean on, so the audit is the only thing standing between the draft and brand.md's rules being violated silently.
+Read from the repo (clone if needed — project knowledge snapshots are not
+authoritative):
 
-Run a visible pass against every do and don't from brand.md. Output under `## Self-check`.
+- `brand.md` (root) — hold: Purpose, Difference, Personality tension,
+  Voice do's/don'ts, Guardrails, Registers
+- `personas/_active.md` — which persona is loaded
+- `personas/[active-persona].md` — the full persona file
+- `skills/copy-engine/references/frameworks.md` — PAS, AIDA, BAB, etc.
+- `skills/copy-engine/references/structures.md` — MAR, GAV, SYM, etc.
 
-Format each line exactly as:
+brand.md is the source of truth for voice. persona.md is the source of
+truth for audience. If anything below conflicts, these files win.
 
-```
-✓ Do 1 — [3-word shorthand]: [one-line reason this passes]
-✓ Do 2 — ...
-✗ Don't 3 — [3-word shorthand]: FLAG — [what the specific violation is in the copy]
-```
-
-Use `✓` for pass, `✗` for flag. All 10 rules must appear, in order (Do 1–5, then Don't 1–5). Do not skip a rule because it seems irrelevant — note "not applicable" if it genuinely cannot apply to this content_type.
-
-**If there are flags:**
-- Leave the original copy exactly as written above the self-check
-- Add a `## Revision` section below the self-check with only the flagged elements rewritten
-- The self-check must remain visible and unedited — it is the audit trail
-
-Do not silently fix anything. The check is the point.
+If `_active.md` says `persona: all`, prepare to generate variants for
+each persona file found in `personas/` (excluding `_active.md`).
 
 ---
 
-## Step 6 — Anti-slop pass
+## Step 1 — WHO (the interrogation)
 
-After the self-check (or revision if there was one), output `## Anti-slop pass`.
-*(Rationale for each test in `copy-frameworks.md §Anti-slop`.)*
+**Co-thinking mode:**
+Read the active persona.md as starting material. Then confirm with the
+writer:
+- "We're writing to [persona name]. Are they in [this situation]?"
+- "What's their emotional state entering this piece?"
+- "What did they just read/do before this?"
 
-Check for and call out each of the following if present in the final copy (or the revision, if it exists):
+Challenge and deepen. The persona is a starting hypothesis, not a
+finished answer. If the writer surfaces something new, offer to update
+the persona file.
 
-**Buzzwords to cut:** innovative, seamless, unlock, leverage, empower, journey, ecosystem, game-changing, next-level, transformative, powerful, robust, holistic, scalable, dynamic, streamlined, revolutionize, disruptive, cutting-edge, world-class
+If NO persona exists: run the full interrogation:
+- Who is one specific person you're writing to? (Not a segment — one person.)
+- What did they just Google / what tab did they just close?
+- What do they currently believe (even if wrong)?
+- What's the private, embarrassing moment they'd recognize themselves in?
 
-**Hedging language to cut:** might, sort of, perhaps, we think, we believe, in our opinion, kind of, we feel — *exception: past-tense earned uncertainty ("we got this wrong first") is not hedging; it is allowed per Do 3*
+At the end, offer: "Save this as a new persona? [Y/N]"
 
-**Punctuation doing emotional work:** exclamation marks, ellipses used for drama, ALL CAPS for emphasis
+**Generation mode:**
+Auto-load persona.md. State the loaded persona and awareness stage.
+Proceed to Step 2 without interrogation.
 
-**Filler openers:** "At [Brand], we..." / "We're excited to..." / "We're passionate about..." / "We're proud to..."
-
-**Sentence length:** flag any sentence over 25 words — in this voice, length reads as hedging
-
-Report each finding as:
-```
-⚠ [finding]: "[the offending phrase]" — cut or rewrite
-```
-
-If nothing is found: `Anti-slop: clean.`
-
-Do not rewrite for the user here — name the problem, let them decide. The anti-slop pass is diagnostic, not prescriptive.
-
----
-
-## Output order (always)
-
-1. Technique selection (one line)
-2. `## Copy`
-3. `## Self-check`
-4. `## Revision` (only if flags exist in self-check)
-5. `## Anti-slop pass`
+Output: Confirmed target person with emotional state and context.
 
 ---
 
-Reference: `copy-frameworks.md`, `failure-modes.md`
-Brand source of truth: `brand.md`
+## Step 2 — ONE THING (single desired reaction)
+
+Force one sentence: "After reading this, they should think: ___"
+
+Rules:
+- ONE reaction. Not three. Not two. One.
+- Push back if vague ("understand the product" is not a reaction)
+- Push back if two goals are smuggled in
+- Present 3-4 options if the writer is stuck
+
+Output: One locked sentence.
+
+---
+
+## Step 3 — RAW MATERIAL (the Ogilvy/Schwartz phase)
+
+This is the biggest step. The writer is interrogated, not asked to "provide
+a brief." Techniques:
+
+- "What would a skeptic say here?"
+- "Don't your competitors say the same thing?"
+- "What's the proof?"
+- Mafia Offer challenge: "If I'm your best prospect, convince me — and I'll
+  tell you when you sound like everyone else."
+- "What are you ANGRY about?"
+- "What's the specific, private, embarrassing moment?"
+
+Present options (multi-select) when the writer needs help surfacing material.
+Gather: facts, competitor claims, customer language (from persona.md VoC),
+objections, proof, emotional moments, origin stories.
+
+In generation mode: auto-compile from brand.md + persona.md pain points,
+beliefs, objections, and VoC. Present the compiled material for writer
+confirmation before proceeding.
+
+Output: Compiled list of ammunition. Every item attributed to its source
+(writer, persona.md VoC, brand.md).
+
+---
+
+## Step 4 — ANGLE (Schwartz diagnosis)
+
+Answer two questions:
+
+**(a) Awareness stage:** Where is the reader on the awareness ladder?
+Read from persona.md's awareness-by-channel field if available.
+- Unaware → lead with story/identity, not product
+- Problem-Aware → lead with the problem (name it better than they can)
+- Solution-Aware → lead with mechanism/approach
+- Product-Aware → lead with proof/differentiation
+- Most Aware → lead with offer/CTA
+
+**(b) Market sophistication:** How many times has this reader heard a
+similar claim? Read from persona.md. Higher sophistication = need for
+new mechanisms, story leads, reframes. Direct claims fail in saturated
+markets.
+
+Output: One-sentence brief:
+"This [piece] will convince [person] that [one idea] because [proof]."
+
+Writer must approve the brief before proceeding.
+
+---
+
+## Step 5 — SCAFFOLDING (choose the structure)
+
+Present 2-3 structural options with genuine differentiation. Each option
+must have:
+- A name (MAR, GAV, SYM, or new names as warranted)
+- A one-line description of the emotional arc
+- The risk / what could go wrong
+- "Feels like: [metaphor]"
+
+Explain each structure before asking the writer to choose. Do NOT present
+structures as tonal variations of the same approach — they must be
+genuinely different shapes.
+
+Load `references/structures.md` for the canonical structures. New
+structures can be invented for the piece — document them in the file
+afterward.
+
