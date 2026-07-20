@@ -141,3 +141,8 @@ Governing principle: **suspension to resolution**. Elements that are in-progress
 - Shadows as depth cues — use layering and opacity instead
 - Spinning loaders — use held tension
 - Color outside the token set
+
+## Information Architecture
+Product-level IA lives in `design/ia/`. Read `SITEMAP.md` and `TAXONOMY.md`
+before proposing any new screens or navigation changes. IA docs are
+scaffolded — content pending after founder concierge sessions.
