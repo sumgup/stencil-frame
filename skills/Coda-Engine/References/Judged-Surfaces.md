@@ -74,7 +74,7 @@ Priority tiers:
 
 &#x20; `prefers-reduced-motion` (static crossed-out version shown, no animation).
 
-\- \*\*Implementation spec:\*\* `DESIGN.md §6` (kinetic reveal timing, stagger.reveal token, GSAP setup).
+\- \*\*Implementation spec:\*\* `DESIGN.md §7` (kinetic reveal timing, stagger.reveal token, GSAP setup).
 
 
 
@@ -138,7 +138,7 @@ Priority tiers:
 
 &#x20; Correction doesn't reflow). Token presets: typography.display (Fraunces opsz 144)
 
-&#x20; for the hero; typography.body (Mona Sans wght 400, wdth 100) elsewhere. See `DESIGN.md §4`.
+&#x20; for the hero; typography.body (Mona Sans wght 400, wdth 100) elsewhere. See `DESIGN.md §5`.
 
 &#x20; Fluid scale (Utopia-style) already in Rubato research.
 

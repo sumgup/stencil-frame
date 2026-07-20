@@ -69,14 +69,16 @@ If a future page needs WebGL, it gets its own budget line here first.
 | Zero lorem/placeholder | Grep the build for "lorem", "TODO", "placeholder" |
 | Caps rule | Human voice lowercase, UI chrome uppercase — visual sweep |
 
+## Gate 6 — Creative stance
+
+| Check | Protocol |
+|---|---|
+| Creative stance gate | Output must be placeable on the brand's `primary_tension` axis. If it can't be placed, it lacks point of view — flag and revise. |
+| Surface-appropriate lean | Brand surfaces lean toward the first pole; product surfaces lean toward the second. Mismatch is a HOLD, not a style note. |
+| Supporting principle | Does the output satisfy `supporting` (e.g. "show your work, make them feel")? |
+
 ---
 
 ## Failure protocol
 
-A failing gate = HOLD verdict. Only exception: failure explicitly accepted in
-the audit trail with (a) the measured value, (b) why it ships anyway, (c) the
-issue filed to fix it. Silent failures are the one unforgivable state.
-
-## Known gaps (v0)
-- No CI wiring (Lighthouse CI, axe-core in Playwright) — manual protocol for now; automate when product code begins Week 8
-- No real-device lab — Moto G-class emulation is the proxy; borrow a real mid-range Android before submission
+A fai

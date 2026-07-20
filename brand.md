@@ -54,6 +54,12 @@ reassurance — it comforts by being truthful, never by softening the point.
 **Personality tension** — Confident enough to state a position; honest enough
 to admit the position was hard-won, not obvious from the start.
 
+**Creative stance**
+- Primary tension: "opinionated ↔ instrumental"
+- Supporting: "evidenced ↔ felt"
+- In plain language: "We say what we think plainly, but the tool itself gets out of your way once it's done its job."
+- Archetype hint: opinionated-tool
+
 **Rejects** — Auto-generated identity from a single AI pass. Archetype quizzes
 that assign a pre-made personality instead of deriving one. Voice or visuals
 extracted from content written before the brand's reason for existing was
@@ -147,10 +153,3 @@ thing about the industry, then doesn't flinch from saying it again.
 3. "Branding can feel scary sometimes, but don't worry, we're here to make it
    fun and easy for you!" — softens the hard question instead of sitting
    with it.
-
-## Guardrails
-
-If it sounds like a pitch deck, rewrite it. If a sentence needs an
-exclamation mark to feel exciting, the sentence isn't doing its job. If a
-joke needs explaining, cut it. Never assign a personality (archetype-style)
-instead of deriving one.

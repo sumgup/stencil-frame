@@ -55,7 +55,77 @@ directly — don't leave both versions sitting in the file.
 
 ---
 
-## 1. Brand context
+## 1. Creative Stance
+
+**Primary tension: Opinionated ↔ Instrumental.**
+
+The brand has a specific, earned point of view. It says the hard thing —
+that most brands fail because they skip positioning, that AI-generated
+copy without a reason-to-exist is noise, that the industry is solving
+the wrong problem. It doesn't hedge. It doesn't use three adjectives
+when zero will do. This is the *opinionated* pole.
+
+But the product is a tool. It exists to make the founder's brand better,
+not to admire itself. The session UI recedes so the founder's answer is
+the hero. Product copy is labels, not speeches. When the tool works, the
+founder forgets it's there. This is the *instrumental* pole.
+
+Every touchpoint sits somewhere on this axis. The landing page is far
+toward opinionated. The session UI is far toward instrumental. A 404
+page has a voice (opinionated) but gets you back to work instantly
+(instrumental). An error message tells you what broke honestly
+(opinionated) and what to do next (instrumental).
+
+### Supporting principle: Show your work, make them feel
+
+Everything Stencil + Frame produces has a traceable origin. Copy traces
+to brand.md. Visual devices trace to art direction. Motion traces to
+named tokens. This is the audit trail — the product's own thesis, applied
+to itself. But traceability without feeling is a spreadsheet. The
+struck-through correction must feel like discovering a secret. The gold
+accent must feel like warmth in a dark room. The delayed button must feel
+like the software is unhurried on your behalf.
+
+### Cascade — what this means for each discipline
+
+| Discipline | Opinionated ↔ Instrumental | Show your work, make them feel |
+|---|---|---|
+| Copy | Landing page confronts. Product copy recedes. Voice is aphoristic-confrontational (brand) or quiet-label (product). Never the same register for both. | Every generation has a visible audit trail. Anti-slop gate runs and shows its work. |
+| Visual | Process-as-Provenance devices (D1, D8) are the opinion made visible. Session UI has no hero imagery — the founder's text is the content. | Proof marks, construction lines, corrections left in. Warm palette (gold, warm white on dark) is the felt counterweight. |
+| Motion | Animations communicate state or they don't exist. No decorative motion. The tool doesn't perform — it responds. | Held tension before resolution. Delayed continue button. Breath-paced text. The software feels unhurried on your behalf. |
+| Interaction | 25-second wait before offering help. Never impose — offer. The founder drives. | Empty space carries meaning. What's not on screen is a design decision. |
+| Error states | Tell what happened. No corporate apology. One link to fix it. Voice is present even in failure. | Use the brand's own devices. Match tone to user's emotional state. |
+| Video / content | The viewer is the hero. The product is the pencil. Story decides form. | Real artifacts in demos. Never generated imagery. |
+
+### Anti-slop commitment (moved from §5)
+
+This is a stance-level decision, not a visual-language detail. By name,
+we avoid:
+
+- Inter, Roboto, Space Grotesk, or system sans-serif as display type
+- Purple-on-white gradients
+- Three rounded cards in a row with uniform shadows
+- Italic-serif display hero (now itself an AI fingerprint)
+- Oversized vague headlines with no specific claim
+- Even-opacity shadows on every element
+- Generated imagery where real artifacts should be
+
+The governing logic: if an AI model would produce it by default with
+no direction, we don't use it.
+
+### How to use this section
+
+When designing any new touchpoint, ask two questions:
+
+1. **Where on the opinionated ↔ instrumental axis does this sit?**
+   Brand surfaces lean opinionated. Product surfaces lean instrumental.
+2. **Does it show its work AND land emotionally?** If it only shows work,
+   it's a spreadsheet. If it only lands emotionally, it's decoration.
+   Both must be present.
+
+---
+
+## 2. Brand context
 
 **What it is** — Stencil + Frame is an open-source, AI-agnostic brand engine.
 Stencil runs a guided, interrogative brand-discovery session and produces a
@@ -77,7 +147,7 @@ the site is proof-of-work, not just marketing.
 
 ---
 
-## 2. Voice (governs every word on the page)
+## 3. Voice (governs every word on the page)
 
 - State the claim plainly. No hedging, no "we believe," no "sort of."
 - Undercut decoration by naming it specifically — "boxes in nice fonts," not
@@ -97,7 +167,7 @@ engine section by section, not written freehand.
 
 ---
 
-## 3. Color (locked — unchanged this cycle)
+## 4. Color (locked — unchanged this cycle)
 
 | Token | Hex | Use |
 |---|---|---|
@@ -111,7 +181,7 @@ whitespace carry the hierarchy, not decoration.
 
 ---
 
-## 4. Typography — split stack (source of truth)
+## 5. Typography — split stack (source of truth)
 
 Every other file should point to this table, not restate it.
 
@@ -143,7 +213,7 @@ Full token spec: `design/tokens.json`.
 
 ---
 
-## 5. Visual language — "Process-as-Provenance"
+## 6. Visual language — "Process-as-Provenance"
 
 Editorial dark aesthetic. Three art-direction registers (D / C / B), fused
 rather than kept separate — see `ART_DIRECTION_SKILL.md` §2 for the full
@@ -171,95 +241,4 @@ D7 (Blank Templates) max once ever.
 
 ---
 
-## 6. Signature moments (hero)
-
-**The Vesica Piscis mark** — brand mascot. Sits left of question/eyebrow
-text at cap-height. Pulses once on arrival, settles to 22% opacity
-permanently after. Coral only.
-
-**The Correction (hero device)** — opening beat of the page. A struck-through
-line states the wrong, expected claim; the real line reveals underneath it
-in full color/weight. This is the single signature moment the page should be
-remembered for — everything else on the page is quiet execution around it.
-
-**Kinetic reveal (secondary, body copy)** — `stagger.reveal` token (42ms) per character;
-line 2 of any multi-line reveal starts when line 1 is 40% through. Built with GSAP
-SplitText (free as of 3.13) + `aria-label`/`aria-hidden` split for accessibility.
-Must satisfy Surface 02 pass condition (`skills/Coda-Engine/References/Judged-Surfaces.md §02`).
-
-**Rubato (page-wide, not v1-blocking)** — variable font axes shift with
-scroll velocity. Sustained page behavior, not hero-specific. Can be layered
-in after the static skeleton is approved — don't block the first prototype
-on it.
-
----
-
-## 7. Judged surfaces (floor gates — Coda engine)
-
-Every state on this page is a judged surface, not just the "designed" ones.
-Full surface list, pass conditions, floor gates, and audit-trail requirement:
-see `skills/Coda-Engine/References/Judged-Surfaces.md` — *this section is a
-compressed pointer, not the authority.*
-
-P0 tier (scored by every visitor and every jury — six surfaces, not four):
-
-- **Preloader / first paint** — no spinner; the Correction types while assets
-  load behind it; strike-through fires when ready. Loading is dramaturgy,
-  not a wait state.
-- **Hero / signature moment** — The Correction + Rubato. Completes ≤5s;
-  degrades to static struck-through state with `prefers-reduced-motion`.
-- **CTA / waitlist form** (submit, success, and error states — all three,
-  not just the happy path)
-- **Scroll-triggered reveals** (must degrade gracefully with
-  `prefers-reduced-motion` — no motion-only content)
-- **Links & buttons** — every interactive element has distinct :hover,
-  :active, :focus-visible states; gold as affordance only.
-- **Typography floor** — CLS <0.02, headline legible at 320px, no orphan on
-  the thesis line.
-
-404 is a P1 surface (scored on inspection, not out of scope): brand.md parse
-error in DM Mono + graphite correction pointing home. The audit-trail thesis,
-played as a joke.
-
-Award-winning formula this page is aiming for: one signature moment (the
-Correction) + a hundred quiet details + excellent copy + narrative structure
-+ a clean technical floor. No state is "good enough for now."
-
----
-
-## 8. Page skeleton (confirmed order)
-
-1. Hero — The Correction + Vesica Piscis + eyebrow wordmark
-2. Problem / Tension
-3. Manifesto
-4. What You Get
-5. How It Works
-6. Who It's For
-7. Proof / Dogfooding
-8. Final CTA
-
-Build and review skeleton-first, one section per decision point. Don't
-move to section *n+1* until section *n*'s copy (via the copywriting engine)
-and layout are both approved.
-
----
-
-## 9. Technical stack
-
-Vite + React + TypeScript. GSAP 3.13 (SplitText, ScrollTrigger — now fully
-free). React Three Fiber for any WebGL moments (gate behind
-`prefers-reduced-motion` and lazy-load). Lenis for smooth scroll. CSS
-variable-font animation via `@property`; scroll-driven `animation-timeline`
-where supported, GSAP ScrollTrigger fallback elsewhere.
-
----
-
-## 10. What this page must not do
-
-- Must not look like a generic AI-default template — no neutral corporate
-  grotesque type, no default Tailwind card shadows, no stock-photo hero.
-- Must not soften the voice with hedged copy, exclamation marks, or
-  "innovative AI-powered solutions"-style language.
-- Must not treat the waitlist form as a happy-path-only surface.
-- Must not ship a section whose copy didn't run through the copywriting
-  engine's six-step sequence, including the anti-slop pass.
+## 7

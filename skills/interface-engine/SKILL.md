@@ -28,10 +28,14 @@ be traced, it doesn't ship. (Same auditability rule as the Copy Engine.)
    DTCG tokens: colors (#080f0a bg, #c8a96e gold, #f0ede6 warm white,
    #e8673a coral — logo mark only), typefaces (Fraunces for display/headlines,
    Mona Sans Variable for body/UI roles, DM Mono for code/UI chrome), and any
-   component tokens defined. Full token spec: `design/tokens.json` and `DESIGN.md §4`.
+   component tokens defined. Full token spec: `design/tokens.json` and `DESIGN.md §5`.
    For Stencil session screens: also load `EMOTIONAL_DESIGN_LANGUAGE.md`
    for the session's emotional arc, act-by-act vocabulary, and typography
    layer grammar (session-hero / session-question / body token presets).
+3. **Creative stance** — `brand.md` → `personality.creative_stance` — hold:
+   `primary_tension`, `supporting`, `archetype_hint`. These govern tone,
+   density, motion personality, and visual register for this output. If
+   the field is absent, proceed without it (v0.x brands may not have it yet).
 
 ## The six steps — run in order, show your work
 
@@ -81,6 +85,10 @@ Shneiderman governs: overview first, zoom and filter, details on demand.
   control/pattern/motion choice, one line:
   `choice → flow requirement → theme token/principle → PASS/FLAG`.
   FLAGs are surfaced, never silently resolved.
+- **Stance check:** Where on the `primary_tension` axis does this output
+  sit? Is that appropriate for the surface type (brand surface → lean
+  toward the first pole; product surface → lean toward the second)?
+  Does it satisfy `supporting`?
 
 ## Output format
 1. Restated JTBD + emotional arc
@@ -92,14 +100,4 @@ Shneiderman governs: overview first, zoom and filter, details on demand.
 
 ## Known gaps (v0)
 
-The following reference files are **non-operational stubs** — placeholder text only;
-must not be cited as authoritative until written:
-
-- `references/ui-controls.md` — control-to-need mapping rules
-- `references/ui-motion.md` — motion gate rules
-- `references/ui-overview.md` — overview mechanisms (minimap, constellation, etc.)
-- `references/ui-spatial.md` — 3D gate + depth-as-hierarchy principles
-
-Until these exist: cite principles from §The six steps directly in the audit trail.
-No accessibility pass yet — planned as step 6.5 (contrast after any translucency,
-reduced-motion fallbacks, target sizes).
+The following reference files are **non-operational stubs** — placehol

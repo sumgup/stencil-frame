@@ -68,7 +68,7 @@ than the landing page — axis presets differ accordingly.
 - **body / input** — existing `typography.body` token (wght 400, wdth 100). Unchanged.
 - **DM Mono** — labels, whispers, structural text (high letter-spacing, 0.2–0.35em). Unchanged.
 
-Fonts: Fraunces via Google Fonts (OFL); Mona Sans Variable via `@fontsource-variable/mona-sans` (jsDelivr, OFL); DM Mono via Google Fonts. All free. See `DESIGN.md §4`.
+Fonts: Fraunces via Google Fonts (OFL); Mona Sans Variable via `@fontsource-variable/mona-sans` (jsDelivr, OFL); DM Mono via Google Fonts. All free. See `DESIGN.md §5`.
 
 ### Motion — Emotional Words (internal only, never shown in UI)
 | Act | Word | Blob speed | Geometry target |

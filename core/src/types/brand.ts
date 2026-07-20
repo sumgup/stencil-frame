@@ -73,13 +73,44 @@ export interface BrandIdentity {
 
 // ─── Layer 3: Positioning ─────────────────────────────────────────────────────
 
+// Machine-readable hint Frame reads to load default cascade rules for
+// copy register, visual density, motion personality, and interaction patterns.
+export type ArchetypeHint =
+  | "opinionated-tool"
+  | "expert-absurdist"
+  | "quiet-authority"
+  | "warm-challenger"
+  | "playful-precision"
+  | "raw-authenticity";
+
+// Derived by Stencil from positioning answers (personality, belief_shift,
+// rejects) after Act 3. Not entered directly by the founder. The founder
+// sees and approves `in_plain_language` only. Optional for v0.x — brands
+// without it still work, Frame just won't have cascade rules to read.
+export interface BrandCreativeStance {
+  // The brand's core creative polarity, e.g. "opinionated ↔ instrumental"
+  primary_tension: string;
+  // Secondary principle, e.g. "evidenced ↔ felt"
+  supporting: string;
+  // Founder-approved plain description shown in UI
+  in_plain_language: string;
+  // One of: opinionated-tool, expert-absurdist, quiet-authority,
+  // warm-challenger, playful-precision, raw-authenticity
+  archetype_hint: ArchetypeHint;
+}
+
 export interface BrandPositioning {
   purpose: string;       // Why are we here?
   practice: string;      // What do we do and how?
   difference: string;    // What makes us different?
   audience: string;      // Who are we here for?
   values: string;        // What do we value most?
-  personality: string;   // What is our personality?
+  // What is our personality? Flat string, or a structured object with an
+  // optional creative_stance sub-field (see BrandCreativeStance above).
+  personality: string | {
+    description: string;
+    creative_stance?: BrandCreativeStance;
+  };
   rejects: string;       // What do we explicitly oppose?
   belief_shift: string;  // From X to Y
   audience_tension: string; // Unspoken contradiction we resolve
@@ -133,49 +164,4 @@ export interface BrandSpec {
   bridging?: string;
 }
 
-// ─── LLM Adapter types ───────────────────────────────────────────────────────
-
-export type LlmTier = "smart" | "cheap";
-
-export interface LlmMessage {
-  role: "user" | "assistant" | "system";
-  content: string;
-}
-
-export interface LlmResponse {
-  content: string;
-  model: string;
-  usage?: {
-    input_tokens: number;
-    output_tokens: number;
-  };
-}
-
-export interface LlmAdapter {
-  call(messages: LlmMessage[], tier: LlmTier): Promise<LlmResponse>;
-}
-
-// ─── Frame types ─────────────────────────────────────────────────────────────
-
-export interface ContentBrief {
-  campaign: string;       // What this piece of content is for
-  product?: string;       // Specific product being featured
-  hook?: string;          // Optional human-supplied angle
-  channel: "instagram" | "myntra" | "amazon";
-}
-
-export interface CarouselSlide {
-  index: number;
-  role: string;           // e.g. "Provoke", "Flex" — from framework
-  headline: string;
-  body: string;
-  cta?: string;
-  image_prompt: string;   // Ready to send to image generation API
-}
-
-export interface CarouselOutput {
-  brand_id: string;
-  brief: ContentBrief;
-  slides: CarouselSlide[];
-  generated_at: string;
-}
+// ─── LLM Adapter types ──────────────────────────────────────────

@@ -16,6 +16,10 @@ and the three Rubato reference files:
 - `references/treatments.md` — the techniques catalog
 - `references/legibility-rules.md` — the scoring/veto rule set
 - `references/motion-tokens.md` — duration/easing/stagger token schema
+- `brand.md` → `personality.creative_stance` — hold: `primary_tension`,
+  `supporting`, `archetype_hint`. These govern tone, density, motion
+  personality, and visual register for this output. If the field is
+  absent, proceed without it (v0.x brands may not have it yet).
 
 If brand.md has no typography tokens yet, stop and say so — Rubato has
 nothing to theme against.
@@ -78,9 +82,4 @@ Visible, un-silenceable, two parts:
 - [ ] Reflow/zoom not broken
 
 **Restraint check** (the anti-slop equivalent):
-- Does this treatment earn its theatrics, or would a plainer choice serve
-  the content equally well? An extreme treatment applied because it's
-  *available*, not because the content role demands it, fails this check —
-  rewrite down to `allow` or the fallback.
-
-Both checks are shown in the output, not silently passed.
+- Does this treatment earn its theatrics, or w

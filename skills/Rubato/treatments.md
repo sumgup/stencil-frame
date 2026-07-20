@@ -40,7 +40,7 @@ Variable-font axis animation (opsz/wght/SOFT/WONK on Fraunces for display treatm
 - **Implementation:** register each axis as a typed `@property` custom property; CSS transitions/keyframes; GSAP for multi-axis sequencing
 - **Fallback:** static axis values at the brand's default display setting (this is the treatment's own resting state, not a separate catalog entry)
 - **Motion tokens used:** `duration.moderate`, `easing.expressive`, optionally `stagger` if per-character
-- **Notes:** SOFT and WONK are Fraunces display-only axes — never animate at body sizes; WONK auto-substitutes off at opsz ≤18. For Mona Sans Variable body-scale use, keep wdth animation to hero/display scale only — at small sizes the delta is imperceptible and the rendering cost isn't justified. See `DESIGN.md §4` for the canonical font role split.
+- **Notes:** SOFT and WONK are Fraunces display-only axes — never animate at body sizes; WONK auto-substitutes off at opsz ≤18. For Mona Sans Variable body-scale use, keep wdth animation to hero/display scale only — at small sizes the delta is imperceptible and the rendering cost isn't justified. See `DESIGN.md §5` for the canonical font role split.
 
 ## split-stagger
 Per-character/word/line entrance stagger.

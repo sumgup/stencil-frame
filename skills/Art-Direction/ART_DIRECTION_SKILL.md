@@ -6,6 +6,11 @@
 > **Companion skills:** copywriting engine (SKILL.md), interface engine, Rubato (typography & motion).
 > **Overture:** narrative layer for §7 (motion) — spine → hook → form casting → storyboard gate runs before any motion asset built against this device library.
 
+**Load context:** `brand.md` → `personality.creative_stance` — hold:
+`primary_tension`, `supporting`, `archetype_hint`. These govern tone,
+density, motion personality, and visual register for this output. If the
+field is absent, proceed without it (v0.x brands may not have it yet).
+
 ---
 
 ## 1. Territory (locked)
@@ -183,6 +188,10 @@ fonts) — deferred until landing page proves the promise.
 5. Palette: near-monochrome + at most one hand-applied accent?
 6. Would it still work in greyscale? (Composition test.)
 7. Audit trail recorded (prompt + sref + human-pass note) alongside asset?
+8. **Stance check:** Where on the `primary_tension` axis does this output
+   sit? Is that appropriate for the surface type (brand surface → lean
+   toward the first pole; product surface → lean toward the second)?
+   Does it satisfy `supporting`?
 
 ---
 
@@ -280,13 +289,4 @@ removes its argument from the visual system.
 - **Use:** in-product push-backs (Act 0 push-back copy can render this
   way), pull quotes.
 - **Scaffold:** `a clean [element] centered on the page, a short
-  handwritten question in pencil in the margin with a small arrow pointing
-  toward it, plenty of empty paper`
-
-### Device selection rule (the "what goes here" query)
-Given a placement: (1) identify the section's argument (critique / method /
-soul / personality); (2) shortlist devices carrying that argument;
-(3) check register fits the placement map (§2); (4) check the page's device
-budget — max 3 distinct devices per page, D7 max once; (5) run the §8 audit
-gate. If no device fits, the section may not need an image (R0 is a valid
-answer).
+  handwrit

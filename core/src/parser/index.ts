@@ -1,5 +1,5 @@
 import { readFile } from "fs/promises";
-import { BrandSpec, BrandIdentity, BrandPositioning, BrandVoice, BrandFramework } from "../types/brand.js";
+import { BrandSpec, BrandIdentity, BrandPositioning, BrandVoice, BrandFramework, ArchetypeHint } from "../types/brand.js";
 
 // ─── YAML frontmatter parser (no dependencies) ───────────────────────────────
 // Handles the subset of YAML used in brand.md files.
@@ -132,6 +132,32 @@ function extractBulletList(text: string): string[] {
 
 // ─── Section parsers ─────────────────────────────────────────────────────────
 
+// Parses the Personality subsection. If it contains a "**Creative stance**"
+// block, returns the structured { description, creative_stance } form;
+// otherwise returns the raw prose string (v0.x brands without creative_stance
+// still work — Frame just won't have cascade rules to read).
+function parsePersonality(raw: string): BrandPositioning["personality"] {
+  const stanceMatch = raw.match(/\*\*Creative stance\*\*\s*\n([\s\S]*)/i);
+  if (!stanceMatch) return raw;
+
+  const description = raw.slice(0, stanceMatch.index).trim();
+  const block = stanceMatch[1];
+  const field = (label: string): string => {
+    const m = block.match(new RegExp(`-\\s*${label}:\\s*(.+)`, "i"));
+    return m ? m[1].trim().replace(/^["']|["']$/g, "") : "";
+  };
+
+  return {
+    description,
+    creative_stance: {
+      primary_tension: field("Primary tension"),
+      supporting: field("Supporting"),
+      in_plain_language: field("In plain language"),
+      archetype_hint: field("Archetype hint") as ArchetypeHint,
+    },
+  };
+}
+
 function parsePositioning(section: string): BrandPositioning {
   const get = (heading: string) => extractSubsection(section, heading) ?? "";
   return {
@@ -140,7 +166,7 @@ function parsePositioning(section: string): BrandPositioning {
     difference: get("Difference"),
     audience: get("Audience"),
     values: get("Values"),
-    personality: get("Personality"),
+    personality: parsePersonality(get("Personality")),
     rejects: get("Rejects"),
     belief_shift: get("Belief shift"),
     audience_tension: get("Audience tension"),
@@ -194,32 +220,4 @@ function parseFramework(section: string): BrandFramework {
 
 // ─── Main parse function ──────────────────────────────────────────────────────
 
-export async function parseBrandFile(filePath: string): Promise<BrandSpec> {
-  const raw = await readFile(filePath, "utf-8");
-  return parseBrandString(raw);
-}
-
-export function parseBrandString(raw: string): BrandSpec {
-  const { yaml, body } = extractFrontmatter(raw);
-
-  const identity = parseIdentityFromYaml(yaml);
-
-  const researchSection = extractSection(body, "Research");
-  if (!researchSection) throw new Error("brand.md missing required ## Research section");
-
-  const positioningSection = extractSection(body, "Positioning");
-  if (!positioningSection) throw new Error("brand.md missing required ## Positioning section");
-
-  const voiceSection = extractSection(body, "Voice");
-  const frameworkSection = extractSection(body, "Framework");
-  const bridgingSection = extractSection(body, "Bridging");
-
-  return {
-    identity,
-    research: researchSection,
-    positioning: parsePositioning(positioningSection),
-    voice: voiceSection ? parseVoice(voiceSection) : undefined,
-    framework: frameworkSection ? parseFramework(frameworkSection) : undefined,
-    bridging: bridgingSection ?? undefined,
-  };
-}
+export async function parseBrandFile(filePath: string): Promise

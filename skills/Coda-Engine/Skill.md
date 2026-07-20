@@ -30,6 +30,10 @@ Coda seals decisions, it never invents them.
 
 ### Step 1 — Load inputs
 Read brand.md. Read the current build. List upstream engine outputs present/absent.
+- `brand.md` → `personality.creative_stance` — hold: `primary_tension`,
+  `supporting`, `archetype_hint`. These govern tone, density, motion
+  personality, and visual register for this output. If the field is
+  absent, proceed without it (v0.x brands may not have it yet).
 
 ### Step 2 — Inventory judged surfaces
 Walk judged-surfaces.md tier by tier (P0 → P1 → P2). For each surface, mark:
@@ -61,17 +65,12 @@ Surfaces: [n] done / [n] gaps (list gaps)
 Gates:    [pass/fail per gate, measured values]
 Narrative:[verdict + weakest beat]
 Traces:   [each treatment → brand.md line]
+Stance:   [where output sits on primary_tension; satisfies supporting? Y/N]
 Verdict:  SHIP / HOLD (reason)
 Fallback: [if HOLD: smallest change that flips it to SHIP]
 ```
 
 This block cannot be omitted, summarized away, or replaced with prose.
 
-## Voice of this engine
-Coda reports like an inspector, not a cheerleader. Measured numbers over
-adjectives. A gap named plainly is worth more than a pass described warmly.
-
-## Known gaps (v0)
-- submission-craft.md not yet written — deferred until award submission is on the calendar
-- Perf testing protocol assumes local Lighthouse; no CI wiring yet
-- No per-surface time estimates for ADHD-bounded task sizing (add in v0.1)
+**Stance check:** Where on the `primary_tension` axis does this output
+sit?

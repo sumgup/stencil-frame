@@ -51,6 +51,10 @@ authoritative):
 - `personas/[active-persona].md` — the full persona file
 - `skills/copy-engine/references/frameworks.md` — PAS, AIDA, BAB, etc.
 - `skills/copy-engine/references/structures.md` — MAR, GAV, SYM, etc.
+- `brand.md` → `personality.creative_stance` — hold: `primary_tension`,
+  `supporting`, `archetype_hint`. These govern tone, density, motion
+  personality, and visual register for this output. If the field is
+  absent, proceed without it (v0.x brands may not have it yet).
 
 brand.md is the source of truth for voice. persona.md is the source of
 truth for audience. If anything below conflicts, these files win.
@@ -162,93 +166,4 @@ must have:
 - The risk / what could go wrong
 - "Feels like: [metaphor]"
 
-Explain each structure before asking the writer to choose. Do NOT present
-structures as tonal variations of the same approach — they must be
-genuinely different shapes.
-
-Load `references/structures.md` for the canonical structures. New
-structures can be invented for the piece — document them in the file
-afterward.
-
-If writer selects "all": generate all presented structures as variants.
-
-For microcopy/generation mode: propose ONE structure and proceed unless
-the writer objects.
-
-Output: Locked structure(s).
-
----
-
-## Step 6 — DRAFT (generate from raw material ONLY)
-
-Rules (non-negotiable):
-- Every line must trace to something from Step 3 raw material
-- Nothing invented. No filler. No bridging sentences that add claims.
-- No AI-slop: no "in today's fast-paced world", no "it's not just about
-  X, it's about Y", no "imagine a world where"
-- If writing for multiple structures: generate each as a complete,
-  independent piece, not variations of the same draft
-
-Read brand.md Voice do's/don'ts before drafting. Read persona.md
-Copy Directives for tone and language.
-
-If `persona: all`: generate one version per persona, same structure,
-different language/tone/proof per persona's Copy Directives.
-
-Output: Draft(s) with inline audit trail comments.
-
----
-
-## Step 7 — SELF-CHECK + ANTI-SLOP
-
-Check every draft against:
-
-**Brand alignment (from brand.md):**
-- [ ] Voice do's: does the draft follow all 5?
-- [ ] Voice don'ts: does the draft violate any?
-- [ ] Guardrails: any banned claims or forbidden territory?
-- [ ] Registers: is the register appropriate for this piece?
-
-**Persona alignment (from persona.md):**
-- [ ] Uses language from VoC "words THEY use"?
-- [ ] Avoids words from "words to AVOID"?
-- [ ] Matches the awareness stage's copy implications?
-- [ ] Addresses at least one belief/objection?
-
-**Traceability:**
-- [ ] Every claim traces to Step 3 raw material?
-- [ ] Source of each claim noted? (writer / persona VoC / brand.md)
-- [ ] No invented statistics, quotes, or proof?
-
-**Anti-slop:**
-- [ ] No hedging qualifiers ("just", "simply", "actually", "basically")
-- [ ] No buzzwords doing work that specifics should do
-- [ ] No exclamation points doing emotional work
-- [ ] No "in a world where..." or "it's not just about..."
-- [ ] Read aloud test: does it sound like a person talking?
-
-Flag violations visibly — do not silently fix. The audit trail is the
-product's own argument in action.
-
-Output: Final copy + audit trail + flags.
-
----
-
-## After the session
-
-Offer:
-1. "Update persona.md with anything new we learned?" [Y/N]
-2. "Save this structure as a named pattern in structures.md?" [Y/N]
-3. "Any raw material worth adding to the persona's VoC?" [Y/N]
-
-The system improves with every use. The persona evolves. The structures
-library grows. The VoC deepens.
-
----
-
-## References
-
-- `references/frameworks.md` — copywriting formulas (PAS, AIDA, BAB, PRESTO, etc.)
-- `references/structures.md` — emotional arc structures (MAR, GAV, SYM, etc.)
-- `references/failure-modes.md` — common copywriting failures and their fixes
-- `references/persona-schema.md` — template for creating new personas
+Explain each structure before asking the wri
