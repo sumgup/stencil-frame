@@ -81,4 +81,10 @@ If a future page needs WebGL, it gets its own budget line here first.
 
 ## Failure protocol
 
-A fai
+A failing gate = HOLD verdict. Only exception: failure explicitly accepted in
+the audit trail with (a) the measured value, (b) why it ships anyway, (c) the
+issue filed to fix it. Silent failures are the one unforgivable state.
+
+## Known gaps (v0)
+- No CI wiring (Lighthouse CI, axe-core in Playwright) — manual protocol for now; automate when product code begins Week 8
+- No real-device lab — Moto G-class emulation is the proxy; borrow a real mid-range Android before submission

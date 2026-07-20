@@ -241,4 +241,95 @@ D7 (Blank Templates) max once ever.
 
 ---
 
-## 7
+## 7. Signature moments (hero)
+
+**The Vesica Piscis mark** — brand mascot. Sits left of question/eyebrow
+text at cap-height. Pulses once on arrival, settles to 22% opacity
+permanently after. Coral only.
+
+**The Correction (hero device)** — opening beat of the page. A struck-through
+line states the wrong, expected claim; the real line reveals underneath it
+in full color/weight. This is the single signature moment the page should be
+remembered for — everything else on the page is quiet execution around it.
+
+**Kinetic reveal (secondary, body copy)** — `stagger.reveal` token (42ms) per character;
+line 2 of any multi-line reveal starts when line 1 is 40% through. Built with GSAP
+SplitText (free as of 3.13) + `aria-label`/`aria-hidden` split for accessibility.
+Must satisfy Surface 02 pass condition (`skills/Coda-Engine/References/Judged-Surfaces.md §02`).
+
+**Rubato (page-wide, not v1-blocking)** — variable font axes shift with
+scroll velocity. Sustained page behavior, not hero-specific. Can be layered
+in after the static skeleton is approved — don't block the first prototype
+on it.
+
+---
+
+## 8. Judged surfaces (floor gates — Coda engine)
+
+Every state on this page is a judged surface, not just the "designed" ones.
+Full surface list, pass conditions, floor gates, and audit-trail requirement:
+see `skills/Coda-Engine/References/Judged-Surfaces.md` — *this section is a
+compressed pointer, not the authority.*
+
+P0 tier (scored by every visitor and every jury — six surfaces, not four):
+
+- **Preloader / first paint** — no spinner; the Correction types while assets
+  load behind it; strike-through fires when ready. Loading is dramaturgy,
+  not a wait state.
+- **Hero / signature moment** — The Correction + Rubato. Completes ≤5s;
+  degrades to static struck-through state with `prefers-reduced-motion`.
+- **CTA / waitlist form** (submit, success, and error states — all three,
+  not just the happy path)
+- **Scroll-triggered reveals** (must degrade gracefully with
+  `prefers-reduced-motion` — no motion-only content)
+- **Links & buttons** — every interactive element has distinct :hover,
+  :active, :focus-visible states; gold as affordance only.
+- **Typography floor** — CLS <0.02, headline legible at 320px, no orphan on
+  the thesis line.
+
+404 is a P1 surface (scored on inspection, not out of scope): brand.md parse
+error in DM Mono + graphite correction pointing home. The audit-trail thesis,
+played as a joke.
+
+Award-winning formula this page is aiming for: one signature moment (the
+Correction) + a hundred quiet details + excellent copy + narrative structure
++ a clean technical floor. No state is "good enough for now."
+
+---
+
+## 9. Page skeleton (confirmed order)
+
+1. Hero — The Correction + Vesica Piscis + eyebrow wordmark
+2. Problem / Tension
+3. Manifesto
+4. What You Get
+5. How It Works
+6. Who It's For
+7. Proof / Dogfooding
+8. Final CTA
+
+Build and review skeleton-first, one section per decision point. Don't
+move to section *n+1* until section *n*'s copy (via the copywriting engine)
+and layout are both approved.
+
+---
+
+## 10. Technical stack
+
+Vite + React + TypeScript. GSAP 3.13 (SplitText, ScrollTrigger — now fully
+free). React Three Fiber for any WebGL moments (gate behind
+`prefers-reduced-motion` and lazy-load). Lenis for smooth scroll. CSS
+variable-font animation via `@property`; scroll-driven `animation-timeline`
+where supported, GSAP ScrollTrigger fallback elsewhere.
+
+---
+
+## 11. What this page must not do
+
+- Must not look like a generic AI-default template — no neutral corporate
+  grotesque type, no default Tailwind card shadows, no stock-photo hero.
+- Must not soften the voice with hedged copy, exclamation marks, or
+  "innovative AI-powered solutions"-style language.
+- Must not treat the waitlist form as a happy-path-only surface.
+- Must not ship a section whose copy didn't run through the copywriting
+  engine's six-step sequence, including the anti-slop pass.

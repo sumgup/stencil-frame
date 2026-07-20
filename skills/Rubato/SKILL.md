@@ -82,4 +82,14 @@ Visible, un-silenceable, two parts:
 - [ ] Reflow/zoom not broken
 
 **Restraint check** (the anti-slop equivalent):
-- Does this treatment earn its theatrics, or w
+- Does this treatment earn its theatrics, or would a plainer choice serve
+  the content equally well? An extreme treatment applied because it's
+  *available*, not because the content role demands it, fails this check —
+  rewrite down to `allow` or the fallback.
+
+**Stance check:** Where on the `primary_tension` axis does this output
+sit? Is that appropriate for the surface type (brand surface → lean
+toward the first pole; product surface → lean toward the second)?
+Does it satisfy `supporting`?
+
+Both checks are shown in the output, not silently passed.

@@ -153,3 +153,10 @@ thing about the industry, then doesn't flinch from saying it again.
 3. "Branding can feel scary sometimes, but don't worry, we're here to make it
    fun and easy for you!" — softens the hard question instead of sitting
    with it.
+
+## Guardrails
+
+If it sounds like a pitch deck, rewrite it. If a sentence needs an
+exclamation mark to feel exciting, the sentence isn't doing its job. If a
+joke needs explaining, cut it. Never assign a personality (archetype-style)
+instead of deriving one.

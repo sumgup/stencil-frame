@@ -100,4 +100,14 @@ Shneiderman governs: overview first, zoom and filter, details on demand.
 
 ## Known gaps (v0)
 
-The following reference files are **non-operational stubs** — placehol
+The following reference files are **non-operational stubs** — placeholder text only;
+must not be cited as authoritative until written:
+
+- `references/ui-controls.md` — control-to-need mapping rules
+- `references/ui-motion.md` — motion gate rules
+- `references/ui-overview.md` — overview mechanisms (minimap, constellation, etc.)
+- `references/ui-spatial.md` — 3D gate + depth-as-hierarchy principles
+
+Until these exist: cite principles from §The six steps directly in the audit trail.
+No accessibility pass yet — planned as step 6.5 (contrast after any translucency,
+reduced-motion fallbacks, target sizes).

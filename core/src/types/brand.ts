@@ -164,4 +164,49 @@ export interface BrandSpec {
   bridging?: string;
 }
 
-// ─── LLM Adapter types ──────────────────────────────────────────
+// ─── LLM Adapter types ───────────────────────────────────────────────────────
+
+export type LlmTier = "smart" | "cheap";
+
+export interface LlmMessage {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
+
+export interface LlmResponse {
+  content: string;
+  model: string;
+  usage?: {
+    input_tokens: number;
+    output_tokens: number;
+  };
+}
+
+export interface LlmAdapter {
+  call(messages: LlmMessage[], tier: LlmTier): Promise<LlmResponse>;
+}
+
+// ─── Frame types ─────────────────────────────────────────────────────────────
+
+export interface ContentBrief {
+  campaign: string;       // What this piece of content is for
+  product?: string;       // Specific product being featured
+  hook?: string;          // Optional human-supplied angle
+  channel: "instagram" | "myntra" | "amazon";
+}
+
+export interface CarouselSlide {
+  index: number;
+  role: string;           // e.g. "Provoke", "Flex" — from framework
+  headline: string;
+  body: string;
+  cta?: string;
+  image_prompt: string;   // Ready to send to image generation API
+}
+
+export interface CarouselOutput {
+  brand_id: string;
+  brief: ContentBrief;
+  slides: CarouselSlide[];
+  generated_at: string;
+}

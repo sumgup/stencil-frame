@@ -73,4 +73,15 @@ Fallback: [if HOLD: smallest change that flips it to SHIP]
 This block cannot be omitted, summarized away, or replaced with prose.
 
 **Stance check:** Where on the `primary_tension` axis does this output
-sit?
+sit? Is that appropriate for the surface type (brand surface → lean
+toward the first pole; product surface → lean toward the second)?
+Does it satisfy `supporting`?
+
+## Voice of this engine
+Coda reports like an inspector, not a cheerleader. Measured numbers over
+adjectives. A gap named plainly is worth more than a pass described warmly.
+
+## Known gaps (v0)
+- submission-craft.md not yet written — deferred until award submission is on the calendar
+- Perf testing protocol assumes local Lighthouse; no CI wiring yet
+- No per-surface time estimates for ADHD-bounded task sizing (add in v0.1)

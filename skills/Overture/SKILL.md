@@ -29,10 +29,13 @@ not authoritative):
 
 - `brand.md` — hold verbatim: **Purpose**, **Difference**, **Personality
   tension**, **Voice do's/don'ts**, **Guardrails**
+- `brand.md → personality.creative_stance` — hold: `primary_tension`,
+  `supporting`, `archetype_hint`. These govern tone, density, motion
+  personality, and visual register. If absent, proceed without.
 - `skills/Art-Direction/ART_DIRECTION_SKILL.md` — §2 registers, §7 motion
   rules, §9 device library (each device's approved motion verb)
 - `skills/Rubato/motion-tokens.md` — the only legal durations and eases
-- `DESIGN.md §5` — the current page's device budget
+- `DESIGN.md §6` — the current page's device budget
 
 brand.md is the source of truth. If anything below conflicts with it,
 brand.md wins.
@@ -107,7 +110,7 @@ The casting question is: **which form makes the spine's tension visible with
 the least production cost?** Story decides form. Choosing the form first and
 retrofitting a story is a violation — flag and restart at Step 3.
 
-Check against the page's device budget (DESIGN.md §5) — a motion asset that
+Check against the page's device budget (DESIGN.md §6) — a motion asset that
 requires an unapproved device is rejected at this step, not discovered at
 build time.
 
@@ -171,13 +174,15 @@ Gates:
 3. **hero-inversion** — viewer is hero, product is guide, throughout
 4. **still-frame** — every beat passes the freeze-frame test
 5. **trace** — every beat names its brand.md concept
-6. **device-budget** — devices used are approved for this page (DESIGN.md §5)
+6. **device-budget** — devices used are approved for this page (DESIGN.md §6)
 7. **motion-legality** — all verbs from device library, all timings from
    motion-tokens.md
 8. **restraint** — one hook, one motion event per viewport, no stacking
 9. **fallback** — poster frame + reduced-motion variant declared
 10. **anti-slop** — nothing glossy, no spectacle-for-spectacle; would a human
     believe a human staged this?
+11. **stance** — Where on the primary_tension axis does this output sit? Is
+    that appropriate for the surface type? Does it satisfy supporting?
 
 FLAGs are never resolved silently. Present them to Sumit with the storyboard.
 The audit trail stays attached to the asset (same discipline as copy-engine

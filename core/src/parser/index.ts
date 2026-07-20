@@ -220,4 +220,32 @@ function parseFramework(section: string): BrandFramework {
 
 // ─── Main parse function ──────────────────────────────────────────────────────
 
-export async function parseBrandFile(filePath: string): Promise
+export async function parseBrandFile(filePath: string): Promise<BrandSpec> {
+  const raw = await readFile(filePath, "utf-8");
+  return parseBrandString(raw);
+}
+
+export function parseBrandString(raw: string): BrandSpec {
+  const { yaml, body } = extractFrontmatter(raw);
+
+  const identity = parseIdentityFromYaml(yaml);
+
+  const researchSection = extractSection(body, "Research");
+  if (!researchSection) throw new Error("brand.md missing required ## Research section");
+
+  const positioningSection = extractSection(body, "Positioning");
+  if (!positioningSection) throw new Error("brand.md missing required ## Positioning section");
+
+  const voiceSection = extractSection(body, "Voice");
+  const frameworkSection = extractSection(body, "Framework");
+  const bridgingSection = extractSection(body, "Bridging");
+
+  return {
+    identity,
+    research: researchSection,
+    positioning: parsePositioning(positioningSection),
+    voice: voiceSection ? parseVoice(voiceSection) : undefined,
+    framework: frameworkSection ? parseFramework(frameworkSection) : undefined,
+    bridging: bridgingSection ?? undefined,
+  };
+}

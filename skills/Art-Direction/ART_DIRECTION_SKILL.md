@@ -289,4 +289,13 @@ removes its argument from the visual system.
 - **Use:** in-product push-backs (Act 0 push-back copy can render this
   way), pull quotes.
 - **Scaffold:** `a clean [element] centered on the page, a short
-  handwrit
+  handwritten question in pencil in the margin with a small arrow pointing
+  toward it, plenty of empty paper`
+
+### Device selection rule (the "what goes here" query)
+Given a placement: (1) identify the section's argument (critique / method /
+soul / personality); (2) shortlist devices carrying that argument;
+(3) check register fits the placement map (§2); (4) check the page's device
+budget — max 3 distinct devices per page, D7 max once; (5) run the §8 audit
+gate. If no device fits, the section may not need an image (R0 is a valid
+answer).
