@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Second ink test — G / B</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@1,9..144,500..600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Mono', monospace; background:#111; }
+  .variant { margin:0 0 4px; }
+  .vtag { padding:10px 20px; font-size:12px; letter-spacing:0.15em; color:#888; background:#111; }
+  /* strips */
+  .strip-yellow { background:#ffe600; color:#0a0a0a; padding:5vw 6vw; }
+  .strip-paper  { background:#f4f1e8; color:#1a1a1a; padding:5vw 6vw; position:relative; }
+  .strip-dark   { background:#080f0a; color:#f0ede6; padding:5vw 6vw; }
+  .h { font-family:'Anton', sans-serif; text-transform:uppercase; font-size:clamp(1.6rem,4vw,3.2rem); line-height:1.05; max-width:20ch; }
+  .body { font-family:'DM Mono', monospace; font-size:15px; line-height:1.6; max-width:58ch; margin-top:18px; }
+  sup { font-size:11px; }
+  .annot {
+    font-family:'DM Mono', monospace; font-size:12px; line-height:1.5; opacity:0.85;
+    position:absolute; right:6vw; top:5vw; width:24ch; border-left:1px solid; padding-left:12px;
+  }
+  .cta { display:inline-block; margin-top:24px; padding:14px 24px; font-size:13px;
+    letter-spacing:0.12em; text-transform:uppercase; text-decoration:none; }
+  .reg { font-size:11px; letter-spacing:0.2em; margin-top:26px; opacity:0.9; }
+
+  /* G — gold accents */
+  .g sup, .g .annot { color:#8a6f3d; border-color:#c8a96e; }
+  .g .reg { color:#8a6f3d; }
+  .g .strip-dark sup, .g .strip-dark .reg { color:#c8a96e; }
+  .g .strip-dark .cta { background:#c8a96e; color:#080f0a; }
+  .g .strip-yellow .cta { background:#0a0a0a; color:#ffe600; }
+
+  /* B — blueprint blue accents */
+  .b sup, .b .annot { color:#2b50c8; border-color:#2b50c8; }
+  .b .reg { color:#2b50c8; }
+  .b .strip-dark sup, .b .strip-dark .reg { color:#7d9bff; }
+  .b .strip-dark .cta { background:#2b50c8; color:#f0ede6; }
+  .b .strip-yellow .cta { background:#0a0a0a; color:#ffe600; }
+</style>
+</head>
+<body>
+
+<div class="variant g">
+  <div class="vtag">G — GOLD SECOND INK</div>
+  <section class="strip-yellow">
+    <h2 class="h">Positioning is the hero<sup>1</sup></h2>
+    <div class="reg">+ REG 03 · CUT ONCE, PRINT FOREVER</div>
+  </section>
+  <section class="strip-paper">
+    <h2 class="h" style="font-size:clamp(1.2rem,2.6vw,2rem)">What you get</h2>
+    <p class="body">A brand.md file where every section visibly traces back to an earlier one.<sup>2</sup> Voice, visual direction, and content are generated from that file — never independently of it.</p>
+    <div class="annot"><sup>2</sup> willing to reject a weak answer and ask again — brand.md §4</div>
+  </section>
+  <section class="strip-dark">
+    <p class="body">You don't need a better mood board.<sup>3</sup> You need a reason you can actually explain.</p>
+    <a class="cta" href="#">Start with positioning</a>
+    <div class="reg">+ REG 08 · EVERY ASSET IN REGISTER</div>
+  </section>
+</div>
+
+<div class="variant b">
+  <div class="vtag">B — BLUEPRINT BLUE SECOND INK</div>
+  <section class="strip-yellow">
+    <h2 class="h">Positioning is the hero<sup>1</sup></h2>
+    <div class="reg">+ REG 03 · CUT ONCE, PRINT FOREVER</div>
+  </section>
+  <section class="strip-paper">
+    <h2 class="h" style="font-size:clamp(1.2rem,2.6vw,2rem)">What you get</h2>
+    <p class="body">A brand.md file where every section visibly traces back to an earlier one.<sup>2</sup> Voice, visual direction, and content are generated from that file — never independently of it.</p>
+    <div class="annot"><sup>2</sup> willing to reject a weak answer and ask again — brand.md §4</div>
+  </section>
+  <section class="strip-dark">
+    <p class="body">You don't need a better mood board.<sup>3</sup> You need a reason you can actually explain.</p>
+    <a class="cta" href="#">Start with positioning</a>
+    <div class="reg">+ REG 08 · EVERY ASSET IN REGISTER</div>
+  </section>
+</div>
+
+</body>
+</html>

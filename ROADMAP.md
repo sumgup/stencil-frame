@@ -23,30 +23,31 @@
 
 ---
 
-## v0.2 — Frame rebuild ← IN PROGRESS
+## v0.2 — Stencil v0.1 + Brand architecture lock ← IN PROGRESS
 
-**Goal:** Frame rebuilt to consume brand.md. ColorFlix end-to-end carousel output.
+**Goal:** Stencil foundation (agent CLI session → brand.md). brand.md as open standard.
+Art direction methodology closed (v0.2 complete July 2026). Landing page confirmed on S+ direction (hero, two-voice structure, marginalia register).
 
 **Built so far:**
 - `brands/colorflix.brand.md` — complete brand file, all seven layers ✓
 - `core/src/parser/` — brand.md → BrandSpec (TypeScript), 13 tests passing ✓
 - `core/src/adapter/` — AI-agnostic LLM adapter, smart/cheap tier routing ✓
-- `frame/server/index.ts` — Node API: `/health`, `/brands`, `/brands/:id`, `/generate/carousel` ✓
-- `index.html` — Frame UI shell: brand selector, brief input, carousel output, slide cards ✓
-- ESM confirmed working (TypeScript throughout, `"type": "module"`) ✓
-- Dev server running: `npm run dev` starts server + UI, auto-kills port conflicts ✓
+- `skills/art-directing-web/` — brand-agnostic art direction process (v0.2) ✓
+- `design/DESIGN.md` — visual system v2: two-ink print model, register table, typography v2, substrate rules ✓
+- Design re-derivation sessions (A, B, D) concluded with locked decisions (coral restriction, material system killed, cinematic lighting killed) ✓
 
 **Still needed to complete v0.2:**
-- Real LLM generation — add `ANTHROPIC_API_KEY` to `.env` and test end-to-end
-- Image generation — slide cards show placeholders, need image gen integration
-- React UI in `frame/ui/` — current UI is standalone `index.html`, Vite/React shell not yet built
+- Landing page build to S+ specification (hero-S-plus.html reference, marginalia layer, glare-yellow field)
+- Interview-WIP action layer (CTA reframed as positioning session booking, WIP disclosure)
+- Validation rider: first five concierge sessions passive test of marginalia register; reopens only on evidence
 
 **Definition of done:**
-Load `colorflix.brand.md` → enter a brief → get five carousel slides (copy + image prompts)
-driven entirely by the brand file. Swap the brand file, get different content.
+Landing page live with S+ confirmed direction. Two-voice structure in place. All v0.2 design decisions locked and documented in `design/DESIGN.md`.
 
-**Vlog opportunity:** "I rebuilt the content engine to read a spec file. Here's what changed."
-**Short opportunity:** brand.md → carousel in 60 seconds, live.
+**Frame status:** GATED. Currently Stencil-only focus. Frame deferred to post-v0.3, gated behind five successful concierge sessions and validated marginalia register. Brand.md remains open standard; one-tool reading confirmed (name + logo + vesica = identity ∩ gap).
+
+**Vlog opportunity:** "Art direction re-derived from scratch: what changed, what stuck, what got killed."
+**Short opportunity:** Two-ink system in 60 seconds, live color tests.
 
 ---
 

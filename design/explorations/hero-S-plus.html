@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Variant S+ — SYM + handwritten marginalia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght,SOFT@1,9..144,400..700,0..100&family=DM+Mono:wght@300&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+  /* NOTE: Caveat is a PLACEHOLDER hand. Final version uses Sumit's scanned
+     handwriting (SVG or webfont from real pen samples) — the whole point of
+     the marginalia layer is that it is provably a human hand. */
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Mono', monospace; }
+  .hero {
+    min-height:100vh; background:#ffe600; color:#0a0a0a;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:8vw 7vw; position:relative; overflow:hidden;
+  }
+  .tag { position:absolute; top:24px; left:28px; font-size:12px; letter-spacing:0.15em; opacity:0.5; }
+  .struck {
+    font-family:'Anton', sans-serif; text-transform:uppercase;
+    font-size:clamp(2.2rem, 7vw, 6.2rem); line-height:1.02; max-width:16ch;
+    text-decoration:line-through; text-decoration-thickness:0.075em;
+    position:relative;
+  }
+  .reveal {
+    font-family:'Fraunces', serif; font-style:italic; font-weight:600;
+    font-variation-settings:"SOFT" 0;
+    font-size:clamp(1.4rem, 3.3vw, 2.9rem); line-height:1.22; max-width:24ch;
+    margin-top:6vh; position:relative;
+  }
+  .cta {
+    display:inline-block; margin-top:7vh; padding:16px 28px; background:#0a0a0a; color:#ffe600;
+    font-size:14px; letter-spacing:0.12em; text-transform:uppercase; text-decoration:none;
+    align-self:flex-start; position:relative;
+  }
+  /* --- the handwritten layer --- */
+  .hand {
+    font-family:'Caveat', cursive; font-size:clamp(1.1rem, 2vw, 1.6rem);
+    color:#0a0a0a; position:absolute; line-height:1.15; max-width:22ch;
+  }
+  .hand-1 { top:-3.2em; right:-2ch; transform:rotate(-3deg); }
+  .hand-2 { bottom:-2.6em; right:10%; transform:rotate(2deg); }
+  .hand-3 { top:50%; left:calc(100% + 24px); transform:rotate(-2deg); width:16ch; }
+  .arrow { position:absolute; width:54px; height:40px; }
+  .arrow path { fill:none; stroke:#0a0a0a; stroke-width:2.2; stroke-linecap:round; }
+  .arr-1 { top:-2.1em; right:9ch; transform:rotate(15deg); }
+  .arr-2 { bottom:-1.9em; right:26%; transform:rotate(200deg); }
+  @media (max-width:900px){ .hand-3{ display:none; } }
+</style>
+</head>
+<body>
+<section class="hero">
+  <span class="tag">S+</span>
+
+  <h1 class="struck">
+    Every brand needs a logo, a palette, and a slogan — done in minutes.
+    <span class="hand hand-1">we tried this. twice.</span>
+    <svg class="arrow arr-1" viewBox="0 0 54 40"><path d="M50 6 C 34 2, 16 10, 6 28 M6 28 l 10 -4 M6 28 l 2 -11"/></svg>
+  </h1>
+
+  <p class="reveal">
+    Every brand needs a reason to exist. That takes longer than minutes. Positioning is the hero.
+    <span class="hand hand-2">the slow way. sorry.</span>
+    <svg class="arrow arr-2" viewBox="0 0 54 40"><path d="M50 6 C 34 2, 16 10, 6 28 M6 28 l 10 -4 M6 28 l 2 -11"/></svg>
+  </p>
+
+  <a class="cta" href="#">
+    Start with positioning
+    <span class="hand hand-3">no mood boards. promise.</span>
+  </a>
+</section>
+</body>
+</html>
