@@ -21,8 +21,8 @@
 Model color as a print system, not a pixel system. Every color must name its job or it doesn't enter the system.
 
 **Ink 1: Near-Black** `#0a0a0a`
-- Job: Typography, structure, fine detail.
-- Usage: All typeset text, hairlines, rules, diagrams.
+- Job: Typography, structure, fine detail, registration crosses.
+- Usage: All typeset text, hairlines, rules, diagrams, registration crosses at 0.35 opacity.
 - Carries 100% of argument and hierarchy.
 
 **Field: Glare Yellow** `#ffe600` (working value; tune in browser)
@@ -35,7 +35,7 @@ Model color as a print system, not a pixel system. Every color must name its job
 - Light-ground value: `#2b50c8`
 - Dark-ground value: `#7d9bff`
 - Job: Annotation, technical detail, link affordance, D8 callouts + superscripts, dark-ground CTA.
-- Usage: Secondary information layer, registration marks, dark-UI affordances.
+- Usage: Secondary information layer, dark-UI affordances.
 - Registers: Industrial annotation, technical surfaces, dark-ground interactive.
 
 **Ground 1: Paper** `#f4f1e8`
@@ -44,7 +44,7 @@ Model color as a print system, not a pixel system. Every color must name its job
 
 **Ground 2: Dark** `#080f0a`
 - Job: Dark-mode ground (retained for quiet-register where needed).
-- Usage: Session UI, dark editorial surfaces.
+- Usage: Quiet-register ground where needed (dark strips, operational surfaces) — NOT the session UI, which is paper+ink per §2 register table.
 
 **Coral** `#e8673a`
 - RESTRICTION: Mascot and session error states only. No other use.
