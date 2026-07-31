@@ -5,7 +5,7 @@ description: Answers questions about expressive and kinetic web typography and m
 
 
 
-\# Typography + Motion Research (2025–2026)
+# Typography + Motion Research (2025–2026)
 
 
 
@@ -13,33 +13,33 @@ This skill answers from the research report in `references/research-2026.md`.
 
 
 
-\## How to answer
+## How to answer
 
-1\. Read the relevant section of `references/research-2026.md` before answering.
+1. Read the relevant section of `references/research-2026.md` before answering.
 
-2\. Answer from the report first; flag when a question goes beyond it.
+2. Answer from the report first; flag when a question goes beyond it.
 
-3\. When recommending a technique, always include: browser support status,
+3. When recommending a technique, always include: browser support status,
 
-&#x20;  accessibility gate (reduced-motion fallback), and the legibility constraint
+   accessibility gate (reduced-motion fallback), and the legibility constraint
 
-&#x20;  from the reading-science rules.
+   from the reading-science rules.
 
-4\. Cite which section of the report the answer came from (auditability).
+4. Cite which section of the report the answer came from (auditability).
 
 
 
-\## Report map
+## Report map
 
-\- §1 CSS typography 2025–26 (variable fonts, scroll-driven, text-box-trim)
+- §1 CSS typography 2025–26 (variable fonts, scroll-driven, text-box-trim)
 
-\- §2 Library stack (GSAP 3.13 free, Motion, R3F + troika, Lenis)
+- §2 Library stack (GSAP 3.13 free, Motion, R3F + troika, Lenis)
 
-\- §3 Techniques catalog (radial, vertical, kinetic, shaders)
+- §3 Techniques catalog (radial, vertical, kinetic, shaders)
 
-\- §4 Design system architecture (DTCG tokens, KineticText primitives)
+- §4 Design system architecture (DTCG tokens, KineticText primitives)
 
-\- §5 Recommendation engine / legibility rules
+- §5 Recommendation engine / legibility rules
 
-\- §6 Inspiration \& prior art
+- §6 Inspiration & prior art
 
