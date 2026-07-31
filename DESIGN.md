@@ -216,7 +216,7 @@ Full token spec: `design/tokens.json`.
 ## 6. Visual language — "Process-as-Provenance"
 
 Editorial dark aesthetic. Three art-direction registers (D / C / B), fused
-rather than kept separate — see `ART_DIRECTION_SKILL.md` §2 for the full
+rather than kept separate — see `skills/Art-Direction/SKILL.md` §2 for the full
 placement map, fusion rules, and device library. *This section is a
 compressed pointer, not the authority.*
 
