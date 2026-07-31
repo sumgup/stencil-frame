@@ -120,4 +120,4 @@ Rule: three durations, two eases, site-wide. A new duration requires a written r
 
 ## Known gaps (v0)
 - No pattern yet for in-product Stencil session surfaces (this file is landing-page
-  scoped; session patterns follow ART_DIRECTION_SKILL.md's recessive placement map)
+  scoped; session patterns follow skills/Art-Direction/SKILL.md's recessive placement map)

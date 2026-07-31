@@ -118,7 +118,7 @@ Example — Act 0:
 **Governing direction (locked):** The session is a recessive surface — the founder's answer is
 the hero; art recedes. In-product visual direction: quiet C-marks only (a pencil underline when
 an answer is accepted — the softest possible reward). Art does not compete for attention during
-the session. See `skills/Art-Direction/ART_DIRECTION_SKILL.md §2` placement map for the full
+the session. See `skills/Art-Direction/SKILL.md §2` placement map for the full
 system.
 
 ---
@@ -127,7 +127,7 @@ system.
 
 The following generative/surrealist approach was explored June 2026 before the art direction
 territory was locked. Preserved here as creative record, not as governing direction. The
-placement map in ART_DIRECTION_SKILL.md supersedes it.
+placement map in SKILL.md (Art-Direction) supersedes it.
 
 **What we identified (Obys reference):** Typography and motion alone are structural — they
 don't create the felt sense of a world. Images pull attention before the brain engages. That

@@ -1,10 +1,7 @@
-\---
-
+---
 name: typography-research
-
-description: Answers questions about expressive/kinetic web typography and motion — CSS variable font animation, scroll-driven animations, GSAP/Motion/R3F/troika stack choices, radial/vertical/non-linear type techniques, DTCG typography tokens, legibility rules and WCAG gates for expressive treatments, Fraunces SOFT/WONK axes. Use whenever the user asks about typography, kinetic type, motion presets, font animation, or which library/technique to use for text effects.
-
-\---
+description: Answers questions about expressive and kinetic web typography and motion — CSS variable font animation, scroll-driven animations, GSAP/Motion/R3F stack choices, radial and vertical type techniques, DTCG typography tokens, legibility rules and WCAG gates, Fraunces SOFT/WONK axes. Use whenever the user asks about typography, kinetic type, motion presets, font animation, or which library to use for text effects.
+---
 
 
 

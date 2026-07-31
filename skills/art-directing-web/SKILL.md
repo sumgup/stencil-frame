@@ -4,7 +4,7 @@ description: Brand-agnostic process for art directing any web page (landing, pro
 ---
 
 # Art Directing a Web Page (v0.2)
-Status: hand-proven through one full re-derivation run (July 2026: direction, 3 capture sessions, control tests, dispositions). Graduates into ART_DIRECTION_SKILL.md when proven on a second surface.
+Status: hand-proven through one full re-derivation run (July 2026: direction, 3 capture sessions, control tests, dispositions). Graduates into skills/Art-Direction/SKILL.md when proven on a second surface.
 Sources: Clarke, *Art Direction for the Web*; re-derivation research (July 2026); Sessions A/B run live.
 Format: a dialogue between art director (Sumit) and partner (Claude). Sumit decides; Claude interrogates, pattern-reads, structures.
 

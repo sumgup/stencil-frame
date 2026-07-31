@@ -15,7 +15,7 @@ description: Story engine for moving-image assets — takes section context + br
 > **Position in the stack:** copy-engine writes the words. Art-Direction picks
 > the evidence. Rubato performs the type. Coda gates the build. **Overture
 > decides what happens in time.** It is the narrative brain for
-> `ART_DIRECTION_SKILL.md §7` (motion layer).
+> `skills/Art-Direction/SKILL.md §7` (motion layer).
 
 When this skill is invoked, execute the steps below in order. Do not skip
 steps or merge them. Steps 2–7 are non-skippable regardless of asset type.
@@ -32,7 +32,7 @@ not authoritative):
 - `brand.md → personality.creative_stance` — hold: `primary_tension`,
   `supporting`, `archetype_hint`. These govern tone, density, motion
   personality, and visual register. If absent, proceed without.
-- `skills/Art-Direction/ART_DIRECTION_SKILL.md` — §2 registers, §7 motion
+- `skills/Art-Direction/SKILL.md` — §2 registers, §7 motion
   rules, §9 device library (each device's approved motion verb)
 - `skills/Rubato/motion-tokens.md` — the only legal durations and eases
 - `DESIGN.md §6` — the current page's device budget

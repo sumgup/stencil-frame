@@ -26,7 +26,7 @@ Rule applied: every locked decision demoted to hypothesis, then re-confirmed / r
 - Movements/trends enter at move 2 (reference vocabulary serving a feeling), never before Direction.
 - Locked decisions reopen only when the evidence they rested on changes (as with palette above) — never from moodboard browsing alone.
 - Sessions C, E–J of the moodboard plan stay closed unless a disposition demands them.
-- Skill consolidation: the Direction/Register front-end merges into Art-Direction-Lab (no new parallel skill); graduates into ART_DIRECTION_SKILL.md when proven.
+- Skill consolidation: the Direction/Register front-end merges into Art-Direction-Lab (no new parallel skill); graduates into skills/Art-Direction/SKILL.md when proven.
 
 ## Tension on watch
 Sumit's gut picks (loud, joyful, maximal) vs. locked landing register (restrained, archival, "The Doctor"). Both assigned homes per five-movements doc (energy → brand surfaces; quiet → session). Test at browser vibe-check: if the landing feels dead, this is the cause — not copy.
