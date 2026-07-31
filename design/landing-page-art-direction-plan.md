@@ -2,7 +2,7 @@
 *S+ confirmed direction. Validation rider in place. Build specifications below.*
 
 Date locked: 2026-07-24  
-Reference: `design/hero-S-plus.html` (direction artifact)  
+Reference: `design/explorations/hero-S-plus.html` (direction artifact)  
 Process: Art-Derivation sessions A/B/D + control tests (see `design/DISPOSITIONS-LOG-v2.md`)
 
 ---
