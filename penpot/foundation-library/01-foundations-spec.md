@@ -1,5 +1,20 @@
 # 01 Foundations — Build Spec for Penpot
 
+> ⚠ **Scope disambiguation (added 2026-08-08):** Despite the filename and
+> Sprint 1 framing below, this spec is built from `design/tokens.json`,
+> which belongs to the **Stencil+Frame brand/landing** design system
+> (Print/Ink model: Near-Black / Glare Yellow / Blueprint Blue / Paper —
+> see root `DESIGN.md`). It is **not** the Sprint 1 Foundations output for
+> the **Stencil methodology** system (near-monochrome Graphite / Blueprint
+> / Coral / Ghost / Paper, derived from `book/*.md`, originally built in
+> Figma). That system's Sprint 1–3 output now lives in
+> `stencil-methodology/01-foundations.md`, `02-tokens.md`, and
+> `03-primitives.md`.
+>
+> Both systems independently use the terms "Blueprint" and "Coral" with
+> different meanings — see `stencil-methodology/README.md` for the full
+> three-way disambiguation table before reusing any value from this file.
+
 Sprint 1, Page 01. Built directly in Penpot's native token editor + a
 Foundations page — no Figma/MCP dependency. Every item below is either
 sourced from `design/tokens.json` (marked **Initial Value: set**) or from
