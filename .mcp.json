@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "penpot": {
+      "transport": "http",
+      "url": "${PENPOT_MCP_URL}"
+    }
+  }
+}

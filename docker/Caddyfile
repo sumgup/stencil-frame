@@ -1,0 +1,22 @@
+{
+	# Local-only HTTPS proxy for reaching Penpot from tools that require
+	# an https:// URL (e.g. Claude's custom MCP connector). Not for any
+	# real deployment — localhost only.
+	auto_https off
+}
+
+localhost:9443 {
+	# Cert issued by mkcert, whose local CA is registered in the OS/browser
+	# trust store (see design/PENPOT_SETUP.md — "mkcert" setup). This is
+	# what makes the cert trusted by strict TLS clients, unlike Caddy's own
+	# self-signed "tls internal", which only browsers tend to accept.
+	tls /certs/localhost.pem /certs/localhost-key.pem
+
+	# Websocket routes need explicit upgrade headers preserved.
+	@ws {
+		path /ws/notifications /mcp/ws
+	}
+	reverse_proxy @ws penpot-frontend:8080
+
+	reverse_proxy penpot-frontend:8080
+}
