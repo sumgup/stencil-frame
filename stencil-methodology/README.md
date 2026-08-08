@@ -21,9 +21,11 @@ a paid tier this project isn't paying for yet.
   above (e.g. `Spacing.EvidenceGap`, `Color.Blueprint`, `Motion.Correction`).
 - `03-primitives.md` — 9 visual primitives (Text, Heading, Paper, Sheet,
   Rule, Margin, Strike, Annotation, Workspace) composed from the tokens.
-- `04-canonical-objects.md` *(pending — see status below)* — objects
-  composed from the primitives (Working Sheet, Evidence Block, Disposition
-  Log, Question Block, Archive).
+- `04-canonical-objects.md` — 5 canonical objects composed from the
+  primitives (Working Sheet, Evidence Block, Disposition Log, Question
+  Block, Archive), each with grammar citations, a visual-implementation
+  build spec, and explicit hypotheses where a design decision isn't yet
+  confirmed by a real founder session.
 
 ## ⚠ Naming collision — read before touching any "Blueprint," "Coral," or "DESIGN.md" reference in this repo
 
@@ -57,16 +59,28 @@ that file for the explicit disambiguation.
   for most primitives, plus a few truncated Purpose/Derived From
   sentences) could not be read cleanly from the source screenshots and
   are flagged inline for a live-Figma re-check rather than guessed.
-- Sprint 4 (Canonical Objects): a spec already exists at
-  `design/CANONICAL-OBJECTS-sprint4.md`, written directly against this
-  folder's Sprint 1–3 output — not yet copied here or built visually
-  (blocked on Figma MCP quota at time of writing). Not duplicated into
-  this folder yet to avoid two sources of truth; treat
-  `design/CANONICAL-OBJECTS-sprint4.md` as canonical for Sprint 4 until
-  it's moved.
-- `99 Decision Log` (the Figma page tracking undecided/flagged items)
-  has not been transcribed — it wasn't included in the screenshots this
-  transcription was made from. Needs a separate pass against live Figma.
+- Sprint 4 (Canonical Objects): relocated from `design/CANONICAL-OBJECTS-sprint4.md`
+  into `04-canonical-objects.md`. Content unchanged except the closing
+  "Next step" section, updated to reflect the decided architecture
+  (Git canonical, Figma/Penpot for visual exploration only) instead of
+  the original's "blocked on Figma MCP quota" framing. None of the five
+  objects are built visually yet in any tool.
+- `99 Decision Log` (the Figma page tracking undecided/flagged items
+  from Sprints 1–3) has not been transcribed — it wasn't included in the
+  screenshots this transcription was made from. Needs a separate pass
+  against live Figma.
+- **Known naming gap, found in final review (2026-08-08):** `03-primitives.md`
+  and `04-canonical-objects.md` both reference `Color.Border` and
+  `Radius.Surface`, but neither exists under those exact names in
+  `02-tokens.md` — the Token Library has 6 Color tokens (Paper, Graphite,
+  Pencil, Ghost, Blueprint, Coral; no Border) and the Corner Radius
+  token is named `Surface` under the `CornerRadius` category, not
+  `Radius`. This gap is carried through faithfully from the original
+  Figma/Sprint-4 material, not introduced by transcription — flagging
+  rather than silently inventing a `Border` color or renaming
+  `CornerRadius.Surface` to match. Needs a founder decision: either add
+  `Color.Border` and rename the radius token to `Radius.Surface`, or
+  correct the primitive/object specs to the Token Library's actual names.
 
 ## Source of truth going forward
 

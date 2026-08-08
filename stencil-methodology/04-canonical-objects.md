@@ -1,9 +1,13 @@
-# Sprint 4 — Canonical Objects
+# 04 — Canonical Objects
 
-**Status:** Spec complete, not yet built in Figma (MCP tool-call quota exhausted — Starter plan, 6 calls/month). This document is the ready-to-execute build spec. Once Figma access is restored, follow "Visual Implementation" per object to populate a new **Canonical Objects** section in the `Stencil` file, following the same documentation card + showcase pattern used by Sprint 3 (Primitive Library).
+> **Scope note:** Stencil *methodology* system (see `01-foundations.md` for full disambiguation). These five objects are composed from the primitives in `03-primitives.md` and the tokens in `02-tokens.md`.
+>
+> Relocated from `design/CANONICAL-OBJECTS-sprint4.md` (2026-08-08) to complete the 01–04 set in this folder. Content unchanged from the original — this sprint's output was already text, not a Figma transcription, so no re-transcription was needed. Only the "Next step" section at the bottom was updated to reflect the decided architecture (Git canonical, Figma/Penpot for visual exploration only) rather than the original's "blocked on Figma MCP quota" framing.
+
+**Status:** Spec complete. Not yet built visually in any tool. This document is the ready-to-execute build spec — once you're ready to compose these visually (Figma, Penpot, or otherwise), follow "Visual implementation" per object, using the same documentation-card + showcase pattern established by `03-primitives.md`.
 
 **Source material read for this sprint:**
-- Figma `Stencil` file — Foundations (Sprint 1), Token Library (Sprint 2, 31 tokens / 9 foundations), Primitive Library (Sprint 3, 9 primitives: Text, Heading, Paper, Sheet, Rule, Margin, Strike, Annotation, Workspace)
+- `stencil-methodology/01-foundations.md`, `02-tokens.md` (31 tokens / 9 foundations), `03-primitives.md` (9 primitives: Text, Heading, Paper, Sheet, Rule, Margin, Strike, Annotation, Workspace)
 - `book/02-diagnostic-patterns.md`, `book/03-interaction-grammar.md`, `book/04-visual-grammar.md`, `book/05-material-grammar.md`, `book/06-spatial-grammar.md`, `book/07-composition-grammar.md`, `book/08-gesture-grammar.md`, `book/09-motion-grammar.md` (Law 4–5)
 
 The Stencil Book is frozen and was not modified. These five objects are readings of it, not additions to it.
@@ -88,7 +92,7 @@ A tall, narrow `Sheet` (`Elevation.Sheet`, `Color.Paper`) with vertical auto-lay
 
 **Hypotheses**
 - *H1:* Assumed one Disposition Log per Working Sheet (scoped to that sheet's lifetime, archivable alongside it) rather than one global log per founder session. Needs a multi-session test.
-- *H2:* `Typography.Disposition`'s actual size/weight is still `TBD` in the Token Library (Sprint 2). Assumed it's reserved for the status word only, with `Body`/`Annotation` styling the entry description depending on author. Needs designer confirmation once the token is resolved.
+- *H2:* `Typography.Disposition`'s actual size/weight is still `TBD` in the Token Library (`02-tokens.md`). Assumed it's reserved for the status word only, with `Body`/`Annotation` styling the entry description depending on author. Needs designer confirmation once the token is resolved.
 
 ---
 
@@ -146,7 +150,7 @@ A Wall-style array of discrete miniature `Sheet` instances (each a completed Wor
 
 ## Summary
 
-Five objects specified, none yet built (blocked on Figma MCP quota — see status line above). Each traces to primitives and tokens already shipped in Sprint 2–3 rather than inventing new visual language; the one new dependency surfaced is a **"Stamp" primitive candidate** (version/citation marks used by both Evidence Block and Archive but not yet built as its own primitive — currently stood in for by `Annotation`'s left-border treatment).
+Five objects specified, none yet built visually. Each traces to primitives and tokens already documented in `02-tokens.md` and `03-primitives.md` rather than inventing new visual language; the one new dependency surfaced is a **"Stamp" primitive candidate** (version/citation marks used by both Evidence Block and Archive but not yet built as its own primitive — currently stood in for by `Annotation`'s left-border treatment).
 
 Two structural relationships surfaced that weren't visible from the Primitive Library alone:
 1. Question Block → Disposition Log: an answered/declined question is hypothesized to convert into a log entry, not disappear.
@@ -154,4 +158,4 @@ Two structural relationships surfaced that weren't visible from the Primitive Li
 
 No product screens, dashboards, or landing pages were created, per instruction. Optimized throughout for traceability to the Book over visual polish — several fields above are intentionally left as open hypotheses rather than resolved defaults.
 
-**Next step:** once Figma MCP access is available (plan upgrade or monthly reset), execute the five "Visual implementation" specs above into a new **Canonical Objects** section in the `Stencil` file, following Sprint 3's Doc-card + Showcase pattern (Purpose / Derived From / Tokens Used / Auto Layout / Variants / States).
+**Next step:** these five "Visual implementation" specs are ready to execute in whichever visual tool you're using for spatial exploration (Penpot, Figma, or otherwise) — following `03-primitives.md`'s documentation-card + showcase pattern (Purpose / Derived From / Tokens Used / Auto Layout / Variants / States). Per this project's architecture, this markdown file remains canonical regardless of which tool renders it; update here first if any hypothesis above gets resolved during that visual pass.
