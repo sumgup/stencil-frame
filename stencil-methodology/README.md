@@ -56,21 +56,15 @@ that file for the explicit disambiguation.
 
 ## Status
 
-- Sprints 1–3: transcribed from Figma screenshots into this folder.
-  Several fields in `03-primitives.md` (Auto Layout / Variants / States
-  for most primitives, plus a few truncated Purpose/Derived From
-  sentences) could not be read cleanly from the source screenshots and
-  are flagged inline for a live-Figma re-check rather than guessed.
+- Sprints 1–3: transcribed from Figma screenshots into this folder. See
+  "Open items" below for what couldn't be read cleanly from the source
+  screenshots.
 - Sprint 4 (Canonical Objects): relocated from `design/CANONICAL-OBJECTS-sprint4.md`
   into `04-canonical-objects.md`. Content unchanged except the closing
   "Next step" section, updated to reflect the decided architecture
   (Git canonical, Figma/Penpot for visual exploration only) instead of
   the original's "blocked on Figma MCP quota" framing. None of the five
   objects are built visually yet in any tool.
-- `99 Decision Log` (the Figma page tracking undecided/flagged items
-  from Sprints 1–3) has not been transcribed — it wasn't included in the
-  screenshots this transcription was made from. Needs a separate pass
-  against live Figma.
 - **Naming gap found in final review (2026-08-08) — resolved.** `03-primitives.md`
   and `04-canonical-objects.md` referenced `Color.Border` and
   `Radius.Surface`, neither of which existed under those exact names in
@@ -89,6 +83,41 @@ that file for the explicit disambiguation.
   ("Corner Radius" vs. "Radius"); this is cosmetic, not a value
   conflict, but worth knowing about before assuming the two files use
   identical section names.
+
+## Open items — require live Figma access, not resolvable from Git alone
+
+These are genuine gaps, not TBD-by-design values. Nothing below was
+guessed to close it — per Stencil's own rule (undefined values are not
+invented), each is left exactly as unreadable/missing until someone with
+Figma access does the re-check. Treat this as the actual next-session
+checklist, in priority order:
+
+1. **`03-primitives.md` — 5 primitives have sentences cut off mid-word**
+   in Purpose or Derived From: Rule, Margin, Strike, Annotation,
+   Workspace. Each has an inline `[flag for verification]` marking
+   exactly where the source screenshot truncated. Re-open the Figma
+   Primitive Library page, read the full sentence, replace the flag.
+2. **`03-primitives.md` — Auto Layout / Variants / States are blank**
+   for 7 of 9 primitives (Paper, Sheet, Rule, Margin, Strike, Annotation,
+   Workspace). Only Text and Heading transcribed with this metadata
+   complete — the screenshot didn't show it clearly for the rest. Needs
+   a direct look at each primitive's Figma properties panel, not just
+   the canvas screenshot.
+3. **`99 Decision Log` page — not transcribed anywhere in this folder.**
+   It was never included in the screenshots this transcription was made
+   from, so it doesn't exist in Git in any form yet, not even partially.
+   If it contains rationale or open questions beyond what's already
+   captured inline in `01-foundations.md`'s "Transcription notes" and
+   this README's own flagged items, that content is currently nowhere
+   but Figma. Highest-priority of the three, since it may contain
+   decisions that supersede TBD values elsewhere in this folder.
+4. **Once 1–3 are closed:** re-run a diff-style comparison between the
+   updated `stencil-methodology/*.md` and live Figma to confirm no other
+   silent truncation happened in fields that looked complete but
+   weren't (the Motion token law citations in `02-tokens.md` — Pause,
+   Withdraw, Easing — were also partially obscured and are a lower-
+   confidence transcription than the rest of that file; worth a second
+   look during the same pass rather than a separate one).
 
 ## Source of truth going forward
 
