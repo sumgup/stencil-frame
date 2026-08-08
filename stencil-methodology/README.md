@@ -17,8 +17,10 @@ a paid tier this project isn't paying for yet.
 - `01-foundations.md` — the 9 foundation categories (Typography, Spacing,
   Grid, Stroke, Corner Radius, Elevation, Color, Motion, Material), each
   with Purpose / Grammar Source / Initial Recommendation / Status.
-- `02-tokens.md` — 31 semantic design tokens derived from the foundations
+- `02-tokens.md` — 32 semantic design tokens derived from the foundations
   above (e.g. `Spacing.EvidenceGap`, `Color.Blueprint`, `Motion.Correction`).
+  31 transcribed from Figma, plus `Color.Border` added 2026-08-08 (see
+  Correction log in that file).
 - `03-primitives.md` — 9 visual primitives (Text, Heading, Paper, Sheet,
   Rule, Margin, Strike, Annotation, Workspace) composed from the tokens.
 - `04-canonical-objects.md` — 5 canonical objects composed from the
@@ -69,18 +71,24 @@ that file for the explicit disambiguation.
   from Sprints 1–3) has not been transcribed — it wasn't included in the
   screenshots this transcription was made from. Needs a separate pass
   against live Figma.
-- **Known naming gap, found in final review (2026-08-08):** `03-primitives.md`
-  and `04-canonical-objects.md` both reference `Color.Border` and
-  `Radius.Surface`, but neither exists under those exact names in
-  `02-tokens.md` — the Token Library has 6 Color tokens (Paper, Graphite,
-  Pencil, Ghost, Blueprint, Coral; no Border) and the Corner Radius
-  token is named `Surface` under the `CornerRadius` category, not
-  `Radius`. This gap is carried through faithfully from the original
-  Figma/Sprint-4 material, not introduced by transcription — flagging
-  rather than silently inventing a `Border` color or renaming
-  `CornerRadius.Surface` to match. Needs a founder decision: either add
-  `Color.Border` and rename the radius token to `Radius.Surface`, or
-  correct the primitive/object specs to the Token Library's actual names.
+- **Naming gap found in final review (2026-08-08) — resolved.** `03-primitives.md`
+  and `04-canonical-objects.md` referenced `Color.Border` and
+  `Radius.Surface`, neither of which existed under those exact names in
+  `02-tokens.md` (which had 6 Color tokens with no Border, and
+  `CornerRadius.Surface` rather than `Radius.Surface`). Founder decision:
+  treat the Primitive/Object specs as correct. `02-tokens.md` was
+  updated to add `Color.Border` (7th color token) and rename
+  `CornerRadius.Surface` → `Radius.Surface`. Full detail and rationale
+  in `02-tokens.md`'s own "Correction log" section.
+  **Residual inconsistency, intentionally left as-is:** `01-foundations.md`
+  still calls this foundation category "Corner Radius" — it was not
+  edited, since it's a separate verbatim Figma transcription and the
+  founder decision was scoped to the token/primitive naming collision,
+  not to renaming the Foundations page's category label. `01` and `02`
+  now use different names for the same underlying concept
+  ("Corner Radius" vs. "Radius"); this is cosmetic, not a value
+  conflict, but worth knowing about before assuming the two files use
+  identical section names.
 
 ## Source of truth going forward
 

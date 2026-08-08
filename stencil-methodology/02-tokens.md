@@ -2,7 +2,7 @@
 
 > **Scope note:** Stencil *methodology* system (see `01-foundations.md` for full disambiguation). Not the same token set as `design/tokens.json` (root brand/landing system — bg/gold/warm-white/coral) or `penpot/foundation-library/01-foundations-spec.md` (built from that same, unrelated `tokens.json`).
 >
-> Transcribed verbatim from Figma (Sprint 2 output, "Token Library" page, "Stencil + Frame · Design System · Sprint 2 · Derived from Stencil Book v1.0"). Source: pasted screenshot, 2026-08-08. Not independently re-verified against live Figma. 31 tokens across 9 foundations. Values marked TBD require implementation testing; decided values are specified by the book.
+> Originally transcribed verbatim from Figma (Sprint 2 output, "Token Library" page, "Stencil + Frame · Design System · Sprint 2 · Derived from Stencil Book v1.0"). Source: pasted screenshot, 2026-08-08. Not independently re-verified against live Figma. As of 2026-08-08 this file has one deliberate correction beyond the original transcription — see "Correction log" at the bottom — and is no longer a pure verbatim copy of the Figma page. 32 tokens across 9 foundations (31 original + 1 added). Values marked TBD require implementation testing; decided values are specified by the book.
 
 ---
 
@@ -106,13 +106,14 @@
 
 ---
 
-## Corner Radius — 1 token
+## Radius — 1 token
 
 ### Surface
 - **Purpose:** Radius of all working surfaces, sheets, and containers. Rounded corners simulate comfort — Stencil surfaces hold marks and commit to a boundary.
 - **Derived From:** Visual Grammar — rounded cards are an explicit counterexample
 - **Status:** Decided
 - **Suggested Value:** 0
+- **Token name note (2026-08-08):** Renamed from `CornerRadius.Surface` to `Radius.Surface` to match the naming already in use in `03-primitives.md` and `04-canonical-objects.md`. See "Correction log" below.
 
 ---
 
@@ -126,7 +127,7 @@
 
 ---
 
-## Color — 6 tokens
+## Color — 7 tokens
 
 ### Paper
 - **Purpose:** The substrate. Background of all working surfaces.
@@ -163,6 +164,12 @@
 - **Derived From:** Visual Grammar ("Coral remains reserved for error")
 - **Status:** Principle decided; value TBD
 - **Suggested Value:** TBD — coral family
+
+### Border
+- **Purpose:** Edge/outline color for bounded surfaces (Paper, Sheet, Workspace, Margin's jurisdiction rule, Annotation's marker). Distinct from Graphite (mark/text) and Ghost (erased residue) — Border marks a surface's boundary, not its content.
+- **Derived From:** Visual Grammar (near-monochrome substrate; boundary as distinct from mark) · Material Grammar (Paper has an edge — finitude)
+- **Status:** Added 2026-08-08, principle decided; value TBD. Not present in the original Sprint 2 Figma page — added to close the gap between `03-primitives.md` / `04-canonical-objects.md` (which reference `Color.Border` throughout) and this Token Library, per founder decision to treat the Primitive/Object specs as correct. See "Correction log" below.
+- **Suggested Value:** TBD — likely a light-to-mid gray, distinct from both Graphite (primary mark) and Ghost (erased residue); needs founder confirmation.
 
 ---
 
@@ -230,7 +237,39 @@
 
 ## Transcription notes
 
-- 31 tokens total, matching the source page's own count: Typography (4), Spacing (4), Grid (3), Stroke (3), Corner Radius (1), Elevation (1), Color (6), Motion (6), Material (3).
-- Only 2 tokens have **Decided** numeric values: `CornerRadius.Surface` (0) and `Elevation.Sheet` (0) — consistent with `01-foundations.md`.
+- Original transcription: 31 tokens, matching the source Figma page's own count: Typography (4), Spacing (4), Grid (3), Stroke (3), Corner Radius (1), Elevation (1), Color (6), Motion (6), Material (3).
+- Only 2 tokens have **Decided** numeric values: `Radius.Surface` (0) and `Elevation.Sheet` (0) — consistent with `01-foundations.md`. (Note: `01-foundations.md` still refers to this foundation category as "Corner Radius" per its own unmodified transcription — the category was renamed to "Radius" only in this token file, to match the primitive/object specs. `01-foundations.md` has not been changed; see Correction log.)
 - Color tokens are "principle decided" (the *role* of each color is settled — e.g. Coral = error only) but no token has an actual hex value locked yet. This matches the Foundations page's Color status ("Principle decided; values TBD").
 - Motion token "Derived From" law numbers in the source screenshot were partially obscured by overlapping text in a few cells (Pause, Withdraw, Easing) — the law citations above are the best reading of what's visible; flagged as `[verify against Figma]` for those three specifically, since the exact law number matters for traceability and I don't want to assert a number I can't fully confirm from the image.
+
+---
+
+## Correction log
+
+**2026-08-08 — Color.Border added, CornerRadius.Surface renamed to Radius.Surface.**
+
+Final combined review of the 01–04 set found that `03-primitives.md` and
+`04-canonical-objects.md` reference `Color.Border` and `Radius.Surface`,
+neither of which existed under those names in this file as originally
+transcribed (this file had `CornerRadius.Surface` and no Border color at
+all). Founder decision (2026-08-08): treat the Primitive/Object specs as
+correct and bring this Token Library in line with them, rather than the
+reverse. Two changes made:
+
+1. **`CornerRadius.Surface` renamed to `Radius.Surface`.** Value (0) and
+   Decided status unchanged — this is a naming correction only, not a
+   value change.
+2. **`Color.Border` added as a new 7th color token.** This was not part
+   of the original Sprint 2 Figma page — its Purpose and Grammar Source
+   above are written now, by inference from how `Color.Border` is used
+   across `03-primitives.md` (Paper, Sheet, Margin, Annotation, Workspace)
+   and `04-canonical-objects.md` (Working Sheet), not from a book
+   citation that was already sitting in Figma. Treat this entry's
+   "Derived From" citation as a reasonable reading, not a verbatim
+   Figma transcription — worth a founder gut-check that the citation
+   holds, same as any other TBD value in this file.
+
+This file is therefore a hybrid as of this date: mostly a verbatim
+Figma transcription, plus this one deliberate, logged correction. Future
+edits to any Decided or TBD value should continue to be made here first,
+per the repo's Git-is-canonical architecture.
