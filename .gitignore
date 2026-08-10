@@ -8,3 +8,12 @@ coverage/
 .vite/
 playwright-report/
 test-results/
+
+# Penpot local dev stack — runtime data and secrets, not source
+docker/.env
+docker/data/**
+!docker/data/**/.gitkeep
+docker/backups/**
+!docker/backups/.gitkeep
+docker/certs/**
+!docker/certs/.gitkeep
