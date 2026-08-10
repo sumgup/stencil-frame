@@ -8,7 +8,8 @@
 
 **Source material read for this sprint:**
 - `stencil-methodology/01-foundations.md`, `02-tokens.md` (31 tokens / 9 foundations), `03-primitives.md` (9 primitives: Text, Heading, Paper, Sheet, Rule, Margin, Strike, Annotation, Workspace)
-- `book/02-diagnostic-patterns.md`, `book/03-interaction-grammar.md`, `book/04-visual-grammar.md`, `book/05-material-grammar.md`, `book/06-spatial-grammar.md`, `book/07-composition-grammar.md`, `book/08-gesture-grammar.md`, `book/09-motion-grammar.md` (Law 4–5)
+- `book/00-stencil.md` (Permanent Provision 2, cited in Question Block H2), `book/02-diagnostic-patterns.md`, `book/03-interaction-grammar.md`, `book/04-visual-grammar.md`, `book/05-material-grammar.md`, `book/06-spatial-grammar.md`, `book/07-composition-grammar.md`, `book/08-gesture-grammar.md`, `book/09-motion-grammar.md` (Law 4–5)
+- **Source-list correction (2026-08-08, persistence review):** `book/00-stencil.md` was missing from this list despite Question Block's H2 correctly quoting Permanent Provision 2 from it — added for traceability. The citation itself was already accurate; only the source list was incomplete.
 
 The Stencil Book is frozen and was not modified. These five objects are readings of it, not additions to it.
 

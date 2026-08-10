@@ -183,9 +183,10 @@
 
 ### Pause
 - **Purpose:** Duration of withheld judgment. The moment where nothing moves. Silence is not absence.
-- **Derived From:** Motion Grammar — Law 3 (Continuity) / Law ~ (judgment receives time)
+- **Derived From:** Motion Grammar — Law 1, Tempo ("Judgment receives time.")
 - **Status:** TBD
 - **Suggested Value:** TBD
+- **Correction (2026-08-08, persistence review):** Originally cited "Law 3 (Continuity) / Law ~ (judgment receives time)," self-flagged `[verify against Figma]`. Checked against `book/09-motion-grammar.md`: the phrase "judgment receives time" is Law 1 (Tempo)'s language, not Law 3's — Law 3 (Continuity) is about discrete editorial units and the causal join between actions, and doesn't describe a pause duration. Corrected to Law 1. This was a transcription/citation error, not a disputed interpretation — no plausible reading of Law 3's actual text supports the original citation.
 
 ### Correction
 - **Purpose:** Duration of the decisive act. Single edit/act. Snappy — authority comes from decisiveness.
@@ -200,16 +201,18 @@
 - **Suggested Value:** TBD
 
 ### Withdraw
-- **Purpose:** Duration of a proposal's retraction. Only Stencil's uncommitted work may withdraw; founder proposals may withdraw too.
-- **Derived From:** Motion Grammar — Law 4 (Persistence: only uncommitted work may withdraw)
+- **Purpose:** Duration of a proposal's retraction. Only Stencil's own uncommitted proposal may withdraw.
+- **Derived From:** Motion Grammar — Law 4, Persistence ("Stencil preserves every committed mark and may withdraw only its own uncommitted proposal.")
 - **Status:** TBD
 - **Suggested Value:** TBD
+- **Correction (2026-08-08, persistence review):** Purpose previously read "...founder proposals may withdraw too." Checked against `book/09-motion-grammar.md` Law 4: the book states the only exception to "Stencil preserves every committed mark" is Stencil's own not-yet-accepted proposal — "Because it never entered the record, it may be withdrawn without falsifying history." Nothing in Law 4 or elsewhere describes founder proposals as withdrawable. The added clause is not supported by the book as written, so it was removed rather than left standing as an unmarked extension. If founder-proposal withdrawal is actually wanted as a deliberate product decision, that requires its own supersession record per `book/00-stencil.md`'s Supersession process — it should not sit silently inside a token's Purpose text as though the book already permits it.
 
 ### Easing
 - **Purpose:** The single decisive easing curve. No bounce, no overshoot. Authority comes from precision, not force.
-- **Derived From:** Motion Grammar — Law ~ (Weight: consequence, not force/bounce)
+- **Derived From:** Motion Grammar — Law 2, Weight ("Weight is consequence, not force.")
 - **Status:** TBD
 - **Suggested Value:** TBD
+- **Correction (2026-08-08, persistence review):** Law number resolved from "Law ~" to Law 2 — content was already correct (matches Law 2/Weight exactly: "Not from bounce. Not from overshoot."), only the citation was left unresolved. Not a content error, just an incomplete citation.
 
 ---
 
